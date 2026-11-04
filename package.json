@@ -1,0 +1,11 @@
+{
+  "name": "lily-path",
+  "productName": "Lily Path",
+  "version": "2.0.0",
+  "description": "A simple day runner for teaching",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "github:mcdanieljordan/Lily-Path-Suite"
+}

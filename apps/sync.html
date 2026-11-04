@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lily Path Sync</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f4f6fb;display:flex;min-height:100vh;align-items:center;justify-content:center;margin:0;color:#222}
+.c{background:#fff;border-radius:16px;padding:28px 32px;max-width:360px;text-align:center;box-shadow:0 6px 24px rgba(0,0,0,.12)}
+button{margin-top:14px;padding:12px 20px;border:0;border-radius:10px;background:#3b6cf6;color:#fff;font-size:16px;font-weight:700;cursor:pointer}
+button.g{background:#e7e9ef;color:#333}
+</style></head><body>
+<div class="c"><div style="font-size:42px">☁️</div><h2>Lily Path Sync</h2><div id="m">Loading…</div><div id="b"></div></div>
+<script>
+(function(){
+const U='https://aiczpuoskwzqtzvoomll.supabase.co',K='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFpY3pwdW9za3d6cXR6dm9vbWxsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4MzczNjgsImV4cCI6MjEwNDQxMzM2OH0.ttZE_4PrGb7qCJjcOKdahv4lH02JrWR4BpePsXC4gpA',OWNER='mcdanieljordan@gmail.com';
+const sb=window.supabase.createClient(U,K,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+let ready;window.__ready=ready=sb.auth.getSession();
+async function who(){const {data}=await sb.auth.getSession();const u=data.session&&data.session.user;return u?{signedIn:true,email:u.email,allowed:(u.email||'').toLowerCase()===OWNER,id:u.id}:{signedIn:false};}
+async function ui(){const w=await who(),m=document.getElementById('m'),b=document.getElementById('b');
+  if(!w.signedIn){m.textContent='Sign in once to sync your Lily Path layout on every device.';b.innerHTML='<button id="si">Sign in with Google</button>';document.getElementById('si').onclick=signIn;}
+  else if(!w.allowed){m.textContent=w.email+' is not allowed.';b.innerHTML='<button class="g" id="so">Sign out</button>';document.getElementById('so').onclick=out;}
+  else{m.textContent='Signed in as '+w.email+'. Syncing is on — you can close this tab.';b.innerHTML='<button class="g" id="so">Sign out</button>';document.getElementById('so').onclick=out;}}
+function signIn(){sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+location.pathname,queryParams:{login_hint:OWNER}}});}
+function out(){sb.auth.signOut().then(ui);}
+sb.auth.onAuthStateChange(()=>{setTimeout(ui,0);});
+window.lilySync={
+  status:who,
+  async pull(){const w=await who();if(!w.allowed)return null;const {data,error}=await sb.from('lily_state').select('state,updated_at').eq('user_id',w.id).maybeSingle();if(error)throw new Error(error.message);return data?data.state:null;},
+  async push(state){const w=await who();if(!w.allowed)throw new Error('not signed in');const {error}=await sb.from('lily_state').upsert({user_id:w.id,state:state,updated_at:new Date().toISOString()});if(error)throw new Error(error.message);return true;},
+  signIn:signIn
+};
+ready.then(ui);
+})();
+</script></body></html>

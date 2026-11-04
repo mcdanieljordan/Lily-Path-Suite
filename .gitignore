@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.DS_Store
+# Student names and rosters never go in this repo. They live in Supabase.
+*.csv
+*roster*

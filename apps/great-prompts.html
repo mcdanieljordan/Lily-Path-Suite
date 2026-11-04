@@ -1,0 +1,2031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher's AI Copilot Hub v2</title>
+<style>
+:root{
+  --bg:#0b0f17; --card:#151c2c; --card2:#10161f; --border:#2a364f; --text:#f1f5f9; --muted:#94a3b8; --dim:#64748b;
+  --accent:#38bdf8; --purple:#818cf8; --green:#34d399; --pink:#f472b6; --warn:#fbbf24; --red:#f87171;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.55;font-size:15px}
+a{color:var(--accent)}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px}
+/* header */
+header.top{position:sticky;top:0;z-index:40;background:rgba(11,15,23,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.top .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding-top:12px;padding-bottom:12px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-size:20px}
+.brand h1{margin:0;font-size:18px;font-weight:800;background:linear-gradient(90deg,var(--accent),var(--purple),var(--green));-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand p{margin:0;font-size:11px;color:var(--muted)}
+nav.links{display:flex;gap:6px;flex-wrap:wrap}
+nav.links a{padding:7px 12px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;color:#cbd5e1;border:1px solid transparent}
+nav.links a:hover{background:var(--card);border-color:var(--border);color:#fff}
+/* sections */
+section.block{margin:34px 0}
+h2.sec{font-size:22px;margin:0 0 4px;font-weight:800}
+p.sub{margin:0 0 16px;color:var(--muted);font-size:14px}
+.hero{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--card),var(--bg));border:1px solid var(--border);border-radius:20px;padding:30px}
+.hero:before,.hero:after{content:"";position:absolute;width:280px;height:280px;border-radius:50%;filter:blur(70px);pointer-events:none}
+.hero:before{top:-90px;right:-90px;background:rgba(56,189,248,.12)}
+.hero:after{bottom:-90px;left:-90px;background:rgba(129,140,248,.12)}
+.hero>*{position:relative;z-index:1}
+.pill{display:inline-block;padding:4px 12px;border-radius:99px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.3);color:var(--accent)}
+.hero h2{font-size:28px;line-height:1.2;margin:14px 0 6px;font-weight:800}
+.hero p.lead{color:#cbd5e1;max-width:760px;margin:0 0 18px}
+.grid{display:grid;gap:14px}
+.g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.box{background:rgba(11,15,23,.7);border:1px solid var(--border);border-radius:14px;padding:16px}
+.box h3{margin:6px 0 4px;font-size:14px}
+.box p{margin:0;font-size:12.5px;color:var(--muted)}
+.step{display:inline-block;font-size:11px;font-weight:800;padding:2px 10px;border-radius:99px;border:1px solid}
+.s1{color:var(--accent);background:rgba(56,189,248,.1);border-color:rgba(56,189,248,.3)}
+.s2{color:var(--purple);background:rgba(129,140,248,.1);border-color:rgba(129,140,248,.3)}
+.s3{color:var(--green);background:rgba(52,211,153,.1);border-color:rgba(52,211,153,.3)}
+.goal{display:flex;flex-direction:column;justify-content:flex-start;align-items:flex-start;cursor:pointer;text-align:left;font:inherit;color:inherit;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;transition:.15s}
+.goal:hover{border-color:var(--accent);transform:translateY(-2px)}
+.goal b{display:block;font-size:14px;margin-bottom:3px}
+.goal span{font-size:12px;color:var(--muted)}
+.goal .ic{font-size:22px;display:block;margin-bottom:4px}
+.note{border-left:3px solid var(--accent);background:rgba(56,189,248,.07);padding:10px 14px;border-radius:0 10px 10px 0;font-size:13px;color:#cbd5e1;margin:12px 0}
+.note.warn{border-color:var(--warn);background:rgba(251,191,36,.08)}
+.note.good{border-color:var(--green);background:rgba(52,211,153,.08)}
+.note.bad{border-color:var(--red);background:rgba(248,113,113,.08)}
+.note b{color:#fff}
+/* controls */
+.controls{display:flex;flex-wrap:wrap;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px;align-items:center}
+.controls input[type=text]{flex:1;min-width:240px}
+input[type=text],textarea,select{background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:10px 12px;font:inherit;font-size:13px;width:100%}
+input[type=text]:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 2px rgba(56,189,248,.2)}
+.controls select{width:auto}
+.favbtn{background:var(--bg);border:1px solid var(--border);color:#cbd5e1;border-radius:10px;padding:10px 12px;font:inherit;font-size:13px;cursor:pointer}
+.favbtn.on{border-color:var(--warn);color:var(--warn)}
+.count{font-size:12px;color:var(--muted);margin:10px 4px}
+/* cards */
+.cards{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(310px,1fr))}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;display:flex;flex-direction:column;justify-content:space-between;transition:.15s;position:relative}
+.card:hover{border-color:rgba(56,189,248,.6)}
+.card .row{display:flex;gap:10px;align-items:flex-start}
+.card .ico{font-size:26px}
+.card h3{margin:0;font-size:15px;line-height:1.25}
+.card .cat{font-size:11.5px;font-weight:600;color:var(--purple)}
+.card p{font-size:12.5px;color:var(--muted);margin:10px 0}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.badge{font-size:10.5px;padding:2px 8px;border-radius:6px;background:var(--bg);border:1px solid var(--border);color:#cbd5e1}
+.badge.lv-Beginner{color:var(--green);border-color:rgba(52,211,153,.4)}
+.badge.lv-Intermediate{color:var(--warn);border-color:rgba(251,191,36,.4)}
+.badge.lv-Advanced{color:var(--pink);border-color:rgba(244,114,182,.4)}
+.tags{font-size:10.5px;color:var(--accent);padding-top:8px;border-top:1px solid rgba(42,54,79,.7)}
+.meta{font-size:11.5px;color:var(--dim);margin-top:6px}
+.actions{display:flex;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+.btn{flex:1;text-align:center;padding:9px 10px;font:inherit;font-size:12.5px;font-weight:600;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:#cbd5e1;cursor:pointer;transition:.15s}
+.btn:hover{background:#1a2338}
+.btn.pri{background:rgba(56,189,248,.12);border-color:rgba(56,189,248,.4);color:var(--accent);font-weight:700}
+.btn.pri:hover{background:rgba(56,189,248,.22)}
+.btn.solid{background:var(--accent);color:#04121c;border-color:var(--accent);font-weight:800}
+.btn.solid:hover{background:#7dd3fc}
+.star{position:absolute;top:12px;right:14px;background:none;border:none;font-size:18px;cursor:pointer;color:var(--dim)}
+.star.on{color:var(--warn)}
+.empty{display:none;text-align:center;padding:50px 20px;background:rgba(21,28,44,.5);border:1px solid var(--border);border-radius:16px}
+/* guides */
+details.guide{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden}
+details.guide>summary{cursor:pointer;list-style:none;padding:16px 18px;display:flex;gap:12px;align-items:center;font-weight:700}
+details.guide>summary::-webkit-details-marker{display:none}
+details.guide>summary .gi{font-size:22px}
+details.guide>summary small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+details.guide>summary:after{content:"+";margin-left:auto;font-size:22px;color:var(--accent)}
+details.guide[open]>summary:after{content:"–"}
+details.guide[open]>summary{border-bottom:1px solid var(--border)}
+.gbody{padding:6px 20px 20px;font-size:14px;color:#dbe4f0}
+.gbody h4{margin:18px 0 6px;font-size:14.5px;color:#fff}
+.gbody ul,.gbody ol{padding-left:20px;margin:6px 0}
+.gbody li{margin:4px 0}
+.gbody table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px}
+.gbody th,.gbody td{border:1px solid var(--border);padding:8px 10px;text-align:left;vertical-align:top}
+.gbody th{background:var(--card2);color:#fff}
+.tblwrap{overflow-x:auto}
+.copybox{position:relative;background:var(--bg);border:1px solid var(--border);border-radius:10px;margin:10px 0}
+.copybox pre{margin:0;padding:12px 90px 12px 14px;white-space:pre-wrap;word-break:break-word;font-size:12px;color:#cbd5e1;font-family:ui-monospace,Menlo,Consolas,monospace}
+.copybox button.cp{position:absolute;top:8px;right:8px;background:rgba(56,189,248,.14);border:1px solid rgba(56,189,248,.4);color:var(--accent);border-radius:8px;padding:5px 10px;font-size:11.5px;font-weight:700;cursor:pointer}
+.copybox button.cp:hover{background:rgba(56,189,248,.25)}
+/* modal */
+.overlay{position:fixed;inset:0;z-index:60;background:rgba(2,6,14,.82);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:14px}
+.overlay.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:18px;width:100%;max-width:1150px;max-height:94vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 25px 60px rgba(0,0,0,.6)}
+.mhead{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);background:rgba(11,15,23,.5)}
+.mhead h3{margin:0;font-size:16px}
+.mhead p{margin:0;font-size:11.5px;color:var(--muted)}
+.xbtn{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:6px 10px}
+.xbtn:hover{color:#fff}
+.tabs{display:flex;gap:4px;padding:8px 14px 0;border-bottom:1px solid var(--border);overflow-x:auto}
+.tab{background:none;border:none;border-bottom:3px solid transparent;color:var(--muted);padding:9px 14px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.tab.on{color:var(--accent);border-color:var(--accent)}
+.mbody{overflow-y:auto;flex:1;padding:16px 18px}
+.pane{display:none}.pane.on{display:block}
+.twocol{display:grid;gap:18px;grid-template-columns:minmax(300px,420px) 1fr}
+@media(max-width:860px){.twocol{grid-template-columns:1fr}}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:12px;font-weight:700;margin-bottom:4px;color:#e2e8f0}
+.field small{display:block;color:var(--dim);font-size:11px;margin-top:2px}
+.field textarea{min-height:84px;resize:vertical}
+.fh{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin:16px 0 8px}
+.chk{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;margin:7px 0;color:#cbd5e1;cursor:pointer}
+.chk input{margin-top:3px;accent-color:var(--accent)}
+.chk b{color:#fff}
+pre.preview{margin:0;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px;font-size:12px;line-height:1.6;white-space:pre-wrap;word-break:break-word;color:#cbd5e1;max-height:60vh;overflow-y:auto;font-family:ui-monospace,Menlo,Consolas,monospace}
+pre.preview mark{background:rgba(251,191,36,.22);color:var(--warn);border-radius:4px;padding:0 2px}
+pre.preview .filled{background:rgba(52,211,153,.14);color:#86efac;border-radius:4px;padding:0 2px}
+.previewbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:12px;color:var(--muted);gap:8px;flex-wrap:wrap}
+.mfoot{padding:12px 18px;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:var(--card)}
+.mfoot .l{font-size:12px;color:var(--muted)}
+.mfoot .r{display:flex;flex-wrap:wrap;gap:8px}
+.mfoot .btn{flex:none;padding:9px 14px}
+.ol{padding-left:0;list-style:none;counter-reset:s;margin:8px 0}
+.ol li{counter-increment:s;position:relative;padding:10px 12px 10px 46px;margin:8px 0;background:var(--bg);border:1px solid var(--border);border-radius:12px;font-size:13.5px}
+.ol li:before{content:counter(s);position:absolute;left:12px;top:10px;width:24px;height:24px;border-radius:50%;background:rgba(56,189,248,.15);color:var(--accent);font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center}
+ul.bul{margin:8px 0;padding-left:20px;font-size:13.5px}
+ul.bul li{margin:6px 0}
+.cols2{display:grid;gap:16px;grid-template-columns:1fr 1fr}
+@media(max-width:760px){.cols2{grid-template-columns:1fr}}
+.toast{position:fixed;bottom:22px;right:22px;z-index:80;background:var(--green);color:#04121c;font-weight:800;padding:12px 18px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.5);transform:translateY(80px);opacity:0;transition:.3s;pointer-events:none}
+.toast.show{transform:none;opacity:1}
+footer{border-top:1px solid var(--border);margin-top:50px;padding:26px 0;text-align:center;font-size:12px;color:var(--dim)}
+.kbd{border:1px solid var(--border);border-radius:5px;padding:0 5px;font-size:11px;background:var(--card2)}
+.statrow{display:flex;gap:8px;flex-wrap:wrap}
+.stat{font-size:11.5px;padding:5px 10px;border-radius:8px;background:var(--card);border:1px solid var(--border);color:#cbd5e1}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+@media print{header.top,.controls,.actions,.overlay,.toast{display:none!important}body{background:#fff;color:#000}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <div class="logo">⚡</div>
+      <div>
+        <h1>Teacher's AI Copilot Hub <span style="font-size:11px;-webkit-text-fill-color:#94a3b8">v2</span></h1>
+        <p>Fill-in-the-blank prompts • step-by-step guidance • research-backed</p>
+      </div>
+    </div>
+    <nav class="links">
+      <a href="#start">Start Here</a>
+      <a href="#prompts">Prompt Library</a>
+      <a href="#guides">Guides</a>
+      <a href="#safety">Safety</a>
+      <a href="#about">What's New</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- START HERE -->
+<section class="block" id="start">
+  <div class="hero">
+    <span class="pill">🚀 Start here — takes 60 seconds</span>
+    <h2>Turn any AI into your classroom assistant.<br>No coding. No editing prompts by hand.</h2>
+    <p class="lead">Pick a tool below, <b>fill in the blanks</b> (grade, topic, etc.), click <b>Copy</b>, and paste it into any AI chat. The hub does the hard part: the role, rules, research-backed game design, and formatting.</p>
+
+    <div class="grid g3">
+      <div class="box"><span class="step s1">STEP 1</span> <span style="float:right;font-size:20px">📋</span><h3>Pick a tool &amp; fill the boxes</h3><p>Open any card in the library. Type your grade and topic into the form. The prompt builds itself on the right.</p></div>
+      <div class="box"><span class="step s2">STEP 2</span> <span style="float:right;font-size:20px">🤖</span><h3>Copy &amp; open an AI</h3><p>Click <b>Copy &amp; Open</b> for Claude, ChatGPT, Gemini or Copilot. Start a <i>new chat</i>, then paste.</p></div>
+      <div class="box"><span class="step s3">STEP 3</span> <span style="float:right;font-size:20px">🔁</span><h3>Refine with follow-ups</h3><p>Every tool has ready-made follow-up prompts ("make it easier", "fix this error"). Copy, paste, improve.</p></div>
+    </div>
+
+    <h3 style="margin:26px 0 10px;font-size:15px">🎯 What do you need today? <span style="color:var(--muted);font-weight:400;font-size:12px">(click one)</span></h3>
+    <div class="grid g4" id="goalGrid"></div>
+
+    <div class="note" style="margin-top:20px">💡 <b>The #1 rule for great results:</b> the more specific you are about <i>who</i> (grade, needs), <i>what</i> (exact topic or standard) and <i>how it'll be used</i> (whole class, centers, homework), the better the AI's output. Every form in this hub asks for exactly those things.</div>
+  </div>
+</section>
+
+<!-- PROMPT LIBRARY -->
+<section class="block" id="prompts">
+  <h2 class="sec">🧰 Prompt Library</h2>
+  <p class="sub">Each tool includes: fill-in form • persona &amp; power-ups • how-to steps • pro tips &amp; mistakes • follow-up prompts.</p>
+  <div class="controls">
+    <input type="text" id="searchInput" placeholder="🔍 Search by keyword, grade, standard, tool…" oninput="filterPrompts()">
+    <select id="categoryFilter" onchange="filterPrompts()"></select>
+    <select id="gradeFilter" onchange="filterPrompts()">
+      <option value="ALL">All grades</option>
+      <option value="K-2">K-2</option><option value="3-5">3-5</option><option value="6-8">6-8</option><option value="9-12">9-12</option>
+    </select>
+    <select id="levelFilter" onchange="filterPrompts()">
+      <option value="ALL">Any difficulty</option>
+      <option value="Beginner">🟢 Beginner</option><option value="Intermediate">🟡 Intermediate</option><option value="Advanced">🟣 Advanced</option>
+    </select>
+    <button class="favbtn" id="favToggle" onclick="toggleFavFilter()">☆ Favorites</button>
+  </div>
+  <div class="count" id="resultsCount"></div>
+  <div class="cards" id="promptsGrid"></div>
+  <div class="empty" id="noResults">
+    <div style="font-size:36px">🔎</div>
+    <h3>No matching tools</h3>
+    <p style="color:var(--muted);font-size:13px">Try a broader search or reset the filters.</p>
+    <button class="btn pri" style="flex:none;padding:9px 18px" onclick="resetAllFilters()">Reset filters</button>
+  </div>
+</section>
+
+<!-- GUIDES -->
+<section class="block" id="guides">
+  <h2 class="sec">📖 Guides &amp; Cheat Sheets</h2>
+  <p class="sub">Short, plain-English playbooks. Open the ones you need. Look for the blue <b>Copy</b> boxes.</p>
+  <div id="guideList"></div>
+</section>
+
+<!-- SAFETY -->
+<section class="block" id="safety">
+  <h2 class="sec">🛡️ The 7 Golden Rules of Using AI With Students</h2>
+  <p class="sub">Read once. Follow always.</p>
+  <div class="grid g3" id="goldenRules"></div>
+  <div class="note warn" style="margin-top:16px">⚠️ This hub gives practical guidance, not legal advice. Your district's technology and legal teams decide which AI tools are approved. When in doubt, ask them <i>before</i> using student information.</div>
+</section>
+
+<!-- ABOUT -->
+<section class="block" id="about">
+  <h2 class="sec">🆕 What's New in v2 (and what we fixed)</h2>
+  <p class="sub">Built from your original hub plus the two research documents.</p>
+  <div class="grid g3" id="aboutGrid"></div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Teacher's AI Copilot Hub v2 — single-file, works offline, no data leaves your computer. Prompts are saved only in your browser (favorites &amp; settings).</p>
+    <p>Grounded in Octalysis (Yu-kai Chou), Self-Determination Theory (Deci &amp; Ryan), Texas TEKS / TA-TEKS, the TEKS Behavior Alignment Tool and the Texas Effective Schools Framework.</p>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <div class="mhead">
+      <div style="display:flex;gap:12px;align-items:center">
+        <span id="mIcon" style="font-size:26px">⚡</span>
+        <div><h3 id="mTitle"></h3><p id="mCat"></p></div>
+      </div>
+      <button class="xbtn" onclick="closeModal()" aria-label="Close">✖</button>
+    </div>
+    <div class="tabs" id="mTabs">
+      <button class="tab on" data-pane="pFill">1 · Fill In &amp; Preview</button>
+      <button class="tab" data-pane="pHow">2 · How To Use</button>
+      <button class="tab" data-pane="pTips">3 · Pro Tips &amp; Pitfalls</button>
+      <button class="tab" data-pane="pFollow">4 · Follow-Up Prompts</button>
+    </div>
+    <div class="mbody">
+      <div class="pane on" id="pFill">
+        <div class="twocol">
+          <div>
+            <div class="fh" style="margin-top:0">✏️ Fill in the blanks</div>
+            <div id="fieldsBox"></div>
+            <div class="fh">🎭 Personality</div>
+            <div class="field"><select id="personaSel" onchange="saveSettings();updatePreview()"></select><small id="personaHelp"></small></div>
+            <div class="fh">⚡ Power-ups <span style="text-transform:none;letter-spacing:0;color:var(--dim);font-weight:400">(optional)</span></div>
+            <div id="addonBox"></div>
+          </div>
+          <div>
+            <div class="previewbar"><span>👁️ Live preview — <mark style="background:rgba(251,191,36,.22);color:var(--warn);padding:0 4px;border-radius:4px">yellow</mark> = still to fill, <span style="background:rgba(52,211,153,.14);color:#86efac;padding:0 4px;border-radius:4px">green</span> = your text</span><span id="wordCount"></span></div>
+            <pre class="preview" id="previewText"></pre>
+          </div>
+        </div>
+      </div>
+      <div class="pane" id="pHow"></div>
+      <div class="pane" id="pTips"></div>
+      <div class="pane" id="pFollow"></div>
+    </div>
+    <div class="mfoot">
+      <span class="l" id="footHint">Works in Claude, ChatGPT, Gemini, Copilot &amp; Grok</span>
+      <div class="r">
+        <button class="btn" onclick="closeModal()">Close</button>
+        <button class="btn pri" onclick="copyModal(false)">📋 Copy Prompt</button>
+        <button class="btn solid" onclick="toggleOpenMenu()" id="openBtn">🚀 Copy &amp; Open AI ▾</button>
+      </div>
+    </div>
+    <div id="openMenu" style="display:none;padding:10px 18px;border-top:1px solid var(--border);background:var(--card2)">
+      <span style="font-size:12px;color:var(--muted)">Copies the prompt, then opens a new tab. Start a <b>new chat</b> and press <span class="kbd">Ctrl</span>+<span class="kbd">V</span> (Mac: <span class="kbd">⌘</span>+<span class="kbd">V</span>):</span>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+        <button class="btn pri" style="flex:none" onclick="copyAndOpen('https://claude.ai/new')">Claude</button>
+        <button class="btn pri" style="flex:none" onclick="copyAndOpen('https://chatgpt.com/')">ChatGPT</button>
+        <button class="btn pri" style="flex:none" onclick="copyAndOpen('https://gemini.google.com/app')">Gemini</button>
+        <button class="btn pri" style="flex:none" onclick="copyAndOpen('https://copilot.microsoft.com/')">Copilot</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span id="toastMsg">Copied!</span></div>
+<script>
+/* ============================================================
+   DATA — shared pieces
+   (§§§ in prompt text is converted to a triple-backtick code fence)
+   ============================================================ */
+const GRADES = ['Kindergarten','1st grade','2nd grade','3rd grade','4th grade','5th grade','6th grade','7th grade','8th grade','High school (9-12)','Mixed grades / multi-level class'];
+const fGrade = {key:'grade',label:'Grade level',type:'select',options:GRADES};
+
+const CATEGORIES = {
+  APPS:'Interactive Web Apps & Games',
+  BOOKS:'Leveled Books & Reading',
+  SPELLING:'Humor & Story Spelling',
+  CAD:'3D Printing & CAD',
+  GAMIFIER:'Unit Gamification & Rewards',
+  ANALYTICS:'Data, IEP & Behavior Reports',
+  FAMILY:'Home & Family Connection',
+  BUILD:'Advanced: Build a Real App',
+  META:'Meta Helpers (Prompts that fix prompts)'
+};
+
+const PERSONAS = {
+  none:{label:'Default (no personality)',help:'The AI uses its normal voice.',text:''},
+  mentor:{label:'🍎 Warm Veteran Teacher Mentor',help:'Practical, realistic about your time, explains the "why" in one sentence.',text:'Respond like a warm, veteran Texas teacher-mentor: practical, realistic about teacher time, and kind. Add a one-sentence "why this works" whenever you make a design choice.'},
+  batman:{label:'🦇 Batman Utility Belt',help:'Blunt, tactical, mission-focused.',text:'Respond like a blunt, tactical utility-belt strategist: direct, mission-focused, zero fluff. Keep the content itself classroom-appropriate and accurate.'},
+  socratic:{label:'🏛️ Socratic Coach',help:'Guides you with questions, one step at a time.',text:'Act as a Socratic coach. Before giving the final result, guide me with short questions ONE AT A TIME (max 5) to refine my goals. After my answers, deliver the complete result.'},
+  minimal:{label:'⚡ Blunt & Minimal',help:'No chatter. Just the deliverable.',text:'Be blunt and minimal: no greetings, no commentary, no explanations unless I ask. Output only the deliverable.'},
+  creative:{label:'🎨 Creative Peer',help:'Playful brainstorm buddy: themes, jokes, hooks.',text:'Act as an enthusiastic creative peer: offer playful themes, hooks and jokes. Keep every idea age-appropriate and respectful.'}
+};
+
+const ADDONS = [
+  {id:'interview',label:'Interview me first',desc:'AI asks up to 5 questions before it builds anything (great if you are unsure).',text:'BEFORE you generate anything, ask me up to 5 short, numbered clarifying questions in ONE message and wait for my answers. Only then produce the full result.'},
+  {id:'access',label:'Make it accessible (ELL / IEP / 504)',desc:'Adds scaffolds: sentence stems, word banks, chunked steps, choices.',text:'ACCESSIBILITY: Build in scaffolds for English learners (sentence stems, word banks, visuals/icons) and for students with IEP/504 supports (chunked steps, reduced choices, extended-time options, read-aloud friendly wording). Label each scaffold clearly so I can include or remove it.'},
+  {id:'privacy',label:'Student-privacy guardrail',desc:'AI refuses/ignores real student names or IDs.',text:'PRIVACY RULES: Never ask for or include real student names, IDs, birthdates, or other identifying details. If I accidentally paste any, ignore them, remind me to de-identify (use Student A, Student B), and continue.'},
+  {id:'verify',label:'Verify standards (no made-up TEKS)',desc:'AI must not invent standard codes.',text:'STANDARDS HONESTY: Only cite standards (TEKS / TA-TEKS codes) that appear in text I provided. If you are not 100% sure a code is real, write "VERIFY CODE" beside it instead of guessing. Remind me to confirm all codes at tea.texas.gov.'},
+  {id:'short',label:'Keep it short & scannable',desc:'Bullets and tables instead of long paragraphs.',text:'Keep it concise: use bullets and tables instead of long paragraphs, and include only what I need to act on.'},
+  {id:'checklist',label:'Add a quality-check list',desc:'Ends with a checklist to review the AI output before using it.',text:'At the end, add a 5-item "Teacher Quality Check" I can use to verify your output (accuracy, grade-appropriateness, bias, standards fit, accessibility) before using it with students.'},
+  {id:'followups',label:'Suggest 3 next steps',desc:'AI ends with 3 ready-to-paste refinement prompts.',text:'At the very end, suggest 3 specific ways I could refine or extend this result, each written as a short prompt I can paste back to you.'}
+];
+
+/* ============================================================
+   PROMPTS
+   ============================================================ */
+const PROMPTS_DATA = [
+
+/* ---------------------------------------------------------- APPS */
+{
+id:'app-generator',
+title:'Master HTML Minigame Engine',
+icon:'🎮', category:'APPS', grades:['3-5','6-8','9-12'],
+skills:['TA-TEKS','Octalysis','SDT-safe','HTML5','Voice','Teacher report'],
+level:'Intermediate', time:'10 min to generate • 10 min to test', bestAI:'Claude, Gemini Pro or ChatGPT (any strong "thinking" model)',
+description:'Turns your lesson or study guide into ONE offline HTML file with 3 mini-games, adaptive difficulty, read-aloud + voice recording, a cosmetic avatar shop and a teacher report — with motivation safeguards built in.',
+whatYouGet:['A single .html file students open in any browser — no install, no login','3 different mini-game styles built from YOUR content','A mastery tracker per standard + printable/copyable teacher report','Read-aloud and voice-recording buttons that work on Chromebooks and iPads'],
+steps:['Fill in your grade level and paste your lesson topic, TEKS, or study guide in the form.','Click "Copy Prompt" and paste it into a NEW chat (Claude, Gemini, ChatGPT…).','Wait for the code box. Click the AI\'s "Copy" button on the code block.','Open Notepad (Windows) / TextEdit (Mac, choose Format → Make Plain Text). Paste. Save as game.html.','Double-click game.html. It opens in your browser. Play it yourself for 5 minutes using the Test Checklist in the Guides section.','If something breaks, copy the error or describe it and use a Follow-Up prompt.'],
+tips:['Paste REAL content (vocab list, notes, a test) rather than just a topic name. The questions will be far more accurate to what you teach.','Ask for fewer things first: if the AI struggles, use the Follow-Up "Lite version" and add features one at a time.','Always play the game as a wrong-answer-only student, as a speed-clicker, and with sound off. That finds 90% of problems.','Edit questions yourself: the prompt makes the AI put every question in one list at the top of the code so you can change text without touching code.','The prompt deliberately uses cosmetic-only rewards and never takes points away. Research (Self-Determination Theory) shows that this protects students\' natural motivation.'],
+pitfalls:['AI code cut off mid-way → reply "continue from exactly where you stopped, no repeats".','Answers that are wrong or off-level → AI can make content errors. YOU must review all questions before students see them.','Pasting student names or data into the chat → don\'t. Use only lesson content.','Expecting the file to save student scores between devices → it saves on that one device only. Use the teacher report to copy results.'],
+followups:[
+ {label:'Lite version (if the AI struggles)',text:'That was too much to generate at once. Rebuild it as a LITE version: only ONE mini-game, 12 questions, simple scoring, and a "Copy Teacher Report" button. Keep the same single-file rules. We will add features after it works.'},
+ {label:'Fix an error',text:'The game does not work. Here is exactly what I see: [DESCRIBE THE PROBLEM OR PASTE THE RED ERROR FROM THE BROWSER CONSOLE]. Find the bug, explain it in one plain sentence, and give me the COMPLETE corrected file (not just the changed lines).'},
+ {label:'Add a class team-goal mode',text:'Add a "Class Team Goal" mode: when students finish a session, the app shows a one-line code they can tell me; I will add up codes on the board. Do not show individual rankings anywhere in the app.'},
+ {label:'Add a Spanish toggle',text:'Add an English/Spanish toggle for all instructions, buttons and questions. Keep the question data structure editable. Flag any question where the translation might change meaning so I can review it with a bilingual colleague.'},
+ {label:'Make it easier / harder',text:'Rewrite the question bank one grade level EASIER (shorter sentences, simpler vocabulary, same standards) and keep the "stretch" questions for the Hard mode only.'}
+],
+fields:[
+ fGrade,
+ {key:'topic',label:'Lesson topic, study guide, or vocabulary (paste it!)',type:'textarea',ph:'e.g., Photosynthesis: chloroplast, glucose, sunlight, carbon dioxide…  (or paste your whole study guide)'},
+ {key:'teks',label:'TEKS / standards (optional)',type:'text',ph:'e.g., 5.9A (paste the text of the standard if you can)'},
+ {key:'theme',label:'Visual theme students will love',type:'text',ph:'e.g., Minecraft-style mining, space rescue, superheroes'}
+],
+promptText:`ROLE
+You are a Senior Front-End Engineer AND a Learning-Experience Designer who has shipped classroom software for Texas K-12 students. You write clean, plainly commented code that a non-programmer can safely edit.
+
+ABOUT ME
+I am a teacher with NO coding background. I will save your output as a single .html file and open it in a browser on a school Chromebook, iPad, or laptop. Students are: {{grade}}.
+
+CONTENT TO TEACH (use this as the ONLY source of facts):
+{{topic}}
+
+Standards (if provided): {{teks}}
+Visual theme: {{theme}}
+
+GOAL
+Build a standalone, single-file HTML5 learning game with inline CSS and JavaScript. ZERO external libraries, fonts, images, CDNs or network calls (it must work offline and pass school web filters). Use emoji and CSS shapes for graphics.
+
+LEARNING DESIGN RULES (non-negotiable)
+1. Learning targets screen at launch: show 3-5 kid-friendly "I can…" statements (and the standards, if given).
+2. Question bank: write at least 24 ORIGINAL questions (8 per mini-game) from my content, mixing recall, application, and one higher-order question per concept (DOK 1-3). Every question has: the correct answer, 2-3 plausible wrong answers that reflect REAL student misconceptions, and a one-sentence explanation shown after the student answers.
+3. Wrong answers get INFORMATIONAL feedback ("Not quite — here's why…") and a chance to retry. Never use shaming sounds, red flashing, or "FAIL" language.
+4. Three genuinely different mini-games: (A) Speed/arcade challenge (matching, whack-a-mole, or falling blocks), (B) Scenario sorting / drag-and-drop (with tap-to-place fallback for touch screens), (C) a fill-in-the-blank adventure puzzle. Student chooses which one to play.
+5. Mastery engine: track each concept separately. Mark a concept "MASTERED" after 3 consecutive correct answers across at least 2 different mini-games. Concepts not yet mastered reappear later in the session (simple spaced repetition).
+6. Adaptive difficulty (Easy / Normal / Hard): 4 correct in a row automatically offers to move up; 2 wrong in a row GENTLY OFFERS ("Want a quick refresher on Easy?") — the student decides, never forced.
+
+MOTIVATION SAFEGUARDS (research-based: Self-Determination Theory + Octalysis)
+- Autonomy: student picks the mini-game, difficulty, avatar and theme color. No forced paths.
+- Competence: feedback is about growth ("You mastered 3 of 5 skills!"), not comparison to others.
+- Rewards are COSMETIC ONLY (hats, colors, pets). Points are never subtracted. Streaks may "pause" but never punish; include one free "streak shield" per session.
+- Occasional surprise bonus (a random cosmetic drop or Easter egg) — capped at one every few questions, never tied to gambling-style mechanics.
+- No public leaderboards of individual students. No countdown pressure unless the student turns on "Speed mode".
+- Healthy-stop nudge: after about 15 minutes show "Great session! This is a perfect stopping point." (They may continue.)
+
+AUDIO & VOICE
+- "🔊 Read Aloud" button on every instruction/question screen using the Web Speech API (speechSynthesis). If unsupported, hide the button gracefully.
+- "🎙️ Record" and "▶️ Play Back" buttons so students can record themselves reading or answering aloud. Use MediaRecorder with this MIME logic: test MediaRecorder.isTypeSupported() for 'audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/aac', 'audio/ogg' in that order and use the first supported (Safari/iPad needs audio/mp4). Wrap microphone access in try/catch and show a friendly message if blocked. Recordings stay in memory on the device and are NEVER uploaded; say so on screen.
+
+ECONOMY & CELEBRATION
+- Coins for correct answers, streaks and mastery. An "Avatar & Pet Shop" where coins unlock cosmetics. CSS/JS confetti and short synthesized sounds (Web Audio oscillators) with a visible Mute button. Respect prefers-reduced-motion (disable confetti if set).
+- Save progress to localStorage inside try/catch. Include a "Reset my progress" button with a confirm step.
+
+TEACHER REPORT (no personal data)
+- Students enter a NICKNAME only (show: "Do not use your real name").
+- "Download Teacher Report" opens a modal with: a canvas bar chart of accuracy per concept, overall accuracy %, active time on task, Mastered vs Needs-Review lists, and which mini-game was strongest.
+- Buttons: "Copy report as text" (formatted for email) and "Download JSON".
+
+PARENT/TEACHER AI HELPER BUTTON
+- At the top place "Copy AI Helper Prompt". It copies a ready-to-paste prompt that says: "You are an Educational Data Coach. Here is a student's game report. Write a warm 3-sentence summary of their wins, explain unmastered concepts in plain language, and give 2 five-minute no-screen activities for tonight." Then append the live report text automatically.
+
+ACCESSIBILITY
+Keyboard-operable everything, visible focus rings, text at least 18px, touch targets at least 44px, high-contrast theme toggle, a text-size toggle (A− / A+), a dyslexia-friendly font option (system fonts such as Verdana/Trebuchet), meaning never conveyed by color alone, ARIA live regions for feedback.
+
+CODE QUALITY
+- Put ALL editable content in one clearly labeled const QUESTIONS array at the very top, with a plain-English "HOW TO EDIT THIS GAME" comment above it.
+- Section comments in plain English. No eval(), no innerHTML with unescaped user text.
+- Before you answer, silently test your logic against these cases: all-wrong play, all-right play, rapid clicking, mic permission denied, refresh mid-game.
+
+OUTPUT FORMAT
+1) A 5-bullet plan (under 100 words).
+2) ONE complete code block: §§§html … §§§ (the entire file, nothing omitted, no placeholders like "rest of code here").
+3) "Teacher Quick-Start": 5 short lines — how to save it, open it, edit questions, share it, and the 3 things to test first.
+If you run out of space, stop at a clean section boundary, write CONTINUE, and I'll reply "continue"; resume exactly where you stopped without repeating code.`
+},
+
+{
+id:'boss-battle',
+title:'Whole-Class Boss Battle Review (Projector Game)',
+icon:'🐉', category:'APPS', grades:['K-2','3-5','6-8','9-12'],
+skills:['Review','Cooperative play','Octalysis CD5','No devices needed'],
+level:'Beginner', time:'5 min', bestAI:'Any',
+description:'One teacher-run, projector-friendly review game: the whole class (in teams) fights a boss with correct answers. Only YOU need a device. Cooperative, low-pressure, and ideal before a test.',
+whatYouGet:['A single HTML file you project on the board','Teacher controls: reveal answer, award team points, next question','Cooperative boss HP bar — everyone wins together or tries again','Printable answer key for you'],
+steps:['Fill in grade, topic, and number of teams.','Copy the prompt into a new AI chat and paste.','Save the code as boss.html (see "How to run what the AI builds" in Guides).','Project it. You click; students answer on whiteboards or by group discussion.','After class, ask the AI follow-up #1 to make tomorrow\'s boss with the questions students missed.'],
+tips:['Use mini whiteboards: all teams answer at once, then reveal. Everyone is accountable without anyone being singled out.','Make the BOSS the common enemy, not other teams — it keeps the energy high and the feelings kind.','Pause on every wrong answer and let a team explain the thinking. That\'s where the learning happens.'],
+pitfalls:['Don\'t run it as team-vs-team elimination: it hurts struggling learners (Octalysis "Black Hat" overload).','Keep it to ~15 minutes — it\'s a review spice, not the whole meal.'],
+followups:[
+ {label:'Make tomorrow\'s boss from missed questions',text:'Here are the questions most of my students missed today: [PASTE QUESTIONS]. Generate a NEW boss-battle question set that re-teaches these ideas in different wording, plus a 2-sentence mini-lesson for each one.'},
+ {label:'Add a "phone-a-friend" lifeline',text:'Add 3 class lifelines (Ask a Neighbor, 50/50, Second Chance) that the teacher can click, each usable once per battle.'}
+],
+fields:[fGrade,
+ {key:'topic',label:'Topic / unit / questions to review',type:'textarea',ph:'e.g., Fractions: comparing, equivalent, adding with like denominators'},
+ {key:'teams',label:'Number of teams',type:'select',options:['3','4','5','6','Whole class as one team']},
+ {key:'boss',label:'Boss theme (optional)',type:'text',ph:'e.g., The Fraction Dragon, Captain Chaos, the Grammar Goblin'}],
+promptText:`ROLE
+You are an experienced elementary/secondary teacher AND a game developer. Build a whole-class review game I can run from my projector.
+
+CLASS
+Grade: {{grade}}
+Review topic / content: {{topic}}
+Teams: {{teams}}
+Boss theme: {{boss}}
+
+BUILD
+A single-file HTML5 app (inline CSS + JS, no external files, works offline). I control it with big buttons; students answer on mini whiteboards or by team discussion.
+
+FEATURES
+1. Setup screen: team names (editable; default fun names), question count (10/15/20).
+2. Generate 20 review questions from my content (mix of recall, application, and 4 "explain your thinking" questions). Put them all in one const QUESTIONS array at the top with a "HOW TO EDIT" comment. Each has: question, answer, a one-line teacher note on the most common misconception, and difficulty (1-3).
+3. Boss fight: a boss with a big HP bar. Each correct team answer deals damage; hard questions deal more. The class beats the boss TOGETHER. Teams earn "assist" stars for explaining their thinking (teacher-awarded button).
+4. Wrong answers: no losing points. The boss "stumbles" and I click "Teach It" to reveal the explanation, then the question returns later in the round.
+5. Teacher controls: Reveal Answer, Award Damage per team, Skip, Undo last action, big countdown timer I can switch on or off (default OFF).
+6. Victory screen with confetti (respect prefers-reduced-motion) and a "Review These Next" list of the questions the class struggled with.
+7. A "Print Answer Key" button producing a clean one-page printable list.
+8. Big readable fonts (24px+ for projection), high contrast, colorblind-safe.
+
+TONE: encouraging, silly, kind. No sarcasm, no humiliation.
+OUTPUT: 3-bullet plan, then ONE complete code block §§§html … §§§ with the entire file, then 4 lines of "how to run it" for a non-programmer.`
+},
+
+{
+id:'quest-board',
+title:'Classroom Quest Board & Token Economy App',
+icon:'🗺️', category:'APPS', grades:['K-2','3-5','6-8'],
+skills:['SDT','Token economy','Octalysis','Classroom management','Choice menu'],
+level:'Intermediate', time:'15 min + a day of testing', bestAI:'Claude, Gemini Pro or ChatGPT',
+description:'A teacher-run quest log and reward vault for your classroom: students earn XP and "Quest Tokens" for learning and responsibilities, then CHOOSE how to spend them. Built on Self-Determination Theory to avoid the "bribery backfire".',
+whatYouGet:['A one-file HTML class dashboard (data stays on your computer)','Quest board with daily, weekly and "boss" quests','XP, levels and tokens; choice-based reward menu','A built-in "Motivation Health Check" that warns you if rewards are getting too controlling'],
+steps:['Fill in grade, class size (no names!), and the kinds of quests you want.','Copy and paste into a new AI chat.','Save the code as questboard.html and open it on your teacher computer.','Spend 10 minutes customizing quests and rewards in the settings screen.','Launch it with the 3-minute "Why we do this" script the AI writes for you (students understand the purpose = better motivation).','After two weeks, paste your Motivation Health Check results into the Follow-Up prompt to tune it.'],
+tips:['Reward effort, strategy, and growth milestones, not just compliance. Celebrate the milestone ("you mastered multiplication facts!"), don\'t pay for basic behavior.','Offer rewards students can choose from: autonomy is the secret ingredient.','Use occasional, surprise celebrations alongside the token system. Research says unexpected rewards protect intrinsic motivation better than constant, predictable payment.','Fade the tokens over time. The goal is a scaffold that students outgrow.'],
+pitfalls:['Never reward activities students already love (free reading, drawing) with tokens: this can reduce their interest (overjustification effect).','Never take tokens away as punishment. Remove the system\'s power to shame.','Don\'t display individual balances publicly. Show a class goal bar instead.','Do not put real student names in the file if it is shared or stored in cloud folders.'],
+followups:[
+ {label:'Tune it after 2 weeks',text:'Here is how the quest system has gone after 2 weeks (anonymous): [WHAT STUDENTS LOVE, WHO IGNORES IT, ANY ARGUING]. Diagnose using Self-Determination Theory (autonomy, competence, relatedness) and propose 5 specific changes, including how to start fading tokens.'},
+ {label:'Write my launch script',text:'Write a 3-minute student-friendly launch script and a one-page parent note explaining the Quest Board: why we use it, how choices work, and that it never takes anything away. Reading level: {{GRADE}}.'}
+],
+fields:[fGrade,
+ {key:'size',label:'Class size (number only, no names)',type:'text',ph:'e.g., 24'},
+ {key:'quests',label:'What should quests be about?',type:'textarea',ph:'e.g., finishing math center goals, reading minutes, helping classmates, classroom jobs, growth-mindset challenges'},
+ {key:'rewards',label:'Reward ideas you can realistically offer',type:'textarea',ph:'e.g., choose seat for a day, lunch with teacher, 10 min free choice, DJ for the class, homework pass, sticker/badge, class game time'}],
+promptText:`ROLE
+You are a Learning Scientist (expert in Self-Determination Theory and the Octalysis framework) AND a front-end developer. Build a classroom quest and token system that motivates WITHOUT undermining students' intrinsic motivation.
+
+CONTEXT
+Grade: {{grade}} | Class size: {{size}} (I will NOT type real student names; students are shown as avatars/nicknames or numbers.)
+Quest themes: {{quests}}
+Rewards I can really offer: {{rewards}}
+
+PSYCHOLOGY GUARDRAILS (design to these)
+- AUTONOMY: students choose which quests to take and how to spend tokens. Menus of choices, never mandates.
+- COMPETENCE: rewards are framed as INFORMATION about growth (milestones, mastered skills), not control. Quests are scaled so they are neither too easy nor impossibly hard.
+- RELATEDNESS: include a cooperative CLASS GOAL (everyone contributes to one shared progress bar). No public ranking of individuals.
+- OVERJUSTIFICATION WARNING: never attach tokens to activities students already enjoy for their own sake; include a "Never reward this" note in settings and a Motivation Health Check (below).
+- Move students from external regulation → identified/integrated regulation: every quest displays a one-line "Why this matters" and each completed quest asks the student to reflect in one sentence ("What did you learn about yourself?").
+- NEVER subtract tokens. Mistakes reset a streak at most, with a free "streak shield" each week.
+- Include UNEXPECTED celebrations (random "Surprise Spotlight" badges for effort) in addition to the predictable tokens, and a "Fade Plan" screen that gradually reduces token frequency over weeks.
+
+BUILD (single-file HTML5, inline CSS + JS, offline, localStorage with try/catch, no external resources)
+1. Quest Board with three types: Daily (small habits), Weekly (skill goals), and Boss Quests (big projects). Teacher creates/edits them in a Settings screen.
+2. Quest completion: teacher or student taps "Submit"; for sensitive quests the teacher taps "Approve". Approved quests grant XP and Quest Tokens exactly ONCE (guard against double-clicking, i.e., idempotent).
+3. XP/levels with animated, tasteful feedback. Short synthesized sounds with a Mute button; respect prefers-reduced-motion.
+4. Reward Vault: the reward menu with token costs. Redemption requires sufficient balance (validate at the moment of redemption, never allow negative). Include an Undo window.
+5. Class Goal Bar + "Class Celebration" unlock when reached.
+6. Teacher Dashboard: quests completed per day, token flow in vs. out, and a MOTIVATION HEALTH CHECK that flags: (a) tokens being earned for tasks marked "intrinsically enjoyed", (b) one student dominating or far behind, (c) rewards becoming predictable-only, (d) suggestions for fading.
+7. Export: "Copy class summary" (anonymous text) and "Download JSON backup" / "Import backup".
+8. Accessibility: keyboard use, 44px targets, 18px+ text, high-contrast toggle, color not the only signal.
+
+OUTPUT FORMAT
+1) A short explanation (under 150 words) of how the design protects motivation.
+2) ONE complete code block §§§html … §§§ (entire file, no omissions).
+3) A "Week-1 Launch Checklist" (7 bullets) and a "When to fade the tokens" paragraph.
+If cut off, stop cleanly, write CONTINUE, and resume where you left off when I say "continue".`
+},
+
+{
+id:'fluency-studio',
+title:'Read-Aloud Fluency Studio (Voice Recorder App)',
+icon:'🎙️', category:'APPS', grades:['K-2','3-5','6-8'],
+skills:['Fluency','WCPM','MediaRecorder','Self-assessment','Reading'],
+level:'Intermediate', time:'10 min + testing on every device type', bestAI:'Claude or ChatGPT',
+description:'Students record themselves reading a passage, listen back, self-score with a kid-friendly rubric, and watch their fluency grow. Includes the cross-browser audio fix (Safari/iPad uses a different format).',
+whatYouGet:['An offline reading-practice app with record / playback / re-record','Teacher stopwatch + words-correct-per-minute (WCPM) calculator','Student self-reflection rubric and progress sparkline','Audio works on Chrome, Edge, Firefox AND Safari/iPad'],
+steps:['Paste your reading passage (or ask for one at the right level), choose grade.','Copy → paste into a new AI chat → save as fluency.html.','Test on EVERY device type your students use (Chromebook, iPad, laptop). Microphones behave differently.','If the mic is blocked, follow the "Mic won\'t work" tip below.','Students read 3 times; the app highlights growth between attempts.'],
+tips:['Microphones usually need the page to be on a secure connection. If the mic fails when opening the file from your computer, host the file (see Guides → "How to run what AI builds") or open it in Chrome.','Recordings stay on the device. Make sure students and parents know that.','Teach students to self-assess FIRST. Self-evaluation builds competence and ownership.'],
+pitfalls:['Safari (iPad) records in audio/mp4, Chrome records audio/webm. The prompt tells the AI to detect this — verify it works on an iPad.','Don\'t grade the recording like a test. Use it as practice and conferencing evidence.'],
+followups:[
+ {label:'Add a phrasing/expression rubric',text:'Add a 4-point fluency rubric (pace, accuracy, phrasing, expression) with kid-friendly descriptions and emoji, and let students rate themselves after each recording.'},
+ {label:'Passage generator',text:'Write 5 original 150-word passages at the {{GRADE}} level on the topic [TOPIC], each with a word count, 3 tricky vocabulary words, and 2 comprehension questions with answers.'}
+],
+fields:[fGrade,
+ {key:'passage',label:'Reading passage (paste) — or type "AI: write one about ___"',type:'textarea',ph:'Paste the passage students will read, or write: AI, write a 120-word passage about frogs'},
+ {key:'goal',label:'Fluency goal',type:'text',ph:'e.g., 90 WCPM by December; reading with expression'}],
+promptText:`ROLE
+You are a reading-intervention specialist AND a web developer who knows the browser audio APIs very well.
+
+CONTEXT
+Students: {{grade}}
+Reading passage (or instruction to write one): {{passage}}
+Fluency goal: {{goal}}
+
+BUILD a single-file HTML5 app (inline CSS + JS, no external dependencies, works offline).
+
+STUDENT EXPERIENCE
+1. Passage screen with large, adjustable text (A− / A+), line-height options, a word-by-word highlight option, and a "🔊 Listen First" button using speechSynthesis (hide it if unsupported).
+2. "🎙️ Record" / "⏹ Stop" / "▶️ Play" / "↻ Re-record" using the Web Audio + MediaRecorder APIs:
+   - Request the mic with navigator.mediaDevices.getUserMedia({audio:true}) inside try/catch; show a friendly message with steps if it is denied or unavailable.
+   - CRITICAL cross-browser rule: before creating the MediaRecorder, test MediaRecorder.isTypeSupported() for, in order: 'audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/aac', 'audio/ogg'. Use the first supported type; if none matches, create the recorder with no options. Safari/iPad needs audio/mp4.
+   - Collect chunks in ondataavailable, build one Blob on stop, play it through an <audio> element, and revoke object URLs when finished.
+   - Recordings stay in memory on this device only. Show "Your voice stays on this device" on screen. Never upload.
+3. After each recording, a 4-point self-assessment (pace, accuracy, phrasing, expression) with emoji and kid-friendly wording, plus a sentence stem: "Next time I will…".
+4. Up to 3 recordings per passage; students listen to attempt 1 vs. attempt 3 and answer "What got better?".
+5. A friendly progress view (sparkline of self-scores) — no comparison between students.
+6. Motivation: choice of avatar and theme color; growth-focused messages ("Your pace improved!"); NO points deducted, no leaderboards.
+
+TEACHER TOOLS
+- Passage word-count display, a stopwatch, and a WCPM calculator: (words read − errors) ÷ minutes, with fields for errors and seconds.
+- "Copy conference notes" button that outputs the self-scores and WCPM as plain text (nickname only).
+- A teacher note comparing the result to a typical fluency range for the grade — clearly labeled "approximate; use your district's norms".
+
+ACCESSIBILITY: keyboard operable, 44px targets, 18px+ text, high-contrast toggle, ARIA live messages, color never the only signal.
+CODE QUALITY: plain-English comments; passage stored in one const at the top with a "HOW TO CHANGE THE PASSAGE" comment.
+
+OUTPUT: 4-bullet plan, ONE complete code block §§§html … §§§, then a 5-line "Test on these devices" checklist (Chromebook, iPad Safari, Windows Chrome, Android Chrome, mic denied).`
+},
+
+/* ---------------------------------------------------------- BOOKS */
+{
+id:'leveled-books',
+title:'10-Tier Differentiated Book Engine',
+icon:'📚', category:'BOOKS', grades:['K-2','3-5','6-8'],
+skills:['Differentiation','Lexile','Comprehension','Vocabulary','Science/Social Studies'],
+level:'Intermediate', time:'10-20 min (AI may need 2-3 messages)', bestAI:'Claude or Gemini Pro (long outputs)',
+description:'One story or concept → ten versions at progressive reading levels with the same characters and facts, comprehension questions with answer keys, vocabulary support and illustration prompts.',
+whatYouGet:['10 reading-level versions of the SAME story','Bloom\'s/DOK-tagged comprehension questions + answer key','Vocabulary glossary and decoding notes per tier','A character & art "style bible" so illustrations stay consistent'],
+steps:['Fill in the story idea or the content you want embedded (science, social studies, SEL…).','Copy → paste into a new AI chat.','The AI may stop partway through. Say "Continue with Tier 5" and so on.','Copy each tier into a doc. Run it through a free readability checker (Lexile Analyzer, or Word/Docs reading-level stats).','Print tiers for groups, or load them on student devices.'],
+tips:['AI is only approximately accurate with Lexile numbers. ALWAYS verify with a readability tool before assigning, and trust your knowledge of your students.','Use the same story for the whole class so everyone can join the discussion — each child reads at the right level, but all talk about the same plot.','Do NOT label tiers by number when printing. Use animal or color names so students don\'t compare levels.','Ask for a decodable version aligned to your phonics scope & sequence for K-2.'],
+pitfalls:['Facts can drift between tiers. Spot-check Tier 1 and Tier 10 for scientific accuracy.','Lower tiers must not sound babyish for older struggling readers. Use the "older reader, lower level" follow-up.'],
+followups:[
+ {label:'Continue next tiers',text:'Continue with the next tiers exactly in the same format. Do not repeat earlier tiers. After each tier, give its estimated Lexile range and average sentence length.'},
+ {label:'Older reader, lower level (high-interest)',text:'Rewrite Tiers 1-4 for 6th-8th graders who read at that level: higher-interest tone, mature characters and humor, no childish illustrations or phrases, but the same decodability and vocabulary load.'},
+ {label:'Add vocabulary & discussion cards',text:'Create printable vocabulary cards (word, kid-friendly definition, picture idea, sentence from the story) for tiers 3, 6 and 9, plus 6 discussion questions that every tier can answer together.'},
+ {label:'Decodable K-2 version',text:'Rewrite Tiers 1-3 as DECODABLE text using ONLY these phonics patterns and high-frequency words: [PASTE YOUR SCOPE & SEQUENCE UP TO THIS WEEK].'}
+],
+fields:[fGrade,
+ {key:'story',label:'Story idea or concept to embed',type:'textarea',ph:'e.g., A young otter learns why wetlands matter (food chains and habitats)'},
+ {key:'concepts',label:'Academic concepts / vocabulary to weave in',type:'text',ph:'e.g., producer, consumer, habitat, adaptation'},
+ {key:'style',label:'Illustration style',type:'text',ph:'e.g., soft watercolor, 3D animated-feature style, comic-book'}],
+promptText:`ROLE
+You are a Master Literacy Specialist, a children's author, and a differentiation coach.
+
+MISSION
+Write ONE story in TEN reading-level versions so a whole class can read "the same book" at different levels.
+Target classroom: {{grade}} (levels span far below to far above this grade).
+
+STORY IDEA / CONTENT: {{story}}
+ACADEMIC CONCEPTS & VOCABULARY TO WEAVE IN: {{concepts}}
+ILLUSTRATION STYLE: {{style}}
+
+STEP 0 — SERIES BIBLE (output first, short)
+- Characters (name, 1-line look, personality), setting, 5 plot beats (the same in all tiers), 3-5 academic concepts that appear in EVERY tier, and a style guide for illustrations (colors, character details) for consistency.
+
+STEP 1 — TEN TIERS (each tier = a complete story, 3 short chapters)
+Keep identical characters, plot beats, and core concepts in every tier. Change ONLY the language complexity:
+- Tiers 1-3 (about 200L-400L): short sentences, high-frequency and decodable words, repetition, one idea per sentence, predictable structure.
+- Tiers 4-7 (about 500L-800L): compound/complex sentences, context-supported academic vocabulary, varied transitions, multi-paragraph chapters.
+- Tiers 8-10 (about 900L-1100L): complex syntax, figurative language, inference-heavy passages, richer vocabulary and nuance.
+For each tier give: Tier name (use an ANIMAL or COLOR label, not a number, so students can't rank themselves), estimated Lexile range, average sentence length, word count.
+
+STEP 2 — EMBEDDED SUPPORT (per chapter)
+- 3 comprehension questions (one literal, one inferential, one evaluative or "connect to your life"), tagged with Bloom's level and DOK. Include a short answer key with evidence from the text.
+- 3 bolded vocabulary words with kid-friendly definitions in a margin box (tiers 1-7).
+- One "Think-Aloud" prompt for teachers to model.
+- One image-generation prompt at the end of each chapter (for Canva/Midjourney/etc.), consistent with the series bible.
+
+STEP 3 — TEACHER PACKAGE
+- A 1-page teacher guide: how to group students, a whole-class discussion plan that works for ALL tiers, and a 5-question exit ticket usable with every tier.
+- Printing instructions: each tier on a separate page with a header and no tier number visible.
+
+HONESTY RULES
+- Lexile levels you give are ESTIMATES. State clearly that I must verify with a readability tool.
+- Do not invent facts. Keep science/social-studies facts accurate and simple, and flag any fact I should double-check.
+
+OUTPUT: Series bible + Tiers 1-3 first. End with "Reply 'continue' for Tiers 4-6", then 7-10 after that, then the teacher package.`
+},
+
+{
+id:'text-leveler',
+title:'Text Leveler & Scaffold Pack (Any Passage)',
+icon:'🪜', category:'BOOKS', grades:['K-2','3-5','6-8','9-12'],
+skills:['Differentiation','ELL','SPED','Scaffolds','Reading'],
+level:'Beginner', time:'3 min', bestAI:'Any',
+description:'Paste any article, textbook page, or primary source. Get it back at 3 levels (below / on / above grade) plus scaffolds: vocabulary, sentence stems, graphic organizer, and questions.',
+whatYouGet:['3 versions of your passage with the same core ideas','Pre-teach vocabulary list and picture clues','Sentence stems for speaking/writing (ELPS-friendly)','Questions at 3 depths + answer key'],
+steps:['Paste your passage (only text you have the right to use).','Fill in grade and the learning goal.','Copy → paste into a new AI chat.','Review the output with a quick read for accuracy and tone.','Print three groups or assign digitally.'],
+tips:['Include your learning goal. The AI will keep the key ideas and simplify the rest.','Ask for "Spanish cognates highlighted" when you have Spanish-speaking ELs.','Print a "no-label" header so levels are not obvious.'],
+pitfalls:['Oversimplifying primary sources changes meaning. Keep an original-text version available.','Check cultural references and idioms that confuse English learners.'],
+followups:[
+ {label:'Add Spanish cognates',text:'Highlight Spanish cognates and false friends in the vocabulary list for the on-grade version, with the Spanish equivalents.'},
+ {label:'Make a graphic organizer',text:'Create a printable graphic organizer (text-based table I can copy to a doc) that matches the learning goal.'}
+],
+fields:[fGrade,
+ {key:'goal',label:'Learning goal',type:'text',ph:'e.g., Identify the main idea and 2 supporting details'},
+ {key:'passage',label:'Paste your passage',type:'textarea',ph:'Paste the article or textbook text here'}],
+promptText:`ROLE
+You are an instructional coach who specializes in differentiation, English learner supports (ELPS) and special-education scaffolds.
+
+TARGET GRADE LEVEL: {{grade}}
+LEARNING GOAL: {{goal}}
+
+SOURCE PASSAGE:
+{{passage}}
+
+TASK
+Produce a "Scaffold Pack" from the passage above:
+1) THREE VERSIONS (same main ideas, same facts, same order of ideas):
+   A) Approaching (about 2 grade levels lower, shorter sentences, definitions in context)
+   B) On Grade (lightly cleaned up)
+   C) Extending (more complex syntax and an added higher-order thinking section)
+   Name them with neutral labels (Version Oak / Maple / Cedar) — not "easy/hard".
+2) PRE-TEACH VOCABULARY: 6-8 Tier-2/Tier-3 words with kid-friendly definitions, an example sentence, and a picture idea.
+3) SENTENCE STEMS: 6 stems for speaking and writing about the passage (beginning/intermediate/advanced language levels).
+4) GRAPHIC ORGANIZER: a clean text table matching my learning goal.
+5) QUESTIONS (3 depths): 3 literal, 3 inferential, 2 evaluative, with an answer key quoting the text.
+6) TEACHER NOTES: likely misconceptions and where students will stumble (idioms, cultural references).
+
+RULES: Do not add facts that are not in the passage. Flag anything that changed meaning when simplified.`
+},
+
+/* ---------------------------------------------------------- SPELLING */
+{
+id:'spelling-story',
+title:'Contextual Story & Humor Spelling Test Generator',
+icon:'🧪', category:'SPELLING', grades:['K-2','3-5','6-8'],
+skills:['Spelling','Vocabulary in context','Humor','Retrieval practice','Mnemonics'],
+level:'Beginner', time:'3 min', bestAI:'Any',
+description:'A continuous, funny story where students fill in missing spelling or vocabulary words. Wrong answers trigger a personalized memory trick. Choose adventure, superhero, or age-appropriate silly/gross-out humor.',
+whatYouGet:['A story-style fill-in-the-blank test using your word list','An answer key where each missed word has a memory trick (mnemonic)','Optional science/content facts woven into the story','Three versions (A/B/C) with scrambled order to reduce copying'],
+steps:['Paste your word list and pick a theme.','Copy → paste into a new AI chat.','Review the story for humor level that fits YOUR class.','Print or paste into a Google Doc. Choose "Version A" for the test and "B" for re-test.'],
+tips:['Humor boosts attention and memory. For upper elementary, "silly and slightly gross" works great. Keep it kind and never aimed at a real person.','Re-test missed words 2-3 days later (spaced practice) using Version B.','Make students write their own funny sentence for each missed word (generation effect).'],
+pitfalls:['Check that blanks make the word guessable from context, but do not give away the spelling.','Review humor for your school culture. If in doubt, choose "Superhero" or "Space".'],
+followups:[
+ {label:'Make Version B (re-test)',text:'Create Version B: a NEW story using the same words in different sentences and a different order, with the same answer-key format.'},
+ {label:'Add a student-written challenge',text:'Add a final section where students write their own 4-sentence story using the 5 words they missed most, with a rubric.'}
+],
+fields:[fGrade,
+ {key:'words',label:'Spelling / vocabulary words',type:'textarea',ph:'e.g., necessary, separate, definitely, argument, calendar'},
+ {key:'topic',label:'Content topic to weave in (optional)',type:'text',ph:'e.g., the water cycle'},
+ {key:'theme',label:'Theme',type:'select',options:['Superhero Academy Mission','Sci-Fi Space Exploration','Silly & Gross Humor (age-appropriate)','Fantasy Quest','Mystery Detective','Surprise me']}],
+promptText:`ROLE
+You are an engaging curriculum author and children's humorist.
+
+INPUTS
+Grade: {{grade}}
+Word list: {{words}}
+Content topic to weave in (optional): {{topic}}
+Theme: {{theme}}
+
+TASK
+Write a story-driven fill-in-the-blank spelling and vocabulary assessment.
+
+RULES
+1. ONE continuous, funny story (about 250-350 words for grades 3-5; adjust for younger/older). The story must naturally teach 3-4 facts about the content topic, if given.
+2. Replace each target word with a blank and a bracketed clue: ___ [Word #1: clue that helps without giving the spelling away]. Use each word in context where the meaning is clear.
+3. Include a mix of: context-clue blanks, definition-clue blanks, and 2 "find the misspelled word" moments hidden in the story.
+4. HUMOR GUARDRAILS: slapstick and silliness are welcome. NEVER make fun of real people, disabilities, bodies, cultures or religions. Keep gross-out humor mild (burps, silly smells), school-appropriate.
+5. SELF-CORRECTION KEY (student-friendly): for every word give the correct spelling and, if missed, a funny, memorable MEMORY TRICK (mnemonic, rhyme, or silly picture) tied to the story's characters.
+6. TEKS/ELA alignment: note which spelling pattern or vocabulary skill each word practices (e.g., suffixes, homophones, Greek/Latin roots) — mark "VERIFY CODE" if you add any standard number you are not 100% sure about.
+7. Produce 3 versions (A, B, C) with different stories and word order but the same word list, so I can re-test.
+8. Add a scoring guide: 90-100% = Spelling Champion, 70-89% = Rising Star, below 70% = Training Mission (growth wording only, no shaming).
+
+OUTPUT FORMAT: Version A first (story + answer key), then say "Reply 'B' for Version B." Keep formatting clean so I can paste into Google Docs.`
+},
+
+/* ---------------------------------------------------------- CAD */
+{
+id:'cad-stl',
+title:'Text-to-3D Printable (OpenSCAD) Classroom Manipulatives',
+icon:'🧊', category:'CAD', grades:['3-5','6-8','9-12'],
+skills:['OpenSCAD','Parametric CAD','Spatial reasoning','3D printing','TA-TEKS'],
+level:'Intermediate', time:'10 min + print time', bestAI:'Claude (strong at precise code) or any strong coding model',
+description:'Describe a classroom manipulative (fraction pieces, cell model, geometric solids) and get an OpenSCAD script with adjustable parameters, ready to export as an STL for your 3D printer.',
+whatYouGet:['An OpenSCAD script with a "settings" block at the top','Clear instructions to preview and export an STL','Printing notes (orientation, supports, infill, time estimate)','Student challenge ideas that teach variables and spatial reasoning'],
+steps:['Describe what you want to make and its approximate size.','Copy → paste into a new AI chat. Save the code in a plain text file named model.scad.','Install the free OpenSCAD app from openscad.org (or use a browser-based OpenSCAD tool if your district blocks installs).','Open model.scad → press F5 (preview) → F6 (render) → File → Export → STL.','Open the STL in your slicer (Bambu Studio, PrusaSlicer, Cura) and print. A small test print first!','Optional: import the STL into Tinkercad to combine with other shapes. Tinkercad imports STL files, it does not run OpenSCAD code.'],
+tips:['Start with ONE object. Complex assemblies are where AI geometry fails.','Change the numbers in the settings block to resize: that\'s the learning moment for students (variables!).','Ask the AI to "add a 0.2 mm tolerance" for pieces that need to fit together.','Print one test piece at 50% scale to save time and filament.'],
+pitfalls:['An OpenSCAD file is code, not a 3D model. You must open it in OpenSCAD and export an STL.','AI sometimes makes walls too thin for kids\' hands. Insist on a 2 mm+ minimum (2.4 mm is better).','Pieces that must fit together need tolerances; otherwise they print fused or too loose.'],
+followups:[
+ {label:'Fix a failed print',text:'My print failed because: [WHAT HAPPENED: warping, thin walls broke, parts fused, supports a mess]. Revise the OpenSCAD script to fix it, explain which parameter you changed and why, and give new print settings.'},
+ {label:'Make a student challenge',text:'Turn this model into a 45-minute lesson: students predict, change 3 parameters, re-render, and measure with calipers/ruler. Include a TA-TEKS-style computational thinking connection (variables, abstraction) and a rubric. Mark any standard code as VERIFY CODE.'},
+ {label:'Add a set of sizes',text:'Generate a set of 6 sizes of this object using a loop/module so one script prints all sizes in a row on one build plate (max 200x200 mm).'}
+],
+fields:[
+ {key:'concept',label:'What should the object represent / teach?',type:'textarea',ph:'e.g., fraction tiles: 1, 1/2, 1/3, 1/4, 1/6, 1/8 as rectangles that fit in one tray'},
+ {key:'size',label:'Approximate size / build plate',type:'text',ph:'e.g., largest piece 100 mm; fits a 200x200 mm plate'},
+ {key:'printer',label:'Printer / material (if known)',type:'text',ph:'e.g., Bambu A1, PLA'}],
+promptText:`ROLE
+You are an expert 3D-CAD engineer (OpenSCAD) and a STEM educator who designs for classroom durability.
+
+I WANT TO MAKE a 3D-printable classroom manipulative that helps students visualize:
+{{concept}}
+Size constraints: {{size}}
+Printer / material: {{printer}}
+
+REQUIREMENTS
+1. Write a COMPLETE, valid OpenSCAD script (Constructive Solid Geometry: cube, sphere, cylinder, union, difference, intersection, linear_extrude, etc.). Do NOT output STL text or mesh points.
+2. PARAMETRIC DESIGN: put all dimensions at the top as named variables with comments (e.g., wall_thickness = 2.4; object_scale = 1.0; tolerance = 0.2; $fn = 64). Everything else derives from these.
+3. WATERTIGHT/MANIFOLD GEOMETRY: all solids must overlap or share faces cleanly (no zero-thickness faces, no floating islands). When subtracting, extend the cutting shape slightly past the surface (0.01 mm) to avoid coincident faces.
+4. CLASSROOM DURABILITY: minimum wall thickness 2 mm (prefer 2.4), rounded or chamfered edges where small hands touch, no pieces smaller than 20 mm that could be a choking hazard for K-2 unless I said otherwise.
+5. PRINTABILITY: flat base on the build plate, avoid overhangs steeper than 45 degrees, minimize supports. State the best print orientation.
+6. FIT: where pieces must fit together, use the tolerance variable and say which value to adjust if too tight/loose.
+7. Use modules for each part with a comment explaining it in plain English, and make assembly vs. "print layout" selectable with a variable (view_mode = "assembled" or "print_layout").
+
+OUTPUT FORMAT
+A) One code block §§§openscad … §§§ with the complete script.
+B) Step-by-step instructions for a beginner: install OpenSCAD (free, openscad.org), paste the code, press F5 preview and F6 render, then File → Export → Export as STL. Mention that Tinkercad can IMPORT the STL but does not run OpenSCAD code.
+C) Print settings: layer height, infill %, supports (yes/no), estimated print time/filament at a typical 0.2 mm layer height, and a suggestion for a first 50%-scale test print.
+D) "Learning moments": 3 variables students can change and what they will observe.
+E) Self-check: list any assumptions you made and any parts that might be unprintable.`
+},
+
+];
+PROMPTS_DATA.push(
+
+/* ---------------------------------------------------------- GAMIFIER */
+{
+id:'octalysis-gamifier',
+title:'Unit Gamifier — Octalysis 8-Core-Drive Engine',
+icon:'⚡', category:'GAMIFIER', grades:['K-2','3-5','6-8','9-12'],
+skills:['Octalysis','Active learning','SDT','Unit planning','Low-tech friendly'],
+level:'Intermediate', time:'10 min', bestAI:'Claude, Gemini Pro or ChatGPT',
+description:'Redesigns a static study guide or unit into an active, game-like learning journey using all 8 Octalysis Core Drives, balanced so that intrinsic ("White Hat") motivators lead and pressure ("Black Hat") tricks are used sparingly.',
+whatYouGet:['A unit story arc (mission), skill tree and badge map','"Traditional task vs. Gamified version" side-by-side table','Week-by-week plan with a low-tech (no devices) option','A White Hat / Black Hat balance check'],
+steps:['Paste your unit overview, study guide, or lesson plan.','Fill in grade, time available, and what technology you have.','Copy → paste into a new AI chat.','Pick the 3-5 ideas you like best. You do not need to use all 8 drives at once.','Ask for the "Teacher workload check" follow-up to cut anything that takes too long.'],
+tips:['Start with ONE unit and ONE or TWO new mechanics. Add more once students love them.','The best gamification is often a good story + clear goals + fast feedback + student choice. You don\'t need an app.','Keep points and badges as feedback on progress, not as bribery.','Use pressure mechanics (timers, scarcity, loss) lightly and always with a safety net.'],
+pitfalls:['Leaderboards for everyone can crush struggling students. Prefer personal-best and team goals.','Too many mechanics = confusing. Aim for 3-5 simple ones.','Don\'t gamify tasks students already enjoy for their own sake — it can backfire.'],
+followups:[
+ {label:'Teacher workload check',text:'Review your unit design as a time-poor teacher. Rank each mechanic by (a) student impact and (b) teacher prep time. Cut the lowest-impact, highest-effort items and give me a "Minimum Viable Gamification" version I can launch in 30 minutes.'},
+ {label:'Write the story intro',text:'Write a 2-minute dramatic read-aloud intro for the unit mission, in the voice of a mysterious quest-giver, suitable for {{GRADE}}. Include a secret "mission briefing" handout.'},
+ {label:'Make badges & printables',text:'Design 10 badges with names, icons (emoji), and the exact criteria for each, tied to learning (not just compliance). Give a printable one-page badge tracker.'}
+],
+fields:[fGrade,
+ {key:'unit',label:'Unit / study guide / lesson plan (paste)',type:'textarea',ph:'Paste your unit overview, objectives, key vocabulary, and main assessments'},
+ {key:'time',label:'Unit length',type:'text',ph:'e.g., 3 weeks, 45 min/day'},
+ {key:'tech',label:'Technology available',type:'text',ph:'e.g., 1:1 Chromebooks, or "no student devices"'}],
+promptText:`ROLE
+You are a Lead Behavioral Game Designer and Instructional Architect, an expert in Yu-kai Chou's Octalysis Framework and in Self-Determination Theory (autonomy, competence, relatedness).
+
+CONTEXT
+Grade: {{grade}} | Unit length: {{time}} | Technology: {{tech}}
+UNIT MATERIALS:
+{{unit}}
+
+TASK
+Transform this unit into an engaging learning journey WITHOUT lowering rigor. Use the Octalysis 8 Core Drives, but follow the WHITE HAT FIRST rule: Core Drives 1-3 (Epic Meaning, Accomplishment, Creativity) and 4-5 (Ownership, Social Influence) are the foundation; Core Drives 6-8 (Scarcity, Unpredictability, Loss Avoidance) are used SPARINGLY and always with a safety net.
+
+For EACH core drive, give: (a) one concrete classroom mechanic, (b) exactly how to run it, (c) prep time for me, (d) the SDT need it supports, and (e) a risk to watch for.
+1. Epic Meaning & Calling — frame the unit as a mission with real stakes (story, roles, a "client" or community need).
+2. Development & Accomplishment — a skill tree with visible milestones and mastery badges tied to the unit's standards.
+3. Empowerment of Creativity & Feedback — 3 choice pathways to demonstrate mastery plus fast feedback loops (revise-and-resubmit, exit tickets).
+4. Ownership & Possession — students build or customize something they keep (avatar, portfolio, class museum, lab notebook).
+5. Social Influence & Relatedness — cooperative challenges, peer review with sentence stems, class-wide goals (NO public rankings of individuals).
+6. Scarcity & Impatience — one optional, time-limited side quest. Never required; never tied to grades.
+7. Unpredictability & Curiosity — Easter eggs, mystery boxes, surprise mini-challenges; cosmetic-only random rewards.
+8. Loss & Avoidance — streaks with a "streak shield"; NO point loss, only pauses.
+
+OUTPUT FORMAT
+1) THE MISSION: a 100-word story hook.
+2) SIDE-BY-SIDE TABLE: Traditional task | Gamified equivalent | Core Drive(s) | Prep time.
+3) WEEK-BY-WEEK MAP for the whole unit with daily 1-line activities, including a LOW-TECH (no devices) option for each week.
+4) SKILL TREE & BADGES: list each badge, its learning criterion, and the standards it evidences. If you cite TEKS, only use ones I provided or mark "VERIFY CODE".
+5) ASSESSMENT ALIGNMENT: confirm that game elements measure real mastery, not just participation.
+6) WHITE HAT / BLACK HAT BALANCE CHECK: estimate the % of mechanics by hat color and warn me if Black Hat exceeds about 25%.
+7) MOTIVATION SAFEGUARDS: 5 specific guardrails against over-rewarding and shaming.
+8) 30-MINUTE LAUNCH PLAN: the smallest version I can start tomorrow.`
+},
+
+{
+id:'gamification-audit',
+title:'Gamification Audit — Is My Reward System Helping or Hurting?',
+icon:'🔍', category:'GAMIFIER', grades:['K-2','3-5','6-8','9-12'],
+skills:['SDT','Overjustification','Octalysis','Classroom management','Reflection'],
+level:'Beginner', time:'5 min', bestAI:'Any',
+description:'Describe the points, stickers, class store, or behavior chart you already use. The AI audits it using Self-Determination Theory and Octalysis and tells you what is working, what may backfire, and exactly how to improve it.',
+whatYouGet:['A plain-English diagnosis of your current system','Red flags for the overjustification effect','White Hat / Black Hat balance score','5 small, specific fixes you can make this week'],
+steps:['Describe your current reward or behavior system honestly (what students earn, how, when, what happens when they misbehave).','Copy → paste into a new AI chat.','Choose ONE fix to try for two weeks. Don\'t overhaul everything.'],
+tips:['Be honest about what is not working. The AI cannot help with what it cannot see.','Include any pushback you hear from students ("why do I need this?").'],
+pitfalls:['Don\'t include student names or incidents about specific kids.'],
+followups:[
+ {label:'Create a fading plan',text:'Based on the audit, create a 6-week plan for gradually fading my external rewards while building intrinsic motivation. Specify what changes each week and what I should say to students.'},
+ {label:'Plan the conversation with students',text:'Write a 5-minute class meeting script to introduce the changes and invite student voice (autonomy), including 3 questions for students to answer.'}
+],
+fields:[fGrade,
+ {key:'system',label:'Describe your current system',type:'textarea',ph:'e.g., students earn class dollars for homework and good behavior; spend on Friday at the store; lose dollars for talking…'},
+ {key:'issues',label:'What\'s frustrating you?',type:'textarea',ph:'e.g., same 5 students always win, others have stopped caring; students ask "what do I get?" for everything'}],
+promptText:`ROLE
+You are a motivation scientist who applies Self-Determination Theory (Deci & Ryan), Organismic Integration Theory, the overjustification-effect research, and Yu-kai Chou's Octalysis Framework to real classrooms. You are kind, honest, and practical.
+
+MY CLASSROOM
+Grade: {{grade}}
+My current reward / behavior system:
+{{system}}
+
+What is not working:
+{{issues}}
+
+TASK — run a full audit:
+1. WHAT'S WORKING: list 3 strengths (honest, specific).
+2. SDT HEALTH CHECK: score (1-5) and explain Autonomy (do students have real choice?), Competence (is feedback informational and challenge well-matched?), Relatedness (does it build belonging or rivalry?).
+3. OVERJUSTIFICATION RISKS: identify any place where an expected reward may crowd out intrinsic motivation (e.g., rewarding reading that kids already enjoy). Explain the risk in plain language.
+4. OIT LADDER: where are students on the motivation continuum (external → introjected → identified → integrated)? What would shift them toward "I do this because it matters to me"?
+5. OCTALYSIS MAP: list which Core Drives my system uses; estimate White Hat vs. Black Hat balance and warn me about loss-based or scarcity-based mechanics that might create anxiety.
+6. EQUITY CHECK: who is likely to be left out or shamed (e.g., students with IEPs, English learners, students with difficult home lives)?
+7. TOP 5 FIXES: small, concrete changes I can make THIS WEEK, ranked by impact vs. effort, each with the exact words I might say to students.
+8. WHAT TO KEEP vs. WHAT TO RETIRE.
+Be direct but supportive. Do not tell me to remove all rewards; give me a path.`
+},
+
+{
+id:'class-economy',
+title:'Classroom Economy Designer (No-Tech, Motivation-Safe)',
+icon:'🪙', category:'GAMIFIER', grades:['3-5','6-8','9-12'],
+skills:['Token economy','SDT','Financial literacy','Classroom jobs','Choice menu'],
+level:'Intermediate', time:'10 min', bestAI:'Any',
+description:'Design a complete classroom economy (jobs, pay, store, savings) that teaches financial literacy while protecting intrinsic motivation. Includes printable templates and a launch script.',
+whatYouGet:['A job board and pay scale with "why this matters" statements','A store that sells experiences and choices (not just stuff)','Rules that prevent bribery effects and inequity','Printable money / tracking templates and a student launch script'],
+steps:['Fill in the grade and what you can afford to offer.','Copy → paste into a new AI chat.','Review for fairness for all students, including those with attendance issues or IEP accommodations.','Run a 2-week pilot and use the Audit prompt to evaluate.'],
+tips:['Economies work best when students help design them (autonomy).','Sell EXPERIENCES and CHOICES (seat choice, teacher-assistant for 10 min, music pick) rather than candy.','Give everyone a baseline "salary" for belonging; give bonuses for growth, not just for already-high performers.'],
+pitfalls:['A pay-to-behave system backfires over time. Link pay to jobs and growth, not basic expectations.','Fines and rent can punish low-income students. Avoid or make them symbolic and reversible.'],
+followups:[
+ {label:'Add equity safeguards',text:'Review the economy for equity: who might fall behind permanently? Add 4 safeguards (catch-up bonuses, group bank, forgiveness days, free-choice tokens) that keep it fair without feeling like charity.'},
+ {label:'Create printables',text:'Write text for printable job applications, paychecks, store price tags and a bank register that I can paste into a doc.'}
+],
+fields:[fGrade,
+ {key:'budget',label:'What can you offer? (time, prizes, privileges)',type:'textarea',ph:'e.g., $10/month budget, free seat choice, 10 minutes of free-choice time, lunch bunch, mystery bag'},
+ {key:'focus',label:'Main goal',type:'text',ph:'e.g., responsibility, financial literacy, math practice, community'}],
+promptText:`ROLE
+You are an elementary/secondary teacher-coach experienced in classroom economies, financial literacy education and Self-Determination Theory.
+
+CONTEXT
+Grade: {{grade}}
+What I can offer as "store" items: {{budget}}
+Main goal: {{focus}}
+
+DESIGN A COMPLETE CLASSROOM ECONOMY, following these rules:
+- AUTONOMY: students choose jobs (via application/interview), choose how to spend/save, and vote on at least 3 store items each month.
+- COMPETENCE: pay for growth milestones, contribution, and mastery — not for basic behavior that is simply expected of everyone. Include "personal best" bonuses so every student can win.
+- RELATEDNESS: a class "bank" or community fund for shared goals; group projects earn group rewards.
+- NO punishment by fines. Instead, "restorative" costs (fix it, help repair, reflect) only if I opt in.
+- Rewards are mostly EXPERIENCES and CHOICES, not candy or objects. Offer at least 10 low-cost store items.
+- Include some UNEXPECTED recognitions ("Surprise Spotlight") so rewards are not purely transactional.
+- Include a FADING PLAN: how to reduce the token emphasis by week 8.
+
+OUTPUT
+1) System overview in 8 lines (currency, how it's earned, how it's spent).
+2) JOB BOARD: 12 jobs with duties, pay, and a "why this matters" line.
+3) PAY & PRICE TABLE with an inflation/balance check.
+4) 3-4 FINANCIAL LITERACY MINI-LESSONS tied to the economy (saving, interest, budgeting, scarcity) with TEKS-style learning targets (mark "VERIFY CODE" for any standard number).
+5) EQUITY & ACCESS SAFEGUARDS (students who are absent a lot, students with IEPs, English learners).
+6) PRINTABLE TEXT: job application, paycheck, bank register, store price list.
+7) A 3-minute student launch script and a 5-sentence parent note.
+8) A 2-week pilot plan with 5 "check-in" questions for students.`
+},
+
+{
+id:'breakout-kit',
+title:'Paper Breakout / Escape Room Kit (Zero Devices)',
+icon:'🔐', category:'GAMIFIER', grades:['3-5','6-8','9-12'],
+skills:['Escape room','Cooperative learning','Review','Octalysis CD1/5/7','Low-tech'],
+level:'Beginner', time:'8 min', bestAI:'Any',
+description:'Turn your review content into a printable escape-room puzzle set: locks, ciphers, clue cards, and a story. Teams collaborate to "break out" by solving content questions.',
+whatYouGet:['A complete story, 5-6 puzzles that all depend on content mastery','Answer key and the exact lock/code sequence','Prep list and print list','Hints that protect struggling teams from frustration'],
+steps:['Fill in grade, topic, and the number of puzzles (5 is a good start).','Copy → paste into a new AI chat.','Print the clue cards. Gather simple props (envelopes, optional combo locks or a free digital form).','Do a "dry run" with a colleague to catch mistakes.','Run it for 30-40 minutes and debrief with "Which puzzle taught you the most?".'],
+tips:['Have a hint card system: teams can "buy" hints with a clue token, but there is no penalty.','Mix puzzle types so different strengths matter (logic, vocabulary, numbers, observation).','Reveal the answer key to students AFTER, then discuss misconceptions.'],
+pitfalls:['Content must be the key, not trivia. If puzzles can be solved without the content, redesign.','Avoid timers that cause panic. Use "story time" rather than a hard clock if your class gets anxious.'],
+followups:[
+ {label:'Make it digital',text:'Convert this breakout into a Google Forms-compatible structure: list each page, the questions, correct answers for response validation, and the section-jump logic.'},
+ {label:'Differentiate',text:'Create an "Approaching" and an "Extending" version of puzzles 2 and 4 so groups can work at the right challenge level but still finish together.'}
+],
+fields:[fGrade,
+ {key:'topic',label:'Review content',type:'textarea',ph:'e.g., Ratios and proportional relationships: unit rate, equivalent ratios, scale drawings'},
+ {key:'story',label:'Story theme (optional)',type:'text',ph:'e.g., escape the haunted library, defuse the time bomb, save the space station'},
+ {key:'minutes',label:'Time available',type:'select',options:['20 minutes','30 minutes','40 minutes','50 minutes']}],
+promptText:`ROLE
+You are an educational escape-room designer and veteran classroom teacher.
+
+CONTEXT
+Grade: {{grade}} | Time: {{minutes}} | Story theme: {{story}}
+Content students must have mastered to win:
+{{topic}}
+
+DESIGN A PAPER-BASED BREAKOUT FOR TEAMS OF 3-4
+Requirements:
+1. A short, exciting STORY (under 120 words) with a clear goal and a cooperative tone. No scary or violent content for young students.
+2. 5 puzzles in an order that makes sense. Each puzzle MUST require a specific skill from the content (not just trivia or luck), and each yields a code (3-4 digits, a word, or a direction) used for the final lock.
+3. Variety: at least one logic puzzle, one vocabulary/cipher puzzle, one numerical puzzle, one observation/pattern puzzle, and one "explain it" puzzle that needs a short written justification.
+4. For EACH puzzle give: the clue card text (printable), the intended thinking, the correct answer, the code it produces, a 3-level hint (nudge → stronger hint → near answer), and the standard/skill it practices (mark "VERIFY CODE" if citing standards you aren't sure of).
+5. FINAL LOCK: how the codes combine; a "meta-puzzle" that rewards teamwork.
+6. TEACHER SECTION: a prep and printing checklist, supplies list (cheap options), room setup, and a 5-minute debrief script with 5 reflective questions.
+7. EQUITY & ACCESS: how to adapt for students with reading difficulties, color-blindness, mobility needs, and English learners.
+8. ANSWER KEY page that I can print for myself.
+
+SAFETY: puzzle logic must be verifiable and consistent. Double-check every code works before outputting.`
+},
+
+/* ---------------------------------------------------------- ANALYTICS */
+{
+id:'iep-analytics',
+title:'Behavioral & IEP Data Analytics Reporter',
+icon:'📊', category:'ANALYTICS', grades:['K-2','3-5','6-8','9-12'],
+skills:['TEKS Behavior Alignment','IEP/ARD','MTSS','ESF Levers','De-identified data'],
+level:'Advanced', time:'10 min', bestAI:'An AI tool your district has approved for student data',
+description:'Turns de-identified student activity metrics and observations into a structured progress summary aligned with the TEA TEKS Behavior Alignment domains, MTSS tiers, and the Effective Schools Framework. It supports your professional judgment; it never replaces the ARD/IEP committee.',
+whatYouGet:['Strengths and gaps in neutral, objective language','Mapping to TEKS Behavior Alignment domains (active listening, task focus, communication, multi-step directions, collaboration)','Progress toward IEP goal wording (rate, trend, % accuracy)','Offline, zero-screen interventions and accommodations to try'],
+steps:['READ the Privacy section first. Remove names, IDs, birthdates, school and any identifying details. Use "Student A".','Paste the metrics and observation notes.','Copy → paste ONLY into an AI tool your district has approved for student data.','Review every claim against your records. Delete anything not supported by data.','Use the report as a draft for ARD/MTSS meetings and parent communication.'],
+tips:['Objective language beats labels. "Left seat 4 times in 20 minutes" is better than "hyperactive".','Add the antecedent (what happened before) and the behavior\'s function if you know it.','Ask for a "parent-friendly version" so families understand their child\'s strengths first.','Keep original data. The AI summary is not a record.'],
+pitfalls:['Never paste identifying information into a public AI chat. Ask your district first.','AI cannot diagnose, determine eligibility, or write legally defensible IEP goals alone.','If the data is thin, the AI may over-interpret it. Add the "do not invent data" rule (already included).'],
+followups:[
+ {label:'Parent-friendly version',text:'Rewrite the report as a warm, strengths-first letter to the family (grade 6 reading level, no jargon, no labels), including 3 things they can try at home this week.'},
+ {label:'Draft measurable goal language',text:'Draft 2 measurable goal statements (condition, behavior, criterion, timeframe) from this data for the ARD committee to consider. State clearly that these are drafts for professional review.'},
+ {label:'Spot data gaps',text:'List what additional data I should collect over the next 2 weeks (what, how often, how) to make the picture clearer, using simple tools like tally sheets or time samples.'}
+],
+fields:[fGrade,
+ {key:'metrics',label:'De-identified metrics & observations',type:'textarea',ph:'Student A: Math game accuracy 62% (week 1) → 78% (week 4). On-task 6 of 10 minutes. Needed 3 prompts to start. Left seat twice. Responds well to choice of 2 tasks…'},
+ {key:'goals',label:'IEP/MTSS goal areas (optional)',type:'text',ph:'e.g., task persistence, multi-step directions, math problem solving'}],
+promptText:`ROLE
+You are a Special Education Data Specialist and Behavior Support Consultant supporting a Texas public school teacher. You are objective, strengths-based, and careful. You support — and never replace — the professional judgment of teachers and the ARD/IEP committee.
+
+PRIVACY
+Treat the student as "Student A". If I included any real name, ID, birthdate or other identifying details, ignore them and remind me to de-identify before continuing.
+
+INPUT
+Grade: {{grade}}
+Goal areas (if any): {{goals}}
+De-identified metrics and observations:
+{{metrics}}
+
+RULES (important)
+- Use ONLY the data I provided. Do NOT invent numbers, incidents, diagnoses, or causes. When data is missing, write "NOT ENOUGH DATA" and tell me what to collect.
+- Use objective, observable, non-labeling language. Describe behavior (what you can see/hear), not traits or motives.
+- Strengths first. Never use deficit language about the child.
+- Do not make eligibility or diagnostic statements. Avoid medical advice.
+
+REPORT STRUCTURE
+1. SNAPSHOT (3-4 sentences): who the learner is in this data, in plain language.
+2. TRENDS: quantify (percent, rate per minute, number of prompts); show direction of change over time, and whether the sample size is large enough to trust.
+3. TEKS BEHAVIOR ALIGNMENT: map observations to the TEA TEKS Behavior Alignment domains (active listening, expressive communication, collaborative discussion, task focus/persistence, multi-step directions, self-regulation). For each domain: evidence + level of support needed (independent / minimal / moderate / substantial) — only where the data supports it.
+4. MTSS / IEP PROGRESS: describe progress toward the goal areas I listed (baseline, current, trend). Note which supports seem to help (e.g., choice, chunking, visual schedules).
+5. ESF ALIGNMENT: connect findings to the Texas Effective Schools Framework — Lever 4 (high-quality instructional materials & assessments) and Lever 5 (effective instruction: data-driven, differentiated, feedback loops) — in 2-3 sentences each.
+6. STRENGTHS & GAPS: exactly 3 strengths and 2 learning gaps, each tied to data.
+7. ACTIONABLE SUPPORTS: 3 five-minute, zero-screen sensory or kinesthetic accommodations or interventions (e.g., movement break, visual checklist, chunked directions) for classroom and home, each with how to implement and how to measure.
+8. NEXT STEPS: what data to collect, who to consult, and a suggested date to review.
+9. LIMITATIONS: a short, honest note about the data's limits.
+
+FORMAT: headings + short bullets + one summary table. End with "This is a draft to support professional judgment. Verify against official records before use."`
+},
+
+{
+id:'parent-summary',
+title:'Parent & Student AI Helper (Share With Families)',
+icon:'🤖', category:'ANALYTICS', grades:['K-2','3-5','6-8','9-12'],
+skills:['Parent communication','Data interpretation','Home activities','Plain language'],
+level:'Beginner', time:'2 min', bestAI:'Any',
+description:'A ready-to-share prompt families paste into any AI along with their child\'s game or assessment report. It returns a warm explanation and simple at-home activities.',
+whatYouGet:['A parent-friendly summary in plain language','Explanation of unmastered skills without jargon','Two 5-minute no-screen games for tonight','A built-in privacy reminder for families'],
+steps:['Fill in the grade and subject (for context).','Copy the helper prompt.','Paste it into your parent email, class website or into the game\'s "Copy AI Helper" button.','Families paste the prompt + their child\'s report into any AI chat.'],
+tips:['Send it with a short note: "This is optional and your child\'s information stays with you."','Offer a Spanish version for your families (see follow-up).'],
+pitfalls:['Remind families not to share the child\'s full name or school with public AI tools.'],
+followups:[
+ {label:'Spanish version',text:'Translate the helper prompt into natural, warm Spanish suitable for families, keeping the same privacy reminder and structure.'},
+ {label:'Add a weekly routine',text:'Extend it so the AI also suggests a simple 10-minute weekly routine (3 days) for practicing the weak skills in a playful way.'}
+],
+fields:[fGrade,
+ {key:'subject',label:'Subject / skill area',type:'text',ph:'e.g., 4th grade math: fractions'}],
+promptText:`[TEACHER NOTE: Copy everything below the line and send it to families, or place it behind a "Copy AI Helper" button in your learning app.]
+
+--- FAMILY PROMPT (paste into any AI, then paste your child's report below it) ---
+
+You are a friendly Educational Data Coach helping a parent of a {{grade}} student. The subject is: {{subject}}.
+
+PRIVACY FIRST: Do not ask for the child's full name, address, or school. If I include them, ignore them. Use "your child".
+
+Below this message I will paste a learning report (scores, accuracy, time, mastered skills).
+
+YOUR JOB:
+1. Read the numbers and explain them in plain, jargon-free language a busy parent can understand in 30 seconds.
+2. Write a warm 3-sentence summary that celebrates the child's top 2-3 wins (effort, improvement, strategies) BEFORE mentioning anything to work on.
+3. Explain any skills not yet mastered like you would to a friend: what the skill is, why it matters, and a common reason kids find it tricky.
+4. Give 2 playful, 5-minute, NO-SCREEN activities for tonight (dinner table, car ride, kitchen) that practice those skills — with the exact words to say.
+5. Offer one encouraging sentence parents can say to their child. Avoid comparing to other kids.
+6. If anything looks concerning (big drops, frustration), gently suggest talking to the teacher, without diagnosing anything.
+Keep it under 250 words. Tone: warm, calm, never alarming.
+
+---- (Paste the child's report here) ----`
+},
+
+{
+id:'class-data-groups',
+title:'Class Data → Small Groups & Reteach Plan',
+icon:'🧮', category:'ANALYTICS', grades:['K-2','3-5','6-8','9-12'],
+skills:['ESF Lever 5','Data-driven instruction','Small groups','Reteach','Formative assessment'],
+level:'Intermediate', time:'5 min', bestAI:'Claude or Gemini Pro (good with tables)',
+description:'Paste anonymized class assessment data. Get small-group recommendations, error analysis, reteaching lessons, and a plan for enrichment. Directly supports Effective Schools Framework Lever 5 (data-driven, differentiated instruction).',
+whatYouGet:['Error pattern analysis per standard','3-4 flexible groups with targeted skills','A 15-minute reteach mini-lesson per group','Quick formative checks to know if it worked'],
+steps:['Export or type your assessment results as a table (use Student 1, 2, 3… not names).','Fill in the standards assessed.','Copy → paste into a new AI chat.','Review the groups. YOU know the kids; adjust where you know better.','Teach the mini-lessons and re-check with the quick formative.'],
+tips:['Include distractor data (which wrong answers students picked). It reveals misconceptions.','Keep groups flexible: regroup every 1-2 weeks, never label groups "low" or "high".','Ask for "teaching moves" like manipulatives, anchor charts, or number talks.'],
+pitfalls:['Small samples can mislead. If only 2 students missed something, a quick conference may beat a lesson.','Never paste real names.'],
+followups:[
+ {label:'Write the quick check',text:'Create a 5-question exit ticket for each group that checks only the targeted skill, with an answer key and a threshold for "ready to move on".'},
+ {label:'Generate enrichment',text:'Create an enrichment challenge for students who mastered everything, with an open-ended problem that connects to a real-world scenario.'}
+],
+fields:[fGrade,
+ {key:'standards',label:'Standards / skills assessed',type:'textarea',ph:'e.g., 5.3A Add and subtract fractions with unlike denominators; 5.3B …'},
+ {key:'data',label:'Paste anonymous data',type:'textarea',ph:'Student 1: Q1 ✓ Q2 ✗(chose B) Q3 ✓ …  or percentage by standard'}],
+promptText:`ROLE
+You are an instructional coach for data-driven instruction (Texas Effective Schools Framework, Lever 5) and an expert in error analysis and flexible small-group instruction.
+
+CONTEXT
+Grade: {{grade}}
+Standards / skills assessed: {{standards}}
+
+ANONYMIZED CLASS DATA:
+{{data}}
+
+TASKS
+1. ERROR ANALYSIS: for each standard/question cluster, show the class mastery % and the most common wrong answers. Infer likely misconceptions (state your confidence: high / medium / low) and what each wrong answer suggests about student thinking.
+2. GROUPING: propose 3-4 flexible small groups using NEUTRAL names (not "low/high"). For each: which student numbers, the shared skill gap, and why they belong together. Flag any student who needs a 1:1 conference.
+3. RETEACH PLAN: for each group, a 15-minute mini-lesson with (a) a short script, (b) a visual or manipulative, (c) a guided-practice problem, (d) a student-friendly strategy anchor chart idea, (e) a quick check question.
+4. WHOLE-CLASS MOVES: 2 targeted whole-class warm-ups to address misconceptions common to many.
+5. ENRICHMENT: a challenge for students who have mastered the skills.
+6. PROGRESS MONITORING: a 3-question formative per group and the threshold for exiting the group.
+7. DATA CAVEATS: note small sample sizes, ambiguity, or anything I should verify.
+8. ESF LEVER 5 SUMMARY: 3 bullets I could paste into my team's data meeting notes.
+
+RULES: Don't invent data. Treat groups as temporary. Use growth-oriented language.`
+},
+
+/* ---------------------------------------------------------- FAMILY */
+{
+id:'home-connect',
+title:'Family Connection Kit: Letter + Home Quests (No Screens)',
+icon:'🏠', category:'FAMILY', grades:['K-2','3-5','6-8'],
+skills:['Parent engagement','Home-school','SDT','Choice','Family quests'],
+level:'Beginner', time:'3 min', bestAI:'Any',
+description:'A warm family letter and a menu of 5-10 minute "Home Quests" that reinforce what you are teaching — built on choice and connection, not nagging, homework fights, or screen-time bribery.',
+whatYouGet:['A short letter families actually read','A menu of home quests (kids choose!)','Conversation starters for dinner or car rides','Optional bilingual version'],
+steps:['Fill in grade, unit and what you\'d like families to do (or NOT do).','Copy → paste into a new AI chat.','Edit for your own voice and send via your usual channel (ClassDojo, Remind, email).','Invite families to reply with a photo or a one-line story about their favorite quest.'],
+tips:['Give choice: "Pick one of these three this week."','Celebrate effort, not perfection. Avoid mention of grades or comparisons.','Never tie screen time to homework in your letter; research shows this can reduce interest in the task itself.'],
+pitfalls:['Long letters don\'t get read. Keep it under 200 words.','Avoid assuming all families have printers, internet, or extra time.'],
+followups:[
+ {label:'Spanish / bilingual version',text:'Provide a natural Spanish version of the letter and quests (not literal translation), keeping the warm tone.'},
+ {label:'Low-resource version',text:'Rewrite the home quests so they need NO special supplies, internet, or printing — only things found in most homes.'}
+],
+fields:[fGrade,
+ {key:'unit',label:'What are you teaching right now?',type:'text',ph:'e.g., fractions, the water cycle, persuasive writing'},
+ {key:'ask',label:'What do you want families to do (or not do)?',type:'text',ph:'e.g., chat for 5 minutes about the day; read together; NOT quiz or correct them'}],
+promptText:`ROLE
+You are a family-engagement specialist and an experienced elementary teacher who knows that families are busy and not every home has the same resources.
+
+CONTEXT
+Grade: {{grade}} | Current learning: {{unit}}
+What I'd like from families: {{ask}}
+
+WRITE A FAMILY CONNECTION KIT
+1. A warm, plain-language letter (under 180 words, 6th-grade reading level, no jargon): what we're learning, why it matters, and one thing families can do. Do NOT mention grades. Tone: friendly teammate.
+2. HOME QUEST MENU: 8 quests of 5-10 minutes each, built from ordinary household things, with NO screens required. Mix: talk, make, move, cook, play, and notice-the-world quests. Each quest has a kid-friendly title and the exact words a parent can say to start it.
+3. DINNER-TABLE QUESTIONS: 6 open-ended questions (no right or wrong answers) about the topic.
+4. "CHOICE, NOT CHORES" NOTE: 3 sentences explaining that kids pick which quest to try. Explicitly advise families NOT to use screen time or prizes as payment for these, because it can reduce curiosity.
+5. A short, optional way for families to share a win (photo or a one-line reply).
+6. A SPANISH version of items 1-3 (natural, not literal) — only if I say "include Spanish".
+Keep the whole kit to one printed page if possible.`
+},
+
+/* ---------------------------------------------------------- BUILD (advanced) */
+{
+id:'family-quest-spec',
+title:'Family Quest App — Product & Behavior Blueprint',
+icon:'📐', category:'BUILD', grades:['ALL'],
+skills:['Product spec','SDT','Variable rewards','Ethics','UX'],
+level:'Advanced', time:'15 min', bestAI:'Claude, Gemini Pro or ChatGPT (reasoning model)',
+description:'The first step before any code: a complete product + behavior spec for a ZynthFitQuest-style family productivity game (calendar, chore quests, reward vault), based on your research report. Includes ethical guardrails so it motivates without manipulating kids.',
+whatYouGet:['A 3-pillar app spec: Command Center, Daily Quest Log, Reward Vault','Token economy rules with anti-overjustification design','Screens list + user stories for parents and kids','Ethics, safety and COPPA/privacy checklist'],
+steps:['Read "Where we improved the research report" in What\'s New (bottom of page).','Fill in the form: kids\' ages and your goals.','Copy → paste into a new AI chat. Save the result in a doc; this is your "source of truth".','Next, use the Backend prompt and the iOS Screen Time prompt (below) using this spec as the input.'],
+tips:['Write the spec BEFORE the code. It prevents costly rebuilds.','Test the spec with real families (even 3 households) before investing in the build.','Design for the PARENT\'s time first: if setup is a chore, parents will quit before the kids do.'],
+pitfalls:['Do not copy casino-style mechanics (loot boxes, pay-to-skip, endless variable rewards) — especially for kids. The spec explicitly forbids them.','Collecting data about children triggers legal duties (COPPA in the U.S., plus state laws). Talk to a professional before launch.'],
+followups:[
+ {label:'Create a 4-week MVP roadmap',text:'Turn the spec into a 4-week Minimum Viable Product roadmap for ONE developer (or AI-assisted builder), listing exactly what to build each week and what to cut.'},
+ {label:'User-test script',text:'Write a 20-minute test script and 10 interview questions for trying the app with 3 families (kids 6-12), including what signals tell us the motivation is healthy vs. manipulative.'}
+],
+fields:[
+ {key:'ages',label:'Children\'s ages',type:'text',ph:'e.g., 7, 10 and 13'},
+ {key:'goals',label:'What chores / routines do you want to support?',type:'textarea',ph:'e.g., morning routine, homework, cleaning room, reading 20 min, practicing instrument'},
+ {key:'rewards',label:'What privileges can be earned? (be realistic)',type:'text',ph:'e.g., 15-min tablet game sessions, choose movie, stay up 15 min late'}],
+promptText:`ROLE
+You are a senior product designer and behavioral scientist specializing in children's apps, Self-Determination Theory (autonomy, competence, relatedness), Organismic Integration Theory, and ethical use of reinforcement schedules.
+
+THE IDEA
+"ZynthFitQuest" — a family app that turns household productivity (chores, routines, schoolwork) into a game kids WANT to play, while preserving their intrinsic motivation. Its three pillars:
+- Pillar 1 "The Command Center": shared family calendar & organization (color-coded events, smart reminders that replace parental nagging).
+- Pillar 2 "The Daily Quest Log": chores / to-dos as a visual quest board with tap-to-complete, satisfying micro-animations and XP (competence).
+- Pillar 3 "The Reward Vault": earned "Quest Tokens" let kids CHOOSE how to spend rewards (e.g., timed access to a game), preserving autonomy.
+
+FAMILY CONTEXT
+Children's ages: {{ages}}
+Routines to support: {{goals}}
+Privileges that can be earned: {{rewards}}
+
+PRODUCE A PRODUCT & BEHAVIOR BLUEPRINT
+1. USERS & JOBS-TO-BE-DONE: parent, child (by age band), co-parent. What each is trying to accomplish and what annoys them today.
+2. PSYCHOLOGY DESIGN RULES (explain how each is implemented):
+   - Variable-ratio style surprise: use only SAFE, cosmetic, capped surprises (e.g., a random celebration animation or sticker), never gambling-style mechanics, loot boxes, or pay-to-skip.
+   - Overjustification protection: rewards celebrate milestones and effort, are not offered for tasks the child already loves, and are tapered into occasional unexpected celebrations over time. Each chore has a "why it matters" line, and children can propose their own quests.
+   - Internalization ladder (external → introjected → identified → integrated): how the app moves kids up it.
+   - Autonomy: kids choose WHEN and HOW to complete (within windows), choose how to spend tokens, and customize their avatar.
+   - Competence: difficulty scaling by age, visible progress, no public shaming.
+   - Relatedness: cooperative family goals and non-toxic, private-by-default family leaderboards (opt-in).
+3. TOKEN ECONOMY RULES: earning, spending, expiration (none by default), parent approval rules, what happens when a chore is missed (no token deduction), anti-cheating rules, and a "tapering plan".
+4. "BRAIN-ROT" REWARD CATALOG (as parent-approved rewards): how idle/clicker-style, chaos mini-game and endless-runner-style apps may be used as time-boxed rewards (e.g., a 15-minute session) and why short sessions + clear end are healthier than all-day access.
+5. SCREEN LIST: every screen for parent and child with a 1-line purpose.
+6. USER STORIES (20) with acceptance criteria for the MVP; label each Must / Should / Could.
+7. METRICS OF HEALTHY ENGAGEMENT: what to measure (e.g., chore completion without prompts, child-initiated quests, parent nag-count) and RED-FLAG metrics (compulsive use, anxiety, arguments).
+8. ETHICS & LEGAL CHECKLIST: COPPA / children's privacy (verifiable parental consent, data minimization), app store rules for kids/parental controls, accessibility, and the "no dark patterns" promise. Remind me to consult a qualified professional before launch.
+9. RISKS & MITIGATIONS (top 8).
+Format with clear headings and tables where helpful. Be concrete, not generic.`
+},
+
+{
+id:'supabase-backend',
+title:'Secure Supabase Backend — Schema, RLS, Triggers, Locking',
+icon:'🛢️', category:'BUILD', grades:['ALL'],
+skills:['Supabase','PostgreSQL','Row Level Security','Triggers','Concurrency'],
+level:'Advanced', time:'20 min (+ a developer\'s review)', bestAI:'Claude (precise SQL)',
+description:'Generates a production-minded database for the family quest app: families, users, tasks, wallets and a transaction ledger — with Row Level Security, server-side token crediting, parent approval, and race-condition-proof redemption. Improved from the research doc\'s design.',
+whatYouGet:['Complete SQL: tables, constraints, indexes','RLS policies that make cross-family data leaks impossible','Server-only token crediting via trigger + immutable ledger','A "redeem reward" function using row locking (no double-spend)'],
+steps:['Create a free project at supabase.com.','Copy the prompt → paste into a new AI chat. Do NOT paste any secret keys.','In Supabase open "SQL Editor", paste the SQL, and run it in a TEST project first.','Use the AI\'s test script (included) to verify child accounts cannot give themselves tokens.','Have a developer or security-savvy friend review before real families use it.'],
+tips:['Never put your service_role key inside the app. Only the public (anon/publishable) key goes in client code.','Test with TWO fake families to confirm family A can never see family B.','Ask the AI to explain each policy in plain English; if you cannot understand it, you cannot trust it.'],
+pitfalls:['Letting a child UPDATE task status directly to "completed" lets them self-award tokens. This prompt uses a parent-approval status flow instead.','Mutating a balance without a ledger makes disputes and bugs impossible to audit.','Security-definer functions without a fixed search_path are a known risk. The prompt requires one.'],
+followups:[
+ {label:'Write attack tests',text:'Write SQL test cases acting as (1) a child trying to raise their own balance, (2) a child from family A reading family B tasks, (3) two simultaneous redemptions of the last 100 tokens, (4) a parent approving the same task twice. State the expected result of each.'},
+ {label:'Explain it simply',text:'Explain every table, policy and trigger in plain English for a non-programmer, using a "bank vault" analogy, and list the 5 most important things to never change.'}
+],
+fields:[
+ {key:'roles',label:'Roles in your app',type:'text',ph:'e.g., parent, child (and optionally guardian/caregiver)'},
+ {key:'extras',label:'Anything extra to store?',type:'text',ph:'e.g., calendar events, recurring chores, reward catalog, game session history'}],
+promptText:`ROLE
+You are a senior Postgres/Supabase engineer and application-security reviewer. Precision and security matter more than brevity.
+
+PROJECT
+A multi-tenant family app ("ZynthFitQuest"): families contain parents and children; children complete tasks (quests) approved by parents; approved tasks credit "Quest Tokens" to the child's wallet; children spend tokens in a Reward Vault (e.g., a timed game session).
+Roles: {{roles}}
+Extra data to store: {{extras}}
+
+DELIVER SQL FOR SUPABASE (Postgres), run in order, with comments in plain English:
+
+1. TABLES (uuid primary keys, created_at timestamps, NOT NULL and CHECK constraints, ON DELETE rules, indexes on foreign keys):
+   - families(id, name, created_at)
+   - profiles(id uuid PK references auth.users, family_id, role in ('parent','child'), display_name, created_at)
+   - tasks(id, family_id, assignee_id, title, why_it_matters, reward_amount int CHECK >= 0, status in ('assigned','submitted','approved','rejected'), submitted_at, approved_by, approved_at, created_by)
+   - wallets(user_id PK, family_id, token_balance int NOT NULL DEFAULT 0 CHECK (token_balance >= 0))
+   - token_ledger(id, family_id, user_id, delta int, reason, task_id nullable, redemption_id nullable, created_at) — APPEND-ONLY audit trail; UNIQUE(task_id) for 'task_approved' entries so a task can never pay out twice.
+   - rewards(id, family_id, name, cost int CHECK > 0, session_minutes, active)
+   - redemptions(id, family_id, user_id, reward_id, cost, created_at, expires_at)
+
+2. ROW LEVEL SECURITY: enable RLS on EVERY table. Write policies using a helper function (SECURITY DEFINER, with SET search_path = '' and fully qualified names) such as public.current_family_id() and public.is_parent(), so policy checks are fast and do not recurse. Rules:
+   - Everyone can read only rows in their own family. Children can read only their own wallet, ledger and redemptions.
+   - Parents can INSERT/UPDATE/DELETE tasks and rewards in their family.
+   - Children can only move THEIR OWN task from 'assigned' to 'submitted' (enforce with a policy AND a column-level restriction or a BEFORE UPDATE trigger that blocks changes to reward_amount, assignee_id, status other than that transition).
+   - NOBODY can write wallets or token_ledger directly from the client: no INSERT/UPDATE/DELETE policies for authenticated users on those tables.
+   - Show the exact policy SQL and explain each in one sentence.
+
+3. SERVER-SIDE TOKEN CREDIT: a trigger function (SECURITY DEFINER, fixed search_path) that fires AFTER UPDATE on tasks ONLY when status changes to 'approved' by a parent in the same family: (a) insert one ledger row (delta = +reward_amount), (b) update the wallet. Make it IDEMPOTENT (the unique task_id rule blocks double payout) and verify the approver is a parent of that family.
+
+4. REDEMPTION FUNCTION: public.redeem_reward(reward_id uuid) callable by authenticated children. Inside ONE transaction: SELECT … FOR UPDATE on the wallet row, verify balance >= cost, deduct, insert ledger (negative delta) and a redemptions row with expires_at = now() + session_minutes, and return the redemption. If two redemptions race for the last tokens, the second must fail cleanly with a friendly error. Do NOT trust any client-supplied cost; read it from the rewards table.
+
+5. SAFETY NET: a trigger or constraint ensuring the sum of ledger deltas always equals the wallet balance (or a reconciliation view/function), and no function accepts a user-supplied user_id for crediting.
+
+6. TEST SCRIPT: SQL that simulates (a) a child trying to update their own wallet (must fail), (b) a child changing reward_amount on their task (must fail), (c) a child reading another family's tasks (0 rows), (d) a parent approving a task twice (one credit), (e) two concurrent redemptions of the last tokens (one fails). Explain how to run each (e.g., SET LOCAL ROLE / request.jwt.claims in the Supabase SQL editor).
+
+7. NOTES FOR ME: which keys are safe in the app (publishable/anon only), what must never be exposed (service_role), and a pre-launch security checklist.
+
+STYLE: SQL in code blocks §§§sql … §§§, each followed by a plain-English explanation. State any assumption. Flag any place where a human security review is essential.`
+},
+
+{
+id:'ios-screentime',
+title:'iOS Screen Time Gating Plan (Reward Vault Lock/Unlock)',
+icon:'📱', category:'BUILD', grades:['ALL'],
+skills:['iOS','Screen Time API','FamilyControls','State sync','Android parity'],
+level:'Advanced', time:'20 min (hand to a developer)', bestAI:'Claude or ChatGPT',
+description:'A technical plan for locking and unlocking selected games on a child\'s iPhone/iPad using Apple\'s Screen Time API (FamilyControls, ManagedSettings, DeviceActivity), including the triple-redundant re-lock design and an Android fallback plan.',
+whatYouGet:['Architecture for the three Screen Time frameworks and their extensions','Shared App Group state design (the "unlocked until" timestamp)','Triple-verification flow to make re-locking reliable','Honest list of platform limits + Android alternative + App Store approval notes'],
+steps:['This is for a developer or an AI-assisted builder with a Mac, Xcode and an Apple Developer account.','Copy the prompt → paste into a new AI chat.','Give the resulting plan (and your product spec) to your developer.','Expect to request Apple\'s Family Controls entitlement for distribution. Plan extra time for approval.'],
+tips:['Apple\'s Screen Time API hides which apps the parent chose (opaque tokens). Design around it; don\'t fight it.','Test on REAL devices. Simulators don\'t reproduce Screen Time behavior.','Keep unlock sessions short (15 min). The research notes that DeviceActivity timers are unreliable for long intervals.'],
+pitfalls:['Relying on a single re-lock mechanism will eventually fail (OS may kill background work). The plan uses three independent checks.','Do not promise parents "unbreakable" controls. Be transparent about limits.'],
+followups:[
+ {label:'Android parity plan',text:'Draft the Android equivalent: UsageStatsManager / foreground service / overlay approach or Digital Wellbeing/Family Link alternatives, the permissions required, Google Play policy risks for each, and a recommendation.'},
+ {label:'Write the Swift skeleton',text:'Generate a Swift project skeleton: App Group helper, UserDefaults wrapper (isCurrentlyUnlocked, quotaEndTimestamp), ShieldConfigurationExtension, DeviceActivityMonitor extension, and the foreground re-lock check. Comment every file for a beginner.'}
+],
+fields:[
+ {key:'session',label:'Reward session length',type:'select',options:['10 minutes','15 minutes','20 minutes','30 minutes']},
+ {key:'platforms',label:'Platforms',type:'select',options:['iOS only (first)','iOS + Android']}],
+promptText:`ROLE
+You are a senior iOS engineer who has shipped apps using Apple's Screen Time API (FamilyControls, ManagedSettings, DeviceActivity) and a pragmatic Android engineer.
+
+GOAL
+In a family app, a child earns "Quest Tokens" by completing chores. Spending tokens must UNLOCK a parent-selected set of games for a timed session ({{session}}), after which they must reliably RE-LOCK. Platforms: {{platforms}}.
+
+PRODUCE A TECHNICAL PLAN, in plain language where possible:
+1. FRAMEWORK ROLES: explain the three frameworks and what each is for — FamilyControls (authorization via the parent/iCloud Family Sharing, FamilyActivityPicker with opaque tokens; the app cannot see which apps were picked), ManagedSettings (ManagedSettingsStore applies shields to apps, categories, web domains), DeviceActivity (background schedules and threshold events that run in extensions).
+2. PROJECT STRUCTURE: app target + extensions (DeviceActivityMonitor, ShieldConfiguration, ShieldAction), entitlements (Family Controls), App Group identifier (e.g., group.com.example.questapp.shared), and capabilities to enable.
+3. SHARED STATE: how the app and extensions communicate via UserDefaults(suiteName:) in an App Group. Define the exact keys and types, e.g., isCurrentlyUnlocked: Bool and quotaEndTimestamp: Date/TimeInterval; explain why extensions are sandboxed and may fail silently.
+4. TRIPLE-REDUNDANT RE-LOCK DESIGN (the heart of this plan):
+   (a) Shield extension check: each time a blocked app is opened, compare now vs. quotaEndTimestamp synchronously and deny if expired.
+   (b) DeviceActivity monitor: schedule shorter chained intervals (e.g., 15-minute increments) because longer schedules (over ~45 minutes) have been reported as unreliable; re-apply the shield when the session ends.
+   (c) Foreground check: on every app-foreground event, synchronously read the shared timestamp and re-apply the shield if expired (no async hops).
+   Provide a sequence diagram in text for: unlock → play → expiry → re-lock, and for failure cases (monitor never fires, app killed, clock changed, device rebooted, parent revokes authorization).
+5. SERVER COORDINATION: the app asks the server (e.g., a Supabase redeem_reward function that validates the token balance) before unlocking; the device stores the returned expiry time. Describe offline behavior and clock-tampering mitigations (e.g., use server time stamps; re-verify on reconnect).
+6. PARENT UX: how a parent authorizes, picks apps, and sees status; child UX when a shield appears ("Complete quests to earn time!" — encouraging, never shaming).
+7. LIMITATIONS & HONESTY: list known issues (silent extension failures, memory limits, simulator limitations, opaque tokens) and what we should tell parents.
+8. APP STORE & DISTRIBUTION: Family Controls entitlement request process, review risks, privacy labels and children's data (COPPA) considerations — recommend consulting a professional.
+9. ANDROID PARITY (if included): there is no direct equivalent. Evaluate a polyfill using a foreground service with usage-stats access and an overlay shield, plus the sensitive permissions it needs and Google Play policy risks; recommend the safest viable approach and alternatives (e.g., integrating with Family Link).
+10. TESTING PLAN on real devices, with a checklist of 12 scenarios.
+Output as a structured document with headings. Be explicit about uncertainty — if you are not sure an API behaves a certain way, say so and tell me how to verify it in Apple's documentation.`
+},
+
+/* ---------------------------------------------------------- META */
+{
+id:'interview-builder',
+title:'"Interview Me" Prompt Builder (Not Sure Where to Start?)',
+icon:'🧭', category:'META', grades:['ALL'],
+skills:['Prompt design','Planning','Beginner-friendly'],
+level:'Beginner', time:'5 min', bestAI:'Any',
+description:'Not sure what to ask for? The AI interviews you, one question at a time, then writes a perfect custom prompt for what you need — which you can use in the same chat.',
+whatYouGet:['A guided Q&A with the AI (you only answer questions)','A polished custom prompt written for you','A "Version 2" suggestion to improve it further'],
+steps:['Tell the AI roughly what you want (even a messy idea).','Copy → paste into a new AI chat.','Answer each question in a few words. Say "skip" if you do not know.','At the end, the AI writes your custom prompt. Ask it to run it right away.'],
+tips:['Messy goals are fine. Say "I want something fun for fractions but I only have 20 minutes".','Say "skip" or "you decide" whenever you are unsure.'],
+pitfalls:['If the AI asks several questions at once, reply: "One question at a time, please."'],
+followups:[
+ {label:'Run the prompt now',text:'Great. Now run the prompt you just wrote for me, exactly as written.'},
+ {label:'Make it 50% shorter',text:'Shorten that prompt by about half while keeping all the requirements that matter most.'}
+],
+fields:[
+ {key:'idea',label:'What do you want help with? (messy is OK)',type:'textarea',ph:'e.g., I want my 3rd graders to be more excited about multiplication but I have no time to prep'},
+ {key:'grade',label:'Grade level',type:'select',options:GRADES}],
+promptText:`ROLE
+You are a patient prompt-design coach for busy teachers who are NOT technical. Your job is to interview me and then write the best possible custom prompt for my need.
+
+MY STARTING IDEA: {{idea}}
+GRADE: {{grade}}
+
+HOW TO WORK
+1. Ask me ONE question at a time (never more than one). Keep questions short and offer 2-3 example answers so I can just pick. Ask about: the exact topic/standard, my students (needs, interests), time available, tools/devices I have, what "success" looks like, and any limits (no printing, no internet, etc.). Stop after at most 8 questions, or sooner if you have enough.
+2. If I say "skip" or "you decide", choose a sensible default and tell me what you chose.
+3. When done, write a COMPLETE custom prompt using this structure: ROLE → CONTEXT → TASK → CONSTRAINTS → OUTPUT FORMAT → QUALITY CHECK. Put it in a code block so I can copy it.
+4. After the prompt, add "Version 2 ideas": 3 things I could add to make the result even better.
+5. Remind me to review the AI's output for accuracy and to avoid sharing student names or private information.
+
+Start now with your first question.`
+},
+
+{
+id:'teks-checker',
+title:'TEKS / TA-TEKS Alignment Checker',
+icon:'✅', category:'META', grades:['K-2','3-5','6-8','9-12'],
+skills:['TEKS','TA-TEKS','Alignment','Lesson planning','Verification'],
+level:'Intermediate', time:'5 min', bestAI:'Gemini Pro or Claude (best with long pasted documents)',
+description:'Check whether your lesson, game, or unit actually matches the standards you claim. The AI is forced to use only the standard text YOU paste, which prevents the classic problem of made-up TEKS codes.',
+whatYouGet:['A standard-by-standard alignment table (Full / Partial / Missing)','Gaps and what to add','Honest notes about cognitive demand (is the task as rigorous as the standard?)','Suggested learning targets in student-friendly language'],
+steps:['Go to tea.texas.gov, find the exact student expectations (TEKS) for your grade/subject, and copy their text.','Paste the standards text and your lesson/unit into the form.','Copy → paste into a new AI chat.','Review the table with a colleague or instructional coach before relying on it.'],
+tips:['Always paste the official standards text. Never ask AI to "recall" TEKS from memory.','Technology Applications (TA-TEKS) emphasize embedding computational thinking, data literacy, digital citizenship and practical technology/design concepts across subjects. Paste the exact K-8 expectations from TEA.','Use for game and app prompts too: paste your game\'s question bank to see which standards it covers.'],
+pitfalls:['AI often invents standard numbers or mixes up old and new TEKS versions. The prompt blocks this, but still verify.','Alignment on paper is not the same as rigor in practice. Look at cognitive demand.'],
+followups:[
+ {label:'Fix the gaps',text:'Write 3 activities or questions that close each "Missing" or "Partial" gap, at the correct depth of the standard.'},
+ {label:'Student-friendly "I can" statements',text:'Rewrite the standards covered as kid-friendly "I can…" statements at a {{GRADE}} reading level.'}
+],
+fields:[fGrade,
+ {key:'standards',label:'OFFICIAL standards text (paste from tea.texas.gov)',type:'textarea',ph:'Paste the exact TEKS / TA-TEKS student expectations here'},
+ {key:'lesson',label:'Your lesson / unit / game content',type:'textarea',ph:'Paste the lesson plan, activity list, or question bank'}],
+promptText:`ROLE
+You are a Texas curriculum alignment specialist (TEKS and Technology Applications TEKS) and instructional coach.
+
+GRADE: {{grade}}
+
+STANDARDS (OFFICIAL TEXT I PASTED — this is your ONLY allowed source of standards):
+{{standards}}
+
+MY LESSON / UNIT / ACTIVITY:
+{{lesson}}
+
+STRICT RULES
+- Use ONLY the standards text above. Do not recall, invent, or correct standard numbers from memory. If something in the text looks incomplete, say so.
+- Be honest and critical. Alignment means students actually do the thinking the standard demands, not merely touch the topic.
+
+TASKS
+1. ALIGNMENT TABLE: for each standard/expectation above: Alignment (Full / Partial / Missing) | Evidence from my lesson (quote it) | Cognitive demand of the standard (verb) vs. the demand of my task | Notes.
+2. RIGOR CHECK: where is my lesson easier or harder than the standard?
+3. GAPS: list the missing content or skills and why they matter.
+4. FIXES: 3 specific activities or questions to close the top gaps, written out in full.
+5. LEARNING TARGETS: student-friendly "I can…" statements for each covered standard.
+6. EVIDENCE OF MASTERY: for each standard, one observable piece of evidence I could collect.
+7. If this lesson uses technology: note which TA-TEKS areas it supports (computational thinking & coding, data literacy, digital citizenship, practical technology & innovative design) — only if they appear in the pasted standards.
+End with: "Verify all standard numbers against the official TEA documents at tea.texas.gov."`
+},
+
+{
+id:'prompt-rescuer',
+title:'Prompt Rescuer — Fix a Bad AI Answer',
+icon:'🛟', category:'META', grades:['ALL'],
+skills:['Troubleshooting','Prompt design','Revision'],
+level:'Beginner', time:'3 min', bestAI:'Any',
+description:'The AI gave you something wrong, boring, too long, or broken? Paste what you asked and what you got. The AI diagnoses what went wrong and rewrites your prompt.',
+whatYouGet:['A plain-English diagnosis','A rewritten prompt that avoids the problem','A quick fix you can paste into the SAME chat'],
+steps:['Fill in your original prompt and what went wrong.','Copy → paste into a NEW chat (a fresh start often helps).','Use the improved prompt, or try the quick-fix message in your old chat.'],
+tips:['Describe the problem specifically: "too long", "wrong grade level", "facts incorrect", "code blank screen".','If code is broken, paste the error message from the browser (press F12 → Console).'],
+pitfalls:['Don\'t keep arguing in a long confused chat. Starting fresh with a better prompt is usually faster.'],
+followups:[
+ {label:'General "make it better" message',text:'Before you answer, restate in 3 bullets what I\'m asking for, list any assumptions you\'re making, and tell me what information you\'re missing. Then give the answer.'}
+],
+fields:[
+ {key:'original',label:'Your original prompt (paste or summarize)',type:'textarea',ph:'Paste what you asked the AI'},
+ {key:'problem',label:'What went wrong?',type:'textarea',ph:'e.g., It was too long, wrong reading level, the game shows a blank screen, facts were wrong…'}],
+promptText:`ROLE
+You are a prompt-debugging coach for non-technical teachers.
+
+WHAT I ASKED THE AI:
+{{original}}
+
+WHAT WENT WRONG:
+{{problem}}
+
+TASKS
+1. DIAGNOSE: in plain English (max 5 bullets), why the AI probably got it wrong (e.g., missing context, too many tasks at once, vague output format, no source material, conflicting instructions).
+2. REWRITE my prompt so it fixes the problem. Use ROLE → CONTEXT → TASK → CONSTRAINTS → OUTPUT FORMAT → QUALITY CHECK, and put it in a code block.
+3. QUICK FIX: write ONE short message I can paste into my existing chat to repair the answer without starting over.
+4. PREVENTION: 3 habits that prevent this problem next time.
+Keep it friendly and brief.`
+}
+
+);
+/* ============================================================
+   START-HERE GOAL CARDS
+   ============================================================ */
+const GOALS = [
+  {icon:'🎮',title:'A game for tomorrow\'s review',sub:'Projector boss battle, 5 minutes',open:'boss-battle'},
+  {icon:'📚',title:'Reading at 10 levels',sub:'Same story, every reader included',open:'leveled-books'},
+  {icon:'🧪',title:'A funny spelling test',sub:'Story format with memory tricks',open:'spelling-story'},
+  {icon:'⚡',title:'Make my unit feel like a game',sub:'Octalysis, balanced and safe',open:'octalysis-gamifier'},
+  {icon:'🔍',title:'Check my reward system',sub:'Is it helping or backfiring?',open:'gamification-audit'},
+  {icon:'📊',title:'Student data / IEP report',sub:'De-identified, strengths-first',open:'iep-analytics'},
+  {icon:'🧮',title:'Group students from test data',sub:'Small groups + reteach plan',open:'class-data-groups'},
+  {icon:'🧊',title:'3D print a classroom model',sub:'OpenSCAD → STL → printer',open:'cad-stl'},
+  {icon:'🏠',title:'Connect with families',sub:'Letter + 5-minute home quests',open:'home-connect'},
+  {icon:'🧭',title:'I don\'t know where to start',sub:'AI interviews you, writes the prompt',open:'interview-builder'},
+  {icon:'🛟',title:'The AI gave me garbage',sub:'Diagnose and fix the prompt',open:'prompt-rescuer'},
+  {icon:'📖',title:'Teach me the basics',sub:'Prompt formula, safety, testing',guide:'formula'}
+];
+
+/* ============================================================
+   GOLDEN RULES
+   ============================================================ */
+const RULES = [
+  {n:1,icon:'🕶️',t:'De-identify everything',d:'No names, IDs, birthdates, photos, IEP details, or voices of real students in a chat. Use "Student A". Anything that could identify a child stays out.'},
+  {n:2,icon:'✅',t:'Use approved tools',d:'Ask your district which AI tools are approved for student information. Texas has restricted some AI apps on state devices. Your district\'s list wins over any website.'},
+  {n:3,icon:'👩‍🏫',t:'You are the expert',d:'AI drafts; you decide. Review every question, fact, and level before students see it. You know your students; the AI does not.'},
+  {n:4,icon:'🔎',t:'Verify facts & standards',d:'AI can invent facts, quotes, Lexile numbers and TEKS codes that look real. Paste official standards text, and confirm codes at tea.texas.gov.'},
+  {n:5,icon:'⚖️',t:'Humans make high-stakes calls',d:'IEP/ARD decisions, eligibility, discipline and grades are made by qualified people. Use AI only to organize data and draft language.'},
+  {n:6,icon:'🌱',t:'Reward growth, not compliance',d:'Use cosmetic, choice-based rewards; never subtract points; avoid rewarding what kids already love. The goal is students who need the rewards less over time.'},
+  {n:7,icon:'📣',t:'Be transparent & keep it local',d:'Tell students and families when AI helped. Voice recordings and progress stay on the student\'s device unless your district approves otherwise. No hidden tracking.'}
+];
+
+/* ============================================================
+   ABOUT / WHAT'S NEW
+   ============================================================ */
+const ABOUT = [
+  {i:'🧱',t:'Much deeper prompts',d:'Every prompt now uses ROLE → CONTEXT → TASK → CONSTRAINTS → OUTPUT FORMAT → QUALITY CHECK, with honesty rules ("don\'t invent data / standards") and a plan for when the AI cuts off mid-answer.'},
+  {i:'✏️',t:'Fill-in forms (no more editing)',d:'Type your grade and topic into boxes; the prompt rewrites itself. Yellow = still blank. Choose a personality and add power-ups like "Interview me first" or "Make it accessible".'},
+  {i:'🧭',t:'Guidance on every tool',d:'Each tool has: step-by-step how-to, what you\'ll get, pro tips, common mistakes, and ready-to-paste follow-up prompts.'},
+  {i:'🧠',t:'Motivation safeguards built in',d:'Self-Determination Theory + the overjustification research: choice-based, cosmetic rewards, no point loss, no public rankings, a fading plan, and a "Motivation Health Check".'},
+  {i:'🆕',t:'New tools',d:'Boss Battle, Quest Board, Fluency Studio, Text Leveler, Gamification Audit, Class Economy, Breakout Kit, Class Data → Groups, Family Kit, TEKS Checker, Prompt Rescuer, plus an advanced "Build a real family app" track from the Kid Motivation report.'},
+  {i:'🛡️',t:'Privacy & safety first',d:'7 Golden Rules, a de-identification habit, "VERIFY CODE" for standards, and notes on children\'s data laws. Practical guidance, not legal advice.'},
+  {i:'🔧',t:'Fix: Tinkercad can\'t run OpenSCAD',d:'The original suggested pasting OpenSCAD code into Tinkercad. It doesn\'t run that code. The workflow is now OpenSCAD → export STL → slicer (Tinkercad can import the STL to combine shapes).'},
+  {i:'📉',t:'Fix: model benchmarks are dated',d:'The research report compared 2024-era models (Claude 3.5 Sonnet, GPT-4o, Gemini 1.5 Pro, DeepSeek V3). Newer versions exist, so scores and prices changed. The hub now recommends models by JOB and tells you to compare two tools.'},
+  {i:'🔐',t:'Fix: database design hole',d:'The report let a child set a task to "completed", which auto-credits tokens. A child could award themselves. The v2 backend prompt adds a parent-approval step, an append-only ledger, one-payout-only rule and server-side redemption with row locking.'},
+  {i:'📊',t:'Honest about the statistics',d:'Claims like "400% more course completion" come from Octalysis vendors and case studies. They are inspiring, not proof for your classroom. Pilot small and measure.'},
+  {i:'🔢',t:'Honest about Lexile & TEKS',d:'AI estimates Lexile levels and can invent TEKS codes. Prompts now require verification steps and tell AI to use only standards text you paste.'},
+  {i:'🧩',t:'Better naming of Texas tools',d:'TA-TEKS (Technology Applications), the TEKS Behavior Alignment Tool (TEA SPED support) and the Effective Schools Framework are three different things. The v2 prompts keep them separate.'}
+];
+
+/* ============================================================
+   GUIDES (HTML)
+   ============================================================ */
+const GUIDES = [
+
+{id:'formula',icon:'🧩',title:'The 6-Part Prompt Formula',sub:'Why the prompts here work — and how to write your own',
+html:`
+<p>Every prompt in this hub follows the same recipe. Learn it once and you can write great prompts for anything.</p>
+<div class="tblwrap"><table>
+<tr><th>Part</th><th>What to write</th><th>Example</th></tr>
+<tr><td><b>1. Role</b></td><td>Who should the AI be?</td><td>"You are a veteran 4th-grade math teacher and instructional coach."</td></tr>
+<tr><td><b>2. Context</b></td><td>Who are the students, what is the content, how will it be used?</td><td>"28 students, 6 are English learners, 45-min block, Chromebooks."</td></tr>
+<tr><td><b>3. Task</b></td><td>One clear job.</td><td>"Create a 15-minute reteach lesson on equivalent fractions."</td></tr>
+<tr><td><b>4. Constraints</b></td><td>Rules, limits, things to avoid.</td><td>"Use only my notes. No made-up facts. No student names."</td></tr>
+<tr><td><b>5. Output format</b></td><td>Exactly how you want it back.</td><td>"A table: Time | Teacher does | Students do."</td></tr>
+<tr><td><b>6. Quality check</b></td><td>Make the AI check itself.</td><td>"Before answering, verify all math is correct."</td></tr>
+</table></div>
+<h4>5 habits that make the biggest difference</h4>
+<ul>
+<li><b>Paste real source material.</b> Your notes, vocabulary, test, or standards text. AI is far more accurate when it works from your content.</li>
+<li><b>One main job per prompt.</b> Build in steps: plan first, then draft, then polish.</li>
+<li><b>Give examples of what "good" looks like</b> (a sample question or a sentence in the voice you want).</li>
+<li><b>Let it interview you</b> when unsure (use the "Interview me first" power-up).</li>
+<li><b>Start a new chat for a new task.</b> Long, messy chats make the AI forget your rules.</li>
+</ul>
+<p>Blank template you can copy and fill in:</p>
+<div class="copybox"><button class="cp">Copy</button><pre>ROLE
+You are [who].
+
+CONTEXT
+Students: [grade, needs, class size]
+Content: [paste notes or topic]
+How it will be used: [whole class / centers / homework]
+
+TASK
+[One clear job]
+
+CONSTRAINTS
+- Use only the content I provided. Do not invent facts or standard codes.
+- No real student names.
+- [Other limits]
+
+OUTPUT FORMAT
+[Table / bullet list / printable page / code file]
+
+QUALITY CHECK
+Before you answer, check accuracy and grade-level fit, and tell me anything you are unsure about.</pre></div>`},
+
+{id:'octalysis',icon:'🧿',title:'Octalysis Cheat Sheet for Classrooms',sub:'The 8 Core Drives, with classroom examples and what to watch for',
+html:`
+<p>Octalysis (by Yu-kai Chou) says every motivating experience pulls on 8 human drives. <b>White Hat</b> drives feel empowering and build lasting, intrinsic motivation. <b>Black Hat</b> drives create urgency or anxiety. They work fast, but overuse causes fatigue and burnout. <b>Rule of thumb for school:</b> lead with White Hat, use Black Hat lightly and always with a safety net.</p>
+<div class="tblwrap"><table>
+<tr><th>Core Drive</th><th>Hat</th><th>Classroom example</th><th>Watch out for</th></tr>
+<tr><td><b>1. Epic Meaning &amp; Calling</b></td><td>⚪ White</td><td>The unit is a mission: "Design a water filter for a village." Students act as real engineers.</td><td>Story that doesn't connect to the learning goals.</td></tr>
+<tr><td><b>2. Development &amp; Accomplishment</b></td><td>⚪ White</td><td>Skill trees, mastery badges tied to standards, visible progress bars.</td><td>Badges for compliance rather than real mastery.</td></tr>
+<tr><td><b>3. Empowerment of Creativity &amp; Feedback</b></td><td>⚪ White</td><td>Choice of product (poster, podcast, model), revise-and-resubmit, instant feedback.</td><td>Too much choice paralyzes younger students; offer 2-3 options.</td></tr>
+<tr><td><b>4. Ownership &amp; Possession</b></td><td>Mixed</td><td>Avatars, portfolios, a class museum of student work, customizable notebooks.</td><td>Hoarding points over learning; keep rewards cosmetic.</td></tr>
+<tr><td><b>5. Social Influence &amp; Relatedness</b></td><td>⚪ White</td><td>Team challenges, peer review with sentence stems, shout-outs, class-wide goals.</td><td>Public rankings that shame struggling students.</td></tr>
+<tr><td><b>6. Scarcity &amp; Impatience</b></td><td>⚫ Black</td><td>An optional, limited-time side quest or "mystery box" opening Friday.</td><td>Never tie to grades; can cause anxiety or unfairness.</td></tr>
+<tr><td><b>7. Unpredictability &amp; Curiosity</b></td><td>⚫ Black (mixed)</td><td>Surprise mini-quizzes, hidden Easter eggs, random cosmetic bonus drops.</td><td>No gambling-style mechanics; keep surprises small and cosmetic.</td></tr>
+<tr><td><b>8. Loss &amp; Avoidance</b></td><td>⚫ Black</td><td>Streaks with a free "shield"; mission deadline countdown (optional).</td><td>Never subtract points or shame. Pause the streak, don't punish.</td></tr>
+</table></div>
+<div class="note warn">About the big numbers: statistics like "400% more course completion" come from Octalysis vendors and company case studies. Treat them as inspiring, not proof. Try one mechanic for two weeks and watch what happens in <i>your</i> classroom.</div>
+<h4>Start tiny</h4>
+<ul><li>Pick <b>one</b> drive from the top of the table (1, 2, or 3).</li><li>Add <b>one</b> from 5 (social) if it fits.</li><li>Only later, add a light dash of 7 (surprise).</li></ul>`},
+
+{id:'sdt',icon:'🌱',title:'Rewards Without Ruining Motivation',sub:'Self-Determination Theory + the overjustification effect, in plain English',
+html:`
+<h4>The big idea</h4>
+<p>When a reward is <b>expected</b> and <b>controlling</b>, kids can start doing the task <i>for the reward</i> instead of for themselves. This is called the <b>overjustification effect</b>. Pay a child who loves drawing and they may draw less when the pay stops. Young children are especially prone to it because they tend to read a reward as a "controller" rather than as feedback about their growing skill.</p>
+<p>The good news: <b>Self-Determination Theory (SDT)</b> shows how to design rewards that <i>protect</i> motivation. Kids thrive when 3 needs are met:</p>
+<div class="tblwrap"><table>
+<tr><th>Need</th><th>Do this</th><th>Avoid this</th></tr>
+<tr><td><b>Autonomy</b><br>"I choose."</td><td>Offer 2-3 meaningful choices. Let students pick how and when to spend rewards. Explain <i>why</i> a task matters.</td><td>Threats, surveillance, rigid mandates, "because I said so".</td></tr>
+<tr><td><b>Competence</b><br>"I'm getting good at this."</td><td>Right-sized challenge. Feedback that says what improved. Badges that represent real mastery.</td><td>Tasks that are too easy or impossible. Points for trivial tasks. Comparing students.</td></tr>
+<tr><td><b>Relatedness</b><br>"I belong."</td><td>Cooperative class goals, peer help, private or opt-in recognition.</td><td>Public leaderboards, rewards that make kids compete or feel left out.</td></tr>
+</table></div>
+
+<h4>The motivation ladder (Organismic Integration Theory)</h4>
+<ol>
+<li><b>External:</b> "I do it to get the prize or avoid trouble."</li>
+<li><b>Introjected:</b> "I do it so I won't feel guilty or ashamed."</li>
+<li><b>Identified:</b> "I do it because I see it matters."</li>
+<li><b>Integrated:</b> "This is part of who I am."</li>
+</ol>
+<p>Rewards will always start at step 1. Your job is to <b>move students up the ladder</b>: explain the purpose, give choices, celebrate milestones, then fade the rewards.</p>
+
+<h4>Reword to be informational, not controlling</h4>
+<div class="tblwrap"><table>
+<tr><th>Controlling ❌</th><th>Informational ✅</th></tr>
+<tr><td>"If you finish, you get 10 tokens."</td><td>"You mastered all your multiplication facts. That earns you a milestone badge!"</td></tr>
+<tr><td>"You lost your streak."</td><td>"Your streak is paused. Ready to start a new one?"</td></tr>
+<tr><td>"Good job!" (vague)</td><td>"You checked your answer twice and caught your mistake."</td></tr>
+<tr><td>"Finish and you can have screen time."</td><td>"Pick which challenge you want to try next."</td></tr>
+</table></div>
+
+<h4>8 design rules</h4>
+<ol>
+<li><b>Never reward what kids already love.</b> No tokens for free reading, drawing, building.</li>
+<li><b>Reward milestones and effort strategies</b>, not basic compliance or "being quiet".</li>
+<li><b>Make rewards choices and experiences</b> (pick the seat, DJ the class), not only stuff.</li>
+<li><b>Add surprise celebrations.</b> Unexpected, unannounced recognition protects motivation better than constant "do X, get Y".</li>
+<li><b>Never remove earned rewards as punishment.</b> Streak pauses only.</li>
+<li><b>Fade over time:</b> fewer tokens, more genuine praise and purpose each month.</li>
+<li><b>Ask the kids.</b> A 2-minute survey: "What makes this fun? What feels annoying?"</li>
+<li><b>Run the self-test:</b> "If I removed the reward tomorrow, would they still do it?" If no, shift toward purpose and choice.</li>
+</ol>
+<p>Copy this to check your own system:</p>
+<div class="copybox"><button class="cp">Copy</button><pre>Use Self-Determination Theory to evaluate my reward idea: [DESCRIBE IT]. Score Autonomy, Competence and Relatedness 1-5, name any overjustification risk, and give me 3 specific changes.</pre></div>`},
+
+{id:'safety',icon:'🛡️',title:'Student Privacy & AI Safety Checklist',sub:'Before you paste anything about a child',
+html:`
+<div class="note bad"><b>Stop-and-think rule:</b> If the text could identify a real child, don't paste it into a general AI tool. When in doubt, de-identify or ask.</div>
+<h4>Never paste</h4>
+<ul><li>Names, nicknames that identify, student IDs, birthdates, addresses, photos.</li><li>Full IEP/504/medical/discipline documents.</li><li>Voice recordings or work with names on it.</li></ul>
+<h4>How to de-identify in 30 seconds</h4>
+<ol><li>Replace names with "Student A/B/C".</li><li>Remove dates (use "Week 1, Week 2").</li><li>Remove school, teacher and place names.</li><li>Round or summarize unusual details that make a child recognizable.</li></ol>
+<h4>Checklist</h4>
+<ul>
+<li>☐ Is this tool on my district's approved list?</li>
+<li>☐ Does the tool train on my chats? (Look for "improve the model" settings and turn off if possible.)</li>
+<li>☐ Did I remove every identifier?</li>
+<li>☐ Did I verify facts, standards, and tone before sharing with students?</li>
+<li>☐ Is a human (me, the ARD committee, my team) making the final decision?</li>
+<li>☐ Can I explain to a parent how AI was used?</li>
+</ul>
+<h4>Apps for students</h4>
+<ul>
+<li>Apps made from these prompts store progress <b>only in the student's browser</b>. They make no network calls. Keep it that way. Do not add accounts, ads, or trackers without district approval.</li>
+<li>Students under 13: the U.S. children's privacy law (COPPA) and Texas student-privacy laws create strict duties for anything that collects data. Your district's technology and legal staff decide what's allowed.</li>
+<li>Student voice recordings: keep on-device, make recording optional, explain it plainly, and offer a non-recording alternative.</li>
+</ul>
+<h4>Reducing AI bias</h4>
+<ul><li>Scan outputs for stereotypes in names, jobs, and examples.</li><li>Ask: "Revise to include diverse names, cultures and family structures, avoiding stereotypes."</li><li>Be extra cautious when AI describes student behavior. Use observable facts only.</li></ul>
+<div class="note warn">This is practical guidance, not legal advice. Follow your district policy.</div>`},
+
+{id:'runhtml',icon:'💻',title:'How to Run What the AI Builds (HTML Files)',sub:'Windows • Mac • Chromebook • iPad • sharing with students',
+html:`
+<p>When the AI gives you a big block of code starting with <span class="mono">&lt;!DOCTYPE html&gt;</span>, it is a complete web page. Here is how to turn it into a file you can open:</p>
+<h4>Windows</h4>
+<ol><li>Click the AI's <b>Copy</b> button on the code block.</li><li>Open <b>Notepad</b>, paste.</li><li>File → Save As → name it <span class="mono">game.html</span>. Set "Save as type" to <b>All Files</b>.</li><li>Double-click the file. It opens in your browser.</li></ol>
+<h4>Mac</h4>
+<ol><li>Open <b>TextEdit</b> → Format → <b>Make Plain Text</b>.</li><li>Paste, then File → Save, name it <span class="mono">game.html</span> (if asked, choose to use .html).</li><li>Double-click the file.</li></ol>
+<h4>Chromebook</h4>
+<ol><li>Open the <b>Text</b> app (or any plain-text editor), paste, save as <span class="mono">game.html</span> in the Files app.</li><li>Double-click it in Files, or drag it into a Chrome tab.</li></ol>
+<h4>iPad / iPhone</h4>
+<p>Local HTML files are awkward on iPad. Easiest: build on a computer, then <b>host</b> the file at a web link (below) and open the link in Safari.</p>
+<h4>Sharing with students</h4>
+<ul>
+<li><b>Easiest:</b> put the file in your district's approved shared drive and have students download and open it.</li>
+<li><b>Link:</b> free static hosts (such as Netlify Drop or GitHub Pages) can turn the file into a web link in minutes. Check with your district first before using outside services.</li>
+<li><b>Google Sites:</b> Insert → Embed → "Embed code" lets you paste the HTML into a page.</li>
+</ul>
+<h4>Microphone not working?</h4>
+<ul><li>Browsers allow the microphone only on secure pages. A file on your computer often works in Chrome, but iPad/Safari usually needs a hosted https link.</li><li>Click the 🔒 in the address bar → allow Microphone.</li><li>Safari records in a different audio format (mp4) than Chrome/Firefox (webm). Good prompts here already handle that. If an app has no mic support, ask the AI: "Add MediaRecorder MIME-type detection for Safari."</li></ul>
+<div class="tblwrap"><table>
+<tr><th>Browser engine</th><th>Runs on</th><th>Preferred audio format</th></tr>
+<tr><td>Chrome / Edge</td><td>Windows, Mac, Android, Chromebook</td><td>audio/webm (Opus)</td></tr>
+<tr><td>Firefox</td><td>Windows, Mac, Linux, Android</td><td>audio/webm (Opus)</td></tr>
+<tr><td>Safari</td><td>iPhone, iPad, Mac</td><td>audio/mp4 (AAC)</td></tr>
+</table></div>`},
+
+{id:'testlist',icon:'🧪',title:'Test Checklist Before Students Use an AI-Made App',sub:'15 minutes that saves a ruined lesson',
+html:`
+<p>Never let students be the first testers. Run this checklist (copy it into a doc):</p>
+<h4>1. Content</h4>
+<ul><li>☐ I checked every question/answer for accuracy.</li><li>☐ Reading level fits my students.</li><li>☐ Wrong-answer explanations are correct and kind.</li><li>☐ No bias, stereotypes, or awkward wording.</li></ul>
+<h4>2. Function (try to break it!)</h4>
+<ul><li>☐ Play with ALL wrong answers.</li><li>☐ Play with ALL right answers (does it finish?).</li><li>☐ Click rapidly, double-tap buttons.</li><li>☐ Refresh mid-game (does progress behave?).</li><li>☐ Sound OFF and Mute works.</li><li>☐ Microphone blocked: friendly message?</li><li>☐ Test on a student device type (Chromebook, iPad, small screen).</li></ul>
+<h4>3. Motivation &amp; safety</h4>
+<ul><li>☐ No points are taken away.</li><li>☐ No public ranking of individuals.</li><li>☐ Rewards are cosmetic or choice-based.</li><li>☐ There's a natural stopping point.</li><li>☐ No place to type a real name, no ads, no outside links, no uploads.</li></ul>
+<h4>4. Accessibility</h4>
+<ul><li>☐ Works with keyboard only (Tab/Enter).</li><li>☐ Text is big enough; browser zoom 200% still works.</li><li>☐ Meaning isn't conveyed by color alone.</li><li>☐ Read-aloud works.</li></ul>
+<h4>5. Pilot</h4>
+<ul><li>☐ Watch two students use it <b>without helping</b>. Note where they get stuck.</li></ul>`},
+
+{id:'whichai',icon:'🤖',title:'Which AI for Which Job?',sub:'Choose by task, not brand — models change every few months',
+html:`
+<div class="tblwrap"><table>
+<tr><th>Job</th><th>What matters</th><th>Look for</th></tr>
+<tr><td>Building apps, games, CAD code</td><td>Strict instruction following, precise long output</td><td>The strongest "reasoning / coding" model you can access</td></tr>
+<tr><td>Reading long documents (curriculum, many pages of standards)</td><td>Very large "context window"</td><td>Long-context models (Gemini-class and some Claude tiers)</td></tr>
+<tr><td>Quick formatting, brainstorming, routine tasks</td><td>Speed and cost</td><td>Fast/cheaper models in any family</td></tr>
+<tr><td>Images and tools (analyze a photo of a poster, run tools)</td><td>Multimodal and tool-use features</td><td>Multimodal models; never upload student faces or names</td></tr>
+<tr><td>Anything with student information</td><td>Privacy approval</td><td>ONLY your district-approved tool</td></tr>
+</table></div>
+<div class="note">The research report compared 2024-era models (Claude 3.5 Sonnet, GPT-4o, Gemini 1.5 Pro, DeepSeek V3). It found code accuracy and price differences. Those exact numbers are out of date now. The lesson that still holds: <b>different models have different strengths, so try the same prompt in two tools and keep the better result.</b></div>
+<div class="note warn">Cheap is not worth it if the tool is not approved. Some AI apps are restricted on Texas state devices. Check your district policy before using any lesser-known tool, even for "routine" tasks.</div>
+<h4>Quick tips</h4>
+<ul><li>Start a <b>new chat</b> for each new task.</li><li>If the output is poor, try the "Prompt Rescuer" tool before switching tools.</li><li>Turn on "thinking/reasoning" modes for code and complex plans if your tool has them.</li></ul>`},
+
+{id:'troubleshoot',icon:'🛠️',title:'Troubleshooting: When the AI Misbehaves',sub:'Problem → copy-paste fix',
+html:`
+<h4>It stopped halfway (code or long text cut off)</h4>
+<div class="copybox"><button class="cp">Copy</button><pre>Continue exactly where you stopped. Do not repeat anything you already wrote.</pre></div>
+<h4>The game/app shows a blank screen or error</h4>
+<div class="copybox"><button class="cp">Copy</button><pre>The page does not work. This is what I see: [DESCRIBE IT OR PASTE THE ERROR from the browser: press F12 → Console]. Find the bug, explain it in one plain sentence, and give me the COMPLETE corrected file, not just the changed part.</pre></div>
+<h4>It's too long or too wordy</h4>
+<div class="copybox"><button class="cp">Copy</button><pre>Rewrite this at half the length. Use bullet points and a table where helpful. Remove all introductions and summaries.</pre></div>
+<h4>Wrong reading level</h4>
+<div class="copybox"><button class="cp">Copy</button><pre>Rewrite for [GRADE] students: sentences under [NUMBER] words, everyday vocabulary, and a quick definition for any hard word. Keep the same facts.</pre></div>
+<h4>I think it got facts wrong</h4>
+<div class="copybox"><button class="cp">Copy</button><pre>List every factual claim you made as a numbered list. For each, tell me your confidence (high / medium / low) and where I could verify it. Remove or flag anything you are not sure about.</pre></div>
+<h4>It's generic and boring</h4>
+<div class="copybox"><button class="cp">Copy</button><pre>Make this much more specific and vivid for [GRADE] students learning [TOPIC]. Use concrete examples from kids' real lives (sports, games, food, family). Give 3 alternative versions with different tones.</pre></div>
+<h4>It made up TEKS codes</h4>
+<div class="copybox"><button class="cp">Copy</button><pre>Remove every standard code you wrote. I will paste the official text. Only reference standards from text I provide.</pre></div>
+<h4>It forgot my rules (long chat)</h4>
+<p>Start a <b>new chat</b>, paste the original prompt again, then add: "Here is the previous output to improve:" and paste it.</p>
+<h4>It refuses or says it can't</h4>
+<div class="copybox"><button class="cp">Copy</button><pre>This is for a legitimate classroom teaching purpose with no student information. Please help with the age-appropriate, educational version of this request.</pre></div>`},
+
+{id:'texas',icon:'🤠',title:'Texas Alignment Quick-Guide',sub:'TEKS • TA-TEKS • TEKS Behavior Alignment • Effective Schools Framework',
+html:`
+<div class="note warn">This summary follows your research report. Standards get revised, so always confirm exact wording at <b>tea.texas.gov</b> before citing.</div>
+<div class="tblwrap"><table>
+<tr><th>Tool</th><th>What it is</th><th>How to use it with AI</th></tr>
+<tr><td><b>TEKS</b></td><td>The state curriculum standards for every subject (Texas Essential Knowledge and Skills).</td><td>Paste the official student expectations into prompts. Use the "Verify standards" power-up.</td></tr>
+<tr><td><b>TA-TEKS</b><br>(Technology Applications)</td><td>Revised standards (adopted 2022, fully in place 2024-25 for K-8) that weave technology skills into other subjects. The report groups them into: computational thinking &amp; coding; data literacy &amp; management; digital citizenship &amp; cyber safety; practical technology concepts &amp; innovative design.</td><td>Games, parametric CAD, data analysis, and "how AI works" lessons can all provide evidence. Use the TEKS Checker tool.</td></tr>
+<tr><td><b>TEKS Behavior Alignment Tool</b><br>(TEA SPED Support)</td><td>Maps academic TEKS to functional behavior growth: active listening, expressive communication, collaborative discussion rules, task focus, multi-step directions. Supports ARD, IEP and MTSS decisions.</td><td>Use in the IEP &amp; Behavior Data Reporter. Always de-identify.</td></tr>
+<tr><td><b>Effective Schools Framework (ESF)</b></td><td>Five levers for school improvement.</td><td>Use to label your evidence (below).</td></tr>
+</table></div>
+<h4>ESF — the 5 levers in one line each</h4>
+<ol>
+<li><b>Strong School Leadership &amp; Planning:</b> governance, goals, campus plans.</li>
+<li><b>Strategic Staffing:</b> recruiting, developing, and placing teachers well.</li>
+<li><b>Positive School Culture:</b> safe, predictable, supportive, presuming competence.</li>
+<li><b>High-Quality Instructional Materials &amp; Assessments:</b> TEKS-aligned curricula + interim assessments. <i>(Your games, leveled books and question banks live here.)</i></li>
+<li><b>Effective Instruction:</b> data-driven, differentiated tier-1 instruction with feedback loops. <i>(Your small-group and data tools live here.)</i></li>
+</ol>
+<h4>Copy-ready alignment sentence</h4>
+<div class="copybox"><button class="cp">Copy</button><pre>Add a short "Standards &amp; Evidence" section: list ONLY the standards from the text I pasted, say what student evidence each activity produces, and note which ESF lever (4: materials/assessments or 5: effective instruction) it supports. Mark anything uncertain "VERIFY CODE".</pre></div>`},
+
+{id:'cadflow',icon:'🖨️',title:'From AI Code to a 3D Print (Step-by-Step)',sub:'OpenSCAD → STL → slicer → printer',
+html:`
+<ol>
+<li><b>Get the code:</b> Use the "Text-to-3D Printable" tool. Copy the code block.</li>
+<li><b>Save it:</b> paste into a plain text file named <span class="mono">model.scad</span>.</li>
+<li><b>Open OpenSCAD</b> (free: openscad.org; or ask your tech team for a browser-based version).</li>
+<li>Press <b>F5</b> to preview. If you see errors, copy the red text back to the AI: "Fix this OpenSCAD error."</li>
+<li>Press <b>F6</b> to render, then <b>File → Export → STL</b>.</li>
+<li>Open the STL in your <b>slicer</b> (Bambu Studio, PrusaSlicer, Cura). Check the orientation, add supports only if needed, slice.</li>
+<li>Print one small test piece first (try 50% scale).</li>
+<li><b>Optional:</b> import the STL into Tinkercad to combine or modify shapes. (Tinkercad imports STL but cannot run OpenSCAD code.)</li>
+</ol>
+<div class="note good"><b>The magic for learning:</b> students change numbers at the top (like <span class="mono">wall_thickness = 2.4;</span>), re-render, and see the object change. That's variables, abstraction, and spatial reasoning: core computational-thinking skills.</div>
+<h4>If a print fails</h4>
+<ul><li>Thin walls snapped → increase wall thickness to 2.4 mm+.</li><li>Pieces fused → increase <span class="mono">tolerance</span> to 0.3-0.4 mm.</li><li>Warping or lifting → add a brim; clean the bed.</li><li>Use the "Fix a failed print" follow-up in the CAD tool.</li></ul>`},
+
+{id:'weekly',icon:'📅',title:'A Realistic 20-Minute Weekly Workflow',sub:'Small habit, big payoff',
+html:`
+<div class="tblwrap"><table>
+<tr><th>When</th><th>Time</th><th>What to do</th></tr>
+<tr><td><b>Sunday / Monday</b></td><td>10 min</td><td>Pick ONE tool from the library (a review game, leveled text, or unit gamifier). Fill the form, paste into AI, save the result.</td></tr>
+<tr><td><b>Before teaching it</b></td><td>5 min</td><td>Run the Test Checklist. Fix problems with a follow-up prompt.</td></tr>
+<tr><td><b>Midweek</b></td><td>2 min</td><td>Collect a quick exit ticket or the app's teacher report (nicknames only).</td></tr>
+<tr><td><b>Friday</b></td><td>3 min</td><td>Use "Class Data → Groups" to plan next week's reteach and enrichment.</td></tr>
+<tr><td><b>Monthly</b></td><td>10 min</td><td>Run the "Gamification Audit" on your reward system. Ask students what they like and don't.</td></tr>
+</table></div>
+<div class="note good"><b>Rule of one:</b> introduce only ONE new mechanic or tool at a time. Let it become routine before adding another.</div>
+<h4>Save your best prompts</h4>
+<p>Click the ☆ on a card to favorite it. Favorites and your personality / power-up choices are remembered in this browser.</p>`},
+
+{id:'research',icon:'📚',title:'The Research Behind This Hub (Plain English)',sub:'What the two reports say — and how we used them',
+html:`
+<h4>Report 1: Gamified AI-driven STEM learning</h4>
+<ul>
+<li><b>Human-focused design</b> (Octalysis) beats purely function-focused design: learners stay when the experience meets feelings and needs, not just tasks. → Used in the Unit Gamifier, Boss Battle, Breakout Kit, and Minigame Engine.</li>
+<li><b>White Hat before Black Hat:</b> empowering drives first, pressure drives sparingly. → "White Hat first" rule in prompts.</li>
+<li><b>Parametric CAD</b> (OpenSCAD) lets AI generate editable, printable models. Students learn variables and spatial reasoning by changing numbers. → CAD tool.</li>
+<li><b>Browser audio:</b> record with the MediaRecorder API; Safari needs audio/mp4, Chrome/Firefox use audio/webm. Check support first. → Minigame Engine and Fluency Studio.</li>
+<li><b>Texas alignment:</b> TA-TEKS, TEKS Behavior Alignment Tool, and the Effective Schools Framework. → Data, IEP and TEKS Checker tools.</li>
+</ul>
+<h4>Report 2: Motivating kids (ZynthFitQuest)</h4>
+<ul>
+<li><b>Variable rewards</b> are powerful (that's why games hook kids), but they can become compulsive. → We allow only small, cosmetic, capped surprises.</li>
+<li><b>Overjustification effect:</b> expected rewards can lower interest in tasks kids already like. → Quest Board, Economy, Family Kit, and the Audit.</li>
+<li><b>Self-Determination Theory:</b> autonomy, competence, relatedness. Move kids from "I do it for a prize" to "I do it because it matters". → Built into every reward-related prompt.</li>
+<li><b>Three-pillar family app:</b> Command Center (calendar), Daily Quest Log (chores), Reward Vault (earned, timed access). → Advanced Build track.</li>
+<li><b>Technical safeguards:</b> iOS Screen Time API with redundant re-locking; Supabase Row Level Security, server-side triggers, and row locks to stop cheating and double-spending. → Backend and iOS prompts (with an improved approval flow).</li>
+</ul>
+<div class="note">Both reports cite web sources of varying quality (blogs, vendor posts, forum answers). Use them as starting points, and verify anything important before relying on it.</div>`}
+];
+/* ============================================================
+   APP LOGIC
+   ============================================================ */
+let current = null;          // prompt currently open in the modal
+let vals = {};               // values typed into the form
+let settings = {persona:'none', addons:[]};
+let favs = [];
+let favOnly = false;
+
+/* ---------- storage helpers (safe if blocked) ---------- */
+function loadStore(){
+  try{
+    const s = JSON.parse(localStorage.getItem('tach2_settings')||'null'); if(s) settings = Object.assign(settings,s);
+    const f = JSON.parse(localStorage.getItem('tach2_favs')||'[]'); if(Array.isArray(f)) favs = f;
+  }catch(e){}
+}
+function saveSettings(){
+  settings.persona = document.getElementById('personaSel').value;
+  settings.addons = Array.from(document.querySelectorAll('#addonBox input:checked')).map(x=>x.value);
+  try{localStorage.setItem('tach2_settings',JSON.stringify(settings));}catch(e){}
+}
+function saveFavs(){ try{localStorage.setItem('tach2_favs',JSON.stringify(favs));}catch(e){} }
+
+/* ---------- init ---------- */
+window.addEventListener('DOMContentLoaded',()=>{
+  loadStore();
+  // category select
+  const cs = document.getElementById('categoryFilter');
+  cs.innerHTML = '<option value="ALL">All categories</option>' + Object.entries(CATEGORIES).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
+  // goals
+  document.getElementById('goalGrid').innerHTML = GOALS.map((g,i)=>`<button class="goal" onclick="goalClick(${i})"><span class="ic">${g.icon}</span><b>${g.title}</b><span>${g.sub}</span></button>`).join('');
+  // rules
+  document.getElementById('goldenRules').innerHTML = RULES.map(r=>`<div class="box"><div style="font-size:22px">${r.icon} <span class="step s1" style="vertical-align:middle">RULE ${r.n}</span></div><h3>${r.t}</h3><p>${r.d}</p></div>`).join('');
+  // about
+  document.getElementById('aboutGrid').innerHTML = ABOUT.map(a=>`<div class="box"><div style="font-size:22px">${a.i}</div><h3>${a.t}</h3><p>${a.d}</p></div>`).join('');
+  // guides
+  document.getElementById('guideList').innerHTML = GUIDES.map(g=>`<details class="guide" id="g-${g.id}"><summary><span class="gi">${g.icon}</span><span>${g.title}<small>${g.sub}</small></span></summary><div class="gbody">${g.html}</div></details>`).join('');
+  // persona + addons
+  document.getElementById('personaSel').innerHTML = Object.entries(PERSONAS).map(([k,v])=>`<option value="${k}">${v.label}</option>`).join('');
+  document.getElementById('addonBox').innerHTML = ADDONS.map(a=>`<label class="chk"><input type="checkbox" value="${a.id}" onchange="saveSettings();updatePreview()"><span><b>${a.label}</b><br><span style="color:var(--dim);font-size:11.5px">${a.desc}</span></span></label>`).join('');
+  // tabs
+  document.getElementById('mTabs').addEventListener('click',e=>{
+    const b = e.target.closest('.tab'); if(!b) return; showPane(b.dataset.pane);
+  });
+  // copy buttons inside guides / follow-ups
+  document.addEventListener('click',e=>{
+    const b = e.target.closest('button.cp'); if(!b) return;
+    const box = b.closest('.copybox'); const pre = box && box.querySelector('pre');
+    if(pre){ copyText(pre.textContent, 'Copied!'); }
+  });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+  document.getElementById('resultsCount').textContent = '';
+  renderPrompts(PROMPTS_DATA);
+});
+
+/* ---------- goals ---------- */
+function goalClick(i){
+  const g = GOALS[i];
+  if(g.open){ openModal(g.open); }
+  else if(g.guide){ openGuide(g.guide); }
+}
+function openGuide(id){
+  const el = document.getElementById('g-'+id); if(!el) return;
+  el.open = true;
+  document.getElementById('guides').scrollIntoView();
+  setTimeout(()=>el.scrollIntoView({block:'start'}),50);
+}
+
+/* ---------- cards ---------- */
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function renderPrompts(list){
+  const grid = document.getElementById('promptsGrid'), none = document.getElementById('noResults');
+  document.getElementById('resultsCount').textContent = `Showing ${list.length} of ${PROMPTS_DATA.length} tools`;
+  if(!list.length){ grid.style.display='none'; none.style.display='block'; return; }
+  grid.style.display=''; none.style.display='none';
+  grid.innerHTML = list.map(p=>{
+    const gb = p.grades.map(g=>`<span class="badge">${g==='ALL'?'All grades':'Gr '+g}</span>`).join('');
+    const tags = p.skills.map(s=>'#'+s.replace(/\s+/g,'')).join(' ');
+    const on = favs.includes(p.id);
+    return `<div class="card">
+      <button class="star ${on?'on':''}" title="Favorite" aria-label="Toggle favorite" onclick="toggleFav('${p.id}')">${on?'★':'☆'}</button>
+      <div>
+        <div class="row"><span class="ico">${p.icon}</span><div style="padding-right:24px"><h3>${esc(p.title)}</h3><span class="cat">${CATEGORIES[p.category]}</span></div></div>
+        <p>${esc(p.description)}</p>
+        <div class="badges"><span class="badge lv-${p.level}">${p.level}</span>${gb}<span class="badge">⏱ ${esc(p.time.split(' (')[0].split(' +')[0])}</span></div>
+        <div class="tags">${tags}</div>
+        <div class="meta">Best with: ${esc(p.bestAI)}</div>
+      </div>
+      <div class="actions">
+        <button class="btn" onclick="openModal('${p.id}')">✏️ Fill In &amp; View</button>
+        <button class="btn pri" onclick="quickCopy('${p.id}')">📋 Copy</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterPrompts(){
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  const cat = document.getElementById('categoryFilter').value;
+  const gr = document.getElementById('gradeFilter').value;
+  const lv = document.getElementById('levelFilter').value;
+  const list = PROMPTS_DATA.filter(p=>{
+    if(cat!=='ALL' && p.category!==cat) return false;
+    if(gr!=='ALL' && !p.grades.includes(gr) && !p.grades.includes('ALL')) return false;
+    if(lv!=='ALL' && p.level!==lv) return false;
+    if(favOnly && !favs.includes(p.id)) return false;
+    if(q){
+      const hay = [p.title,CATEGORIES[p.category],p.description,p.bestAI,p.promptText,...p.skills,...p.tips,...p.steps].join(' ').toLowerCase();
+      return q.split(/\s+/).every(w=>hay.includes(w));
+    }
+    return true;
+  });
+  renderPrompts(list);
+}
+function resetAllFilters(){
+  document.getElementById('searchInput').value='';
+  ['categoryFilter','gradeFilter','levelFilter'].forEach(id=>document.getElementById(id).value='ALL');
+  favOnly=false; document.getElementById('favToggle').classList.remove('on'); document.getElementById('favToggle').textContent='☆ Favorites';
+  filterPrompts();
+}
+function toggleFavFilter(){
+  favOnly=!favOnly; const b=document.getElementById('favToggle');
+  b.classList.toggle('on',favOnly); b.textContent = favOnly?'★ Favorites':'☆ Favorites';
+  filterPrompts();
+}
+function toggleFav(id){
+  favs = favs.includes(id) ? favs.filter(x=>x!==id) : favs.concat(id);
+  saveFavs(); filterPrompts();
+}
+
+/* ---------- prompt assembly ---------- */
+function shortLabel(f){ return (f.label||f.key).split(/ \(| — | \/ /)[0].toUpperCase(); }
+
+// mark=true wraps blanks/filled text in invisible markers for the preview highlighter
+function assemble(p, v, mark){
+  let body = p.promptText.split('§§§').join('```');
+  body = body.replace(/\{\{(\w+)\}\}/g,(m,k)=>{
+    const f = (p.fields||[]).find(x=>x.key===k);
+    const val = (v[k]||'').trim();
+    if(val) return mark ? '\u0003'+val+'\u0004' : val;
+    const ph = '['+(f?shortLabel(f):k.toUpperCase())+']';
+    return mark ? '\u0001'+ph+'\u0002' : ph;
+  });
+  const persona = PERSONAS[settings.persona];
+  let out = '';
+  if(persona && persona.text) out += 'STYLE: '+persona.text+'\n\n';
+  out += body;
+  const picked = ADDONS.filter(a=>settings.addons.includes(a.id));
+  if(picked.length){
+    out += '\n\nEXTRA INSTRUCTIONS\n' + picked.map((a,i)=>(i+1)+'. '+a.text).join('\n');
+  }
+  return out;
+}
+function plainPrompt(p, v){ return assemble(p, v, false); }
+
+/* ---------- modal ---------- */
+function openModal(id){
+  const p = PROMPTS_DATA.find(x=>x.id===id); if(!p) return;
+  current = p; vals = {};
+  document.getElementById('mIcon').textContent = p.icon;
+  document.getElementById('mTitle').textContent = p.title;
+  document.getElementById('mCat').textContent = `${CATEGORIES[p.category]} • ${p.level} • ⏱ ${p.time} • Best with: ${p.bestAI}`;
+  // form
+  document.getElementById('fieldsBox').innerHTML = (p.fields||[]).map(f=>{
+    let input;
+    if(f.type==='textarea') input = `<textarea data-k="${f.key}" placeholder="${esc(f.ph||'')}"></textarea>`;
+    else if(f.type==='select') input = `<select data-k="${f.key}"><option value="">— choose —</option>${f.options.map(o=>`<option>${esc(o)}</option>`).join('')}</select>`;
+    else input = `<input type="text" data-k="${f.key}" placeholder="${esc(f.ph||'')}">`;
+    return `<div class="field"><label>${esc(f.label)}</label>${input}</div>`;
+  }).join('') || '<p style="color:var(--muted);font-size:12.5px">No blanks to fill. Just copy!</p>';
+  document.querySelectorAll('#fieldsBox [data-k]').forEach(el=>{
+    const h = ()=>{ vals[el.dataset.k]=el.value; updatePreview(); };
+    el.addEventListener('input',h); el.addEventListener('change',h);
+  });
+  // settings
+  document.getElementById('personaSel').value = settings.persona in PERSONAS ? settings.persona : 'none';
+  document.querySelectorAll('#addonBox input').forEach(c=>c.checked = settings.addons.includes(c.value));
+  // panes
+  renderHow(p); renderTips(p); renderFollow(p);
+  showPane('pFill');
+  document.getElementById('openMenu').style.display='none';
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  updatePreview();
+  const first = document.querySelector('#fieldsBox [data-k]'); if(first) setTimeout(()=>first.focus(),60);
+}
+function closeModal(){
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
+  current=null;
+}
+function showPane(id){
+  document.querySelectorAll('#mTabs .tab').forEach(t=>t.classList.toggle('on',t.dataset.pane===id));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.id===id));
+  document.getElementById('footHint').textContent = id==='pFill' ? 'Works in Claude, ChatGPT, Gemini, Copilot & Grok' : 'Tip: go back to tab 1 to copy the full prompt';
+}
+function updatePreview(){
+  if(!current) return;
+  const raw = assemble(current, vals, true);
+  const html = esc(raw)
+    .replace(/\u0001/g,'<mark>').replace(/\u0002/g,'</mark>')
+    .replace(/\u0003/g,'<span class="filled">').replace(/\u0004/g,'</span>');
+  document.getElementById('previewText').innerHTML = html;
+  const plain = plainPrompt(current, vals);
+  const words = plain.trim().split(/\s+/).length;
+  const blanks = (raw.match(/\u0001/g)||[]).length;
+  document.getElementById('wordCount').textContent = `${words} words` + (blanks?` • ${blanks} blank${blanks>1?'s':''} left`:' • ready ✅');
+  const desc = (PERSONAS[settings.persona]||{}).help||'';
+  document.getElementById('personaHelp').textContent = desc;
+  renderFollow(current);
+}
+
+function renderHow(p){
+  const g = (p.fields||[]).length;
+  document.getElementById('pHow').innerHTML = `
+    <div class="cols2">
+      <div>
+        <div class="fh" style="margin-top:0">🎁 What you'll get</div>
+        <ul class="bul">${p.whatYouGet.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
+        <div class="statrow" style="margin-top:12px"><span class="stat">⏱ ${esc(p.time)}</span><span class="stat">🎚 ${p.level}</span><span class="stat">🤖 ${esc(p.bestAI)}</span></div>
+      </div>
+      <div>
+        <div class="fh" style="margin-top:0">🪜 Step-by-step</div>
+        <ol class="ol">${p.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol>
+      </div>
+    </div>
+    <div class="note">Need help running a file the AI creates? See <b>Guides → "How to Run What the AI Builds"</b>. Before using it with students, run the <b>Test Checklist</b>.</div>`;
+}
+function renderTips(p){
+  document.getElementById('pTips').innerHTML = `
+    <div class="cols2">
+      <div><div class="fh" style="margin-top:0">💡 Pro tips</div><ul class="bul">${p.tips.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>
+      <div><div class="fh" style="margin-top:0;color:var(--warn)">⚠️ Common mistakes</div><ul class="bul">${p.pitfalls.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>
+    </div>
+    <div class="note warn">Always review AI output yourself. Do not paste real student names or identifying details. See <b>Safety</b> at the bottom of the page.</div>`;
+}
+function renderFollow(p){
+  document.getElementById('pFollow').innerHTML = `
+    <p style="font-size:13px;color:var(--muted);margin-top:0">After the AI answers, paste one of these into the <b>same chat</b>. Replace anything in [BRACKETS] first.</p>
+    ${(p.followups||[]).map(f=>`<div class="fh" style="margin:14px 0 4px">${esc(f.label)}</div><div class="copybox"><button class="cp">Copy</button><pre>${esc(f.text.split('{{GRADE}}').join(vals.grade||'[GRADE LEVEL]'))}</pre></div>`).join('')}`;
+}
+
+/* ---------- copy ---------- */
+function copyText(text,msg){
+  const done = ()=>toast(msg||'Prompt copied! Now paste it into your AI.');
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(()=>fallbackCopy(text,done));
+  } else fallbackCopy(text,done);
+}
+function fallbackCopy(text,done){
+  const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.focus(); ta.select();
+  try{ document.execCommand('copy'); done(); }catch(e){ toast('Could not copy automatically. Select the text and copy it manually.'); }
+  document.body.removeChild(ta);
+}
+function copyModal(){
+  if(!current) return;
+  const t = plainPrompt(current, vals);
+  const left = (assemble(current,vals,true).match(/\u0001/g)||[]).length;
+  copyText(t, left ? `Copied! (${left} blank${left>1?'s':''} still unfilled — check the yellow text)` : 'Prompt copied! Now paste it into your AI.');
+}
+function quickCopy(id){
+  const p = PROMPTS_DATA.find(x=>x.id===id); if(!p) return;
+  copyText(plainPrompt(p,{}), 'Copied! Fill in the [BRACKETS] before sending — or use "Fill In & View".');
+}
+function toggleOpenMenu(){
+  const m=document.getElementById('openMenu'); m.style.display = m.style.display==='none'?'block':'none';
+}
+function copyAndOpen(url){
+  if(!current) return;
+  copyText(plainPrompt(current,vals),'Copied! Paste into the new tab with Ctrl+V (⌘+V on Mac).');
+  window.open(url,'_blank','noopener');
+}
+
+/* ---------- toast ---------- */
+let toastTimer;
+function toast(msg){
+  const t=document.getElementById('toast'); document.getElementById('toastMsg').textContent=msg;
+  t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),3200);
+}
+</script>
+</body>
+</html>

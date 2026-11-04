@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lily Path</title>
+<link rel="stylesheet" href="style.css?v=8">
+</head>
+<body>
+<header class="bar" id="bar">
+  <div class="tabs" id="tabs"></div>
+  <button class="newtab" id="newtab" title="Open a link">+</button>
+  <span class="sp"></span>
+  <button class="themebtn" id="syncbtn" data-s="off" title="Sync">☁</button>
+  <button class="themebtn" id="themebtn" title="Change colors">🎨</button>
+</header>
+
+<main id="main">
+  <section class="view show" id="today"></section>
+  <div id="views"><div class="sdiv" id="sdiv" hidden title="Drag to resize, double-click to reset"></div></div>
+  <div class="dropz" id="dropz"><div data-side="a">Put it on the left</div><div data-side="b">Put it on the right</div></div>
+</main>
+
+<div class="themes" id="themes" hidden></div>
+<div class="pill" id="pill" hidden></div>
+
+<dialog id="dlg">
+  <form method="dialog" id="dlgForm">
+    <h3 id="dlgTitle"></h3>
+    <label>Name<input id="dName" autocomplete="off"></label>
+    <label id="dUrlWrap">Link<input id="dUrl" autocomplete="off" placeholder="https://"></label>
+    <div class="dbtns">
+      <button type="button" class="ghost danger" id="dDel">Delete</button>
+      <span class="sp"></span>
+      <button type="button" class="ghost" id="dCancel">Cancel</button>
+      <button class="primary" id="dOk">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="ctx" id="ctx" hidden></div>
+<div class="toast" id="toast" hidden></div>
+<script src="app.js?v=12"></script>
+</body>
+</html>

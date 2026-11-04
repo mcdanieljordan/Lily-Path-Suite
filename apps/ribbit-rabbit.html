@@ -2230,6 +2230,11 @@ html.ll-mode body>*:not(#appBar):not(#llHost):not(.modal-overlay):not(.toast){di
   <h2 style="font-size:1rem;font-weight:800;color:var(--accent-warm);margin:18px 0 10px;letter-spacing:.02em">🏫 Classes &amp; Attendance</h2>
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr));gap:12px;align-items:start">
   <div class="timer-section" style="margin:0">
+    <h3>🏷️ Student names</h3>
+    <p style="font-size:.8rem;color:var(--text-dim);margin-bottom:10px">Choose what shows on screen. Set a nickname for any student by editing the student.</p>
+    <select id="nameModeSel" class="roster-select"><option value="first">First name + last initial</option><option value="nick">Nickname if set, otherwise first name</option></select>
+  </div>
+  <div class="timer-section" style="margin:0">
     <h3>🏫 Manage Classes</h3>
     <p style="font-size:.8rem;color:var(--text-dim);margin-bottom:10px">Rename or delete any class. Deleting a class removes it and all its students — this can't be undone.</p>
     <div id="manageClassesList"><div class="manage-class-row" data-rid="mu18ysoo5fj8y" draggable="true">
@@ -2656,6 +2661,7 @@ Rules:
     <div class="modal-field" style="flex:1"><label>First Name</label><input type="text" id="seFirst" maxlength="30"></div>
     <div class="modal-field" style="flex:1"><label>Last Name / Initial</label><input type="text" id="seLast" maxlength="30"></div>
   </div>
+  <div class="modal-field"><label>Nickname / Display name (optional)</label><input type="text" id="seNick" maxlength="30" placeholder="Shown instead of the first name when Settings → Student names uses nicknames"></div>
   <div style="display:flex;gap:8px">
     <div class="modal-field" style="flex:1"><label>Roster #</label><input type="number" id="seNum" min="0" max="999"></div>
     <div class="modal-field" style="flex:1"><label>Custom #</label><input type="number" id="seCustom" min="0" max="999"></div>
@@ -3004,8 +3010,11 @@ function genderOf(s){const g=String((s&&s.gender)||'').trim().toUpperCase();retu
 function soundsAZ(){return [...sounds].sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true,sensitivity:'base'}))}
 function sFolders(s){if(!Array.isArray(s.folderIds))s.folderIds=s.folderId?[s.folderId]:[];return s.folderIds}
 // Last-name initial; uses 2 letters when another student in the class shares the same first letter
-function dispFirst(s){return String(s.firstName||s.name||'').trim().split(/\s+/)[0]||'?'}
+let nameMode=(function(){try{return localStorage.getItem('rr_nameMode')||'first'}catch(e){return 'first'}})();
+function nickOf(s){return nameMode==='nick'&&s&&s.nickname&&String(s.nickname).trim()?String(s.nickname).trim():''}
+function dispFirst(s){return nickOf(s)||String(s.firstName||s.name||'').trim().split(/\s+/)[0]||'?'}
 function lastInit(s){
+  if(nickOf(s))return '';
   const ln=(s.lastName||'').trim();if(!ln)return '';
   const r=rosters.find(x=>x.students.includes(s));
   const c0=ln.charAt(0).toLowerCase();
@@ -3628,6 +3637,7 @@ function applyMiniBar(){const el=document.getElementById('miniBar');if(!el)retur
   const show=miniBarOn&&document.getElementById('panel-attendance').classList.contains('active');
   el.style.display=show?'flex':'none';document.getElementById('panel-attendance').style.marginRight=show?'150px':'';if(show)renderMiniBar()}
 function setupDashExtras(){
+  {const ns=document.getElementById('nameModeSel');if(ns){ns.value=nameMode;ns.addEventListener('change',()=>{nameMode=ns.value;try{localStorage.setItem('rr_nameMode',nameMode)}catch(e){}try{renderAttendance()}catch(e){}try{renderGroups()}catch(e){}toast('Names updated')})}}
   const t=document.getElementById('miniBarToggle');t.checked=miniBarOn;
   t.addEventListener('change',()=>{miniBarOn=t.checked;localStorage.setItem('rr_miniBar',miniBarOn?'1':'0');applyMiniBar()});
   const q=document.getElementById('qsSearch'),res=document.getElementById('qsResults');let hits=[];
@@ -4930,6 +4940,7 @@ function openStudentEditModal(rosterId,studentId){
   document.getElementById('studentModalTitle').textContent='Edit: '+(student.firstName||student.name||'');
   document.getElementById('seFirst').value=student.firstName||student.name||'';
   document.getElementById('seLast').value=student.lastName||'';
+  document.getElementById('seNick').value=student.nickname||'';
   document.getElementById('seNum').value=student.num||0;
   document.getElementById('seCustom').value=student.customNum||0;
   renderTimerSoundSelects();
@@ -4953,6 +4964,7 @@ async function saveStudentEdit(){
   student.firstName=document.getElementById('seFirst').value.trim()||student.firstName;
   student.name=student.firstName;
   student.lastName=document.getElementById('seLast').value.trim();
+  student.nickname=document.getElementById('seNick').value.trim();
   student.num=parseInt(document.getElementById('seNum').value)||0;
   student.customNum=parseInt(document.getElementById('seCustom').value)||0;
   student.soundId=document.getElementById('seSound').value||null;
@@ -6420,7 +6432,7 @@ function hopFontAt(i){if(!hopOrder){hopOrder=HOP_FONTS.slice();for(let k=hopOrde
 function hopFontStyleAt(i){const f=hopFontAt(i);return `font-family:'${f[0]}',cursive,sans-serif;font-weight:${f[1]}`}
 function hopFont(id){if(!hopFonts[id]){const used=Object.values(hopFonts).map(f=>f[0]);let c=HOP_FONTS.filter(f=>!used.includes(f[0]));if(!c.length)c=HOP_FONTS;hopFonts[id]=c[Math.random()*c.length|0]}return hopFonts[id]}
 function hopFontStyle(id){const f=hopFont(id);return `font-family:'${f[0]}',cursive,sans-serif;font-weight:${f[1]}`}
-function hopName(s){let f=s.firstName?String(s.firstName).trim().split(/\s+/)[0]:s.firstName,l=s.lastName;if(!f){const p=String(s.name||'?').trim().split(/\s+/);f=p[0];if(!l&&p.length>1)l=p[p.length-1]}return{first:f||'?',ini:l?String(l).trim().charAt(0).toUpperCase():''}}
+function hopName(s){if(nickOf(s))return{first:nickOf(s),ini:''};let f=s.firstName?String(s.firstName).trim().split(/\s+/)[0]:s.firstName,l=s.lastName;if(!f){const p=String(s.name||'?').trim().split(/\s+/);f=p[0];if(!l&&p.length>1)l=p[p.length-1]}return{first:f||'?',ini:l?String(l).trim().charAt(0).toUpperCase():''}}
 
 const VZ={s:null,p:null,kw:0,idx:0,pressed:-1,at:0,lit:false,hold:false,holdT:0,raf:0,t:0,bob:0,PH:190,SP:56,R:{x:360,tx:360,pr:0},L:{pr:0}};
 const VZ_PX=10,VZ_PW=700,VZ_KT=116,VZ_KH=90,VZ_LENS=[26,32,36,32,24];

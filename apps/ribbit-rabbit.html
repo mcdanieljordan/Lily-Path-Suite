@@ -3004,6 +3004,7 @@ function genderOf(s){const g=String((s&&s.gender)||'').trim().toUpperCase();retu
 function soundsAZ(){return [...sounds].sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true,sensitivity:'base'}))}
 function sFolders(s){if(!Array.isArray(s.folderIds))s.folderIds=s.folderId?[s.folderId]:[];return s.folderIds}
 // Last-name initial; uses 2 letters when another student in the class shares the same first letter
+function dispFirst(s){return String(s.firstName||s.name||'').trim().split(/\s+/)[0]||'?'}
 function lastInit(s){
   const ln=(s.lastName||'').trim();if(!ln)return '';
   const r=rosters.find(x=>x.students.includes(s));
@@ -3648,7 +3649,7 @@ function reportRows(){const r=rosters.find(x=>x.id===document.getElementById('re
   const rows=r.students.map(s=>{const g=k=>((w[k]||{}).students||{})[s.id]||0;
     const week=g(wk),month=Object.keys(w).filter(k=>k.slice(0,7)===mo||dAdd(k,4).slice(0,7)===mo).reduce((a,k)=>a+g(k),0);
     const pv=prev.map(g),hasHist=prev.some(k=>w[k]),avg=hasHist?pv.reduce((a,b)=>a+b,0)/4:0;
-    return{name:(s.firstName||s.name||'?')+(s.lastName?' '+s.lastName:''),total:studentXP(s),week,month,avg:Math.round(avg*10)/10,lift:Math.round((week-avg)*10)/10,star:hasHist&&week>avg&&week>0}});
+    return{name:dispFirst(s)+(s.lastName?' '+lastInit(s):''),total:studentXP(s),week,month,avg:Math.round(avg*10)/10,lift:Math.round((week-avg)*10)/10,star:hasHist&&week>avg&&week>0}});
   const m=document.getElementById('repSort').value;
   rows.sort((a,b)=>m==='name'?a.name.localeCompare(b.name):(b[m]-a[m])||a.name.localeCompare(b.name));
   return{r,rows}}
@@ -3803,7 +3804,7 @@ function renderQuickAssignStudents(){
   const rid=document.getElementById('qaRosterSelect').value,sid=document.getElementById('qaSoundSelect').value;
   const roster=rosters.find(r=>r.id===rid);
   if(!roster||!sid){list.innerHTML='<span style="font-size:.75rem;color:var(--text-muted)">Pick a class and a sound above, then tap students below.</span>';return}
-  list.innerHTML=roster.students.map(s=>`<div class="qa-student-chip${s.soundId===sid?' assigned':''}" data-sid="${s.id}">${s.firstName||s.name}${s.soundId===sid?' 🔊':''}</div>`).join('');
+  list.innerHTML=roster.students.map(s=>`<div class="qa-student-chip${s.soundId===sid?' assigned':''}" data-sid="${s.id}">${dispFirst(s)}${s.soundId===sid?' 🔊':''}</div>`).join('');
   list.querySelectorAll('.qa-student-chip').forEach(chip=>chip.addEventListener('click',async()=>{
     const stu=roster.students.find(x=>x.id===chip.dataset.sid);
     stu.soundId=(stu.soundId===sid)?null:sid;
@@ -4300,7 +4301,7 @@ function renderAbsentStrip(roster,att){
   if(!roster||!att){el.innerHTML='';return}
   const abs=roster.students.filter(s=>{const r=att.records.find(x=>x.studentId===s.id);return r&&r.status==='absent'});
   const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  el.innerHTML='<span class="absent-label">✕ Absent today <b>'+abs.length+'</b></span>'+(abs.length?abs.map(s=>'<span class="absent-chip">'+esc((s.firstName||s.name||'?')+(s.lastName?' '+lastInit(s):''))+'</span>').join(''):'<span class="absent-none">No one marked absent</span>');
+  el.innerHTML='<span class="absent-label">✕ Absent today <b>'+abs.length+'</b></span>'+(abs.length?abs.map(s=>'<span class="absent-chip">'+esc(dispFirst(s)+(s.lastName?' '+lastInit(s):''))+'</span>').join(''):'<span class="absent-none">No one marked absent</span>');
 }
 function pointsForStatus(status){return status==='present'?2:status==='nojump'?1:0}
 function computeStreak(rosterId,studentId){
@@ -4508,7 +4509,7 @@ function renderFocus(){
   const s=students[focusIndex];
   const att=attendance[getAttendanceKey(rid)];
   const rec=(att&&att.records.find(r=>r.studentId===s.id))||{status:'unmarked'};
-  const name=s.firstName||s.name||'?';
+  const name=dispFirst(s);
   document.getElementById('focusProgress').textContent=`${focusIndex+1} / ${students.length}`;
   {const pc=(focusIndex+1)/students.length*100,bf=document.getElementById('focusBarFill');bf.style.width=pc+'%';bf.style.background='linear-gradient(90deg,#ff3b5c,#ff9f1c,#ffe14d,#4fe36b,#3bc9ff,#6b6bff,#c24dff)';bf.style.backgroundSize=(10000/pc)+'% 100%'}
   document.getElementById('focusAvatar').innerHTML=s.photo?`<img src="${s.photo}" alt="">`:name.charAt(0).toUpperCase();
@@ -4693,7 +4694,7 @@ function renderChampBoard(){
     <span class="champ-bar"><i style="width:${d.L.pct}%"></i></span>
     <span class="champ-next">${d.L.next?`${d.L.need} pts to ${d.L.next.icon} ${d.L.next.name}`:'🌟 Max level!'}</span>
     <span class="champ-stats"><span>🏆 Best <b>${d.best?fmtSpeedTime(d.best):'—'}</b></span><span>⏱ Today <b>${d.todayTime?fmtSpeedTime(d.todayTime):'—'}</b></span><span title="Total XP from every app">⭐ Total <b class="pts">${d.total}</b></span><span title="Points earned today">Today <b class="today">+${d.today}</b></span><span title="Points this school week (Mon–Fri) — starts fresh every Monday">📅 Week <b class="today">+${d.week}</b></span></span>
-    ${showAllAbsent?(d.absent.length?`<span class="champ-absent">✕ ${d.absent.length} absent: ${d.absent.map(s=>fmtEsc((s.firstName||s.name||'?')+(s.lastName?' '+lastInit(s):''))).join(', ')}</span>`:'<span class="champ-absent none">✓ No one absent</span>'):''}
+    ${showAllAbsent?(d.absent.length?`<span class="champ-absent">✕ ${d.absent.length} absent: ${d.absent.map(s=>fmtEsc(dispFirst(s)+(s.lastName?' '+lastInit(s):''))).join(', ')}</span>`:'<span class="champ-absent none">✓ No one absent</span>'):''}
   </button>`}).join('');
   el.querySelectorAll('[data-time]').forEach(t=>t.addEventListener('click',async e=>{e.stopPropagation();const r=rosters.find(x=>x.id===t.dataset.time);if(!r)return;const v=prompt('Class time (e.g. 9:05–9:50 or Period 2 · 9:05)',r.timeLabel||'');if(v===null)return;r.timeLabel=v.trim().slice(0,30);await dbPut('rosters',r);renderChampBoard()}));
   el.querySelectorAll('.champ-card').forEach(c=>c.addEventListener('click',()=>{const sel=document.getElementById('rosterSelect');if(sel.value===c.dataset.rid)return;sel.value=c.dataset.rid;sel.dispatchEvent(new Event('change'))}));
@@ -4814,7 +4815,7 @@ function renderAttendance(){
     row.className=cls;
 
 
-    const displayName=student.firstName||student.name||'?';
+    const displayName=dispFirst(student);
     const lastIn=student.lastName?lastInit(student):'';
     const numPart=student.num||'';
     const lineNum=student.customNum?` [${student.customNum}]`:'';
@@ -5354,10 +5355,10 @@ function renderGroups(){
         <button class="group-lock" data-lock="${i}" title="${g.locked?'Unlock':'Lock'}">${g.locked?'🔒':'🔓'}</button>
       </div>
       ${g.students.map(s=>{
-        const dn=s.firstName||s.name||'?';
+        const dn=dispFirst(s);
         const av=s.photo?`<div class="group-avatar"><img src="${s.photo}" alt=""></div>`:`<div class="group-avatar">${dn.charAt(0).toUpperCase()}</div>`;
         const bIcons=leaderMark(s);
-        return `<div class="group-student">${av}<span class="group-student-name"${nameStyle(s)}>${fmtEsc(dn)}${s.lastName?' <small style="color:var(--text-muted)">'+s.lastName+'</small>':''}</span>${bIcons}</div>`;
+        return `<div class="group-student">${av}<span class="group-student-name"${nameStyle(s)}>${fmtEsc(dn)}${s.lastName?' <small style="color:var(--text-muted)">'+lastInit(s)+'</small>':''}</span>${bIcons}</div>`;
       }).join('')}
     `;
     card.querySelector('[data-lock]').addEventListener('click',()=>{
@@ -5617,7 +5618,7 @@ function renderWeeksModal(){
     const p=per.find(x=>x.r.id===sel.value);
     const studs=[...p.r.students].sort((a,b)=>(a.firstName||a.name||'').localeCompare(b.firstName||b.name||''));
     const best=weeks.map(w=>Math.max(0,...Object.values((p.w[w]||{}).students||{})));
-    rows=`<tr style="background:var(--bg-card)"><td style="font-weight:800">Class total</td>${weeks.map(w=>`<td class="num" style="font-weight:800">${(p.w[w]||{}).total||'—'}</td>`).join('')}</tr>`+studs.map(s=>`<tr><td style="white-space:nowrap">${fmtEsc((s.firstName||s.name||'?')+(s.lastName?' '+lastInit(s):''))}</td>${weeks.map((w,i)=>{const v=((p.w[w]||{}).students||{})[s.id]||0;return cell(v,v>0&&v===best[i])}).join('')}</tr>`).join('');
+    rows=`<tr style="background:var(--bg-card)"><td style="font-weight:800">Class total</td>${weeks.map(w=>`<td class="num" style="font-weight:800">${(p.w[w]||{}).total||'—'}</td>`).join('')}</tr>`+studs.map(s=>`<tr><td style="white-space:nowrap">${fmtEsc(dispFirst(s)+(s.lastName?' '+lastInit(s):''))}</td>${weeks.map((w,i)=>{const v=((p.w[w]||{}).students||{})[s.id]||0;return cell(v,v>0&&v===best[i])}).join('')}</tr>`).join('');
   }
   document.getElementById('weeksBody').innerHTML=`<table class="speed-history-table"><thead><tr><th>${sel.value==='all'?'Class':'Student'}</th>${th}</tr></thead><tbody>${rows}</tbody></table>`;
 }
@@ -6419,7 +6420,7 @@ function hopFontAt(i){if(!hopOrder){hopOrder=HOP_FONTS.slice();for(let k=hopOrde
 function hopFontStyleAt(i){const f=hopFontAt(i);return `font-family:'${f[0]}',cursive,sans-serif;font-weight:${f[1]}`}
 function hopFont(id){if(!hopFonts[id]){const used=Object.values(hopFonts).map(f=>f[0]);let c=HOP_FONTS.filter(f=>!used.includes(f[0]));if(!c.length)c=HOP_FONTS;hopFonts[id]=c[Math.random()*c.length|0]}return hopFonts[id]}
 function hopFontStyle(id){const f=hopFont(id);return `font-family:'${f[0]}',cursive,sans-serif;font-weight:${f[1]}`}
-function hopName(s){let f=s.firstName,l=s.lastName;if(!f){const p=String(s.name||'?').trim().split(/\s+/);f=p[0];if(!l&&p.length>1)l=p[p.length-1]}return{first:f||'?',ini:l?String(l).trim().charAt(0).toUpperCase():''}}
+function hopName(s){let f=s.firstName?String(s.firstName).trim().split(/\s+/)[0]:s.firstName,l=s.lastName;if(!f){const p=String(s.name||'?').trim().split(/\s+/);f=p[0];if(!l&&p.length>1)l=p[p.length-1]}return{first:f||'?',ini:l?String(l).trim().charAt(0).toUpperCase():''}}
 
 const VZ={s:null,p:null,kw:0,idx:0,pressed:-1,at:0,lit:false,hold:false,holdT:0,raf:0,t:0,bob:0,PH:190,SP:56,R:{x:360,tx:360,pr:0},L:{pr:0}};
 const VZ_PX=10,VZ_PW=700,VZ_KT=116,VZ_KH=90,VZ_LENS=[26,32,36,32,24];

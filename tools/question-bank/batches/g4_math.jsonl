@@ -34,7 +34,7 @@
 {"c": "111.6.b.2.G", "d": 3, "q": "Which fraction is equal to 0.55?", "o": ["55/1000", "55/10", "56/100", "55/100"], "a": 3, "e": "0.55 is 55 hundredths, which is 55/100."}
 {"c": "111.6.b.2.G", "d": 2, "q": "Which fraction is equal to 0.6?", "o": ["6/10", "6/100", "60/10", "7/10"], "a": 0, "e": "0.6 is 6 tenths, which is 6/10."}
 {"c": "111.6.b.2.G", "d": 2, "q": "Which decimal is equal to 9/10?", "o": ["0.09", "0.9", "9.00", "1.9"], "a": 1, "e": "9/10 is 9 tenths, which is 0.9."}
-{"c": "111.6.b.2.G", "d": 2, "q": "Which decimal is equal to 8/10?", "o": ["8.00", "1.8", "0.8", "8.0"], "a": 2, "e": "8/10 is 8 tenths, which is 0.8."}
+{"c": "111.6.b.2.G", "d": 2, "q": "Which decimal is equal to 8/10?", "o": ["8.00", "1.8", "0.8", "0.08"], "a": 2, "e": "8/10 is 8 tenths, which is 0.8."}
 {"c": "111.6.b.2.H", "d": 4, "q": "A number line from 0.1 to 0.2 is split into 10 equal parts. A point is on the fifth mark after 0.1. Which decimal names the point?", "o": ["0.51", "0.25", "0.1", "0.15"], "a": 3, "e": "Each mark is 0.01, so the point is 5 hundredths past 0.1: 0.15."}
 {"c": "111.6.b.2.H", "d": 2, "q": "A number line from 0 to 1 is split into 10 equal parts. A point is on the fourth mark after 0. Which decimal names the point?", "o": ["0.4", "0.04", "0.6", "4.0"], "a": 0, "e": "Each mark is 0.1, so 4 marks is 0.4."}
 {"c": "111.6.b.2.H", "d": 4, "q": "A number line from 0.3 to 0.4 is split into 10 equal parts. A point is on the fourth mark after 0.3. Which decimal names the point?", "o": ["0.44", "0.34", "0.3", "0.43"], "a": 1, "e": "Each mark is 0.01, so the point is 4 hundredths past 0.3: 0.34."}

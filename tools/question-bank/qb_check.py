@@ -30,6 +30,14 @@ def check_files(paths, strict_codes=None):
             if len(it['e']) > 400: bad.append((where, "explanation too long")); continue
             if len({onorm(x) for x in o}) != len(o): bad.append((where, f"duplicate options {o}")); continue
             if any(not str(x).strip() for x in o): bad.append((where, "empty option")); continue
+            nv = []
+            for x in o:
+                m_ = re.fullmatch(r'(\$?)(\d[\d,]*(?:\.\d+)?)(¢?)(?:\s+([A-Za-z][A-Za-z ]*))?', str(x).strip())
+                if m_: nv.append((float(m_.group(2).replace(',', '')), m_.group(1) + m_.group(3) + (m_.group(4) or '').strip()))
+            if len(nv) == len(o) and len(set(nv)) != len(nv): bad.append((where, f"options with the same numeric value {o}")); continue
+            if all(re.fullmatch(r'[\d.]+( \+ [\d.]+)+', str(x)) for x in o):
+                sv = [sum(F(t) for t in str(x).split(' + ')) for x in o]
+                if len(set(sv)) != len(sv): bad.append((where, f"sum options with the same value {o}")); continue
             right = str(o[a]).strip()
             if len(norm(right)) >= 4 and norm(right) in norm(it['q']) and not re.fullmatch(r'[\d.,/$%\s-]+', right):
                 bad.append((where, f"answer given away in the question: {right!r}")); continue

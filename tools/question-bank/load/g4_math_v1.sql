@@ -40,7 +40,7 @@ from (values
 ('111.6.b.2.G',3,'Which fraction is equal to 0.55?','["55/1000", "55/10", "56/100", "55/100"]'::jsonb,3,'0.55 is 55 hundredths, which is 55/100.','original'),
 ('111.6.b.2.G',2,'Which fraction is equal to 0.6?','["6/10", "6/100", "60/10", "7/10"]'::jsonb,0,'0.6 is 6 tenths, which is 6/10.','original'),
 ('111.6.b.2.G',2,'Which decimal is equal to 9/10?','["0.09", "0.9", "9.00", "1.9"]'::jsonb,1,'9/10 is 9 tenths, which is 0.9.','original'),
-('111.6.b.2.G',2,'Which decimal is equal to 8/10?','["8.00", "1.8", "0.8", "8.0"]'::jsonb,2,'8/10 is 8 tenths, which is 0.8.','original'),
+('111.6.b.2.G',2,'Which decimal is equal to 8/10?','["8.00", "1.8", "0.8", "0.08"]'::jsonb,2,'8/10 is 8 tenths, which is 0.8.','original'),
 ('111.6.b.2.H',4,'A number line from 0.1 to 0.2 is split into 10 equal parts. A point is on the fifth mark after 0.1. Which decimal names the point?','["0.51", "0.25", "0.1", "0.15"]'::jsonb,3,'Each mark is 0.01, so the point is 5 hundredths past 0.1: 0.15.','original'),
 ('111.6.b.2.H',2,'A number line from 0 to 1 is split into 10 equal parts. A point is on the fourth mark after 0. Which decimal names the point?','["0.4", "0.04", "0.6", "4.0"]'::jsonb,0,'Each mark is 0.1, so 4 marks is 0.4.','original'),
 ('111.6.b.2.H',4,'A number line from 0.3 to 0.4 is split into 10 equal parts. A point is on the fourth mark after 0.3. Which decimal names the point?','["0.44", "0.34", "0.3", "0.43"]'::jsonb,1,'Each mark is 0.01, so the point is 4 hundredths past 0.3: 0.34.','original'),

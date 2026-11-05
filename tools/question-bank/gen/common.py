@@ -5,13 +5,19 @@ import random, json, re
 from fractions import Fraction as F
 
 class Bank:
-    def __init__(self, prefix, seed, no_neg=False, norm_dup=False):
+    def __init__(self, prefix, seed, no_neg=False, norm_dup=False, own=None):
         self.no_neg = no_neg
-        self.norm_dup = norm_dup
+        self.norm_dup = norm_dup or own is not None
         self.P = prefix
         self.R = random.Random(seed)
         self.out = []
         self.seen = set()
+        if own:   # own = this batch's file name; every prompt already in the other batches is off limits (the bank keeps one question per prompt text)
+            import glob, os
+            for fp in glob.glob(os.path.join(os.path.dirname(__file__), '..', 'batches', '*.jsonl')):
+                if os.path.basename(fp) == own: continue
+                for line in open(fp, encoding='utf8'):
+                    self.seen.add(re.sub(r'[^a-z0-9]', '', json.loads(line)['q'].lower()))
 
     def mk(self, code, d, q, right, wrong, e, chk=None, need=3):
         R = self.R

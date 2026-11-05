@@ -7,8 +7,8 @@ No released STAAR items are copied here. Released tests and blueprints are used 
 
 ## Files
 - `schema.sql` – creates the table, its read-only security rule and the `question_bank_coverage` view. Run once in the Supabase SQL editor.
-- `gen/*.py` – question writers. `python3 gen/g3_math.py` rebuilds `batches/g3_math.jsonl` (same seed = same file). Same for `g2_math.py` and `g4_math.py`; `gen/common.py` holds the shared helpers.
-- `qb_check.py` – checks a batch (math answers recomputed, no duplicates, one right answer, answer not given away). Exit code 1 = fix first.
+- `gen/*.py` – question writers. `python3 gen/g3_math.py` rebuilds `batches/g3_math.jsonl` (same seed = same file). Same for `gk_math.py`, `g1_math.py`, `g2_math.py`, `g4_math.py` and `g5_math.py`; `gen/common.py` holds the shared helpers.
+- `qb_check.py` – checks a batch (math answers recomputed, no duplicates, one right answer, answer not given away, no two choices with the same value). Exit code 1 = fix first.
 - `qb_sql.py` – turns a checked batch into the SQL in `load/`. Usage: `python3 qb_sql.py "Mathematics" g3_math_v1 load/g3_math_v1.sql batches/g3_math.jsonl`
 - `load/*.sql` – ready-to-run inserts. Safe to run twice (duplicates are skipped).
 
@@ -17,7 +17,7 @@ No released STAAR items are copied here. Released tests and blueprints are used 
 `d` is difficulty 1-5 (the five board rows use 3,2,3,4,2: row 1 comes from the grade below, row 5 previews the grade above).
 
 ## Status
-- Math, status `checked` (script-verified, not yet teacher-verified): Grade 2 = 189 questions / 33 standards, Grade 3 = 255 / 46, Grade 4 = 241 / 41. Total 685.
+- Math, status `checked` (script-verified, not yet teacher-verified): Kindergarten = 181 questions / 27 standards, Grade 1 = 279 / 43, Grade 2 = 189 / 33, Grade 3 = 255 / 46, Grade 4 = 241 / 41, Grade 5 = 410 / 39. Total 1,555 across 229 standards.
 - A few generated questions repeated an existing prompt (e.g. "Which number is odd?") and were skipped on load; the bank never holds two questions with the same prompt text.
-- Next: Math K-1 and 5-8, then Science, ELA, Social Studies, then PE, Health, Fine Arts, Tech.
+- Next: Math 6-8, then Science, ELA, Social Studies, then PE, Health, Fine Arts, Tech.
 - Battleship reads the bank already (commit 706637e) and falls back to its built-in questions when the table is missing or empty.

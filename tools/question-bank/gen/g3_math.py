@@ -45,7 +45,7 @@ def g2B_value():
 def g2B_ratio():
     a = R.randint(2, 4); b = R.randint(1, a - 1); d = R.randint(2, 9)
     return mk('2.B', 4, f"The digit {d} in {cm(d * 10 ** a)} has a value that is how many times the value of the digit {d} in {cm(d * 10 ** b)}?",
-              cm(10 ** (a - b)), [cm(x) for x in (10, 100, 1000, 10000)], f"Each place to the left is worth 10 times as much; {a - b} place(s) apart is {cm(10 ** (a - b))} times.", CK(f"10**{a - b}"))
+              cm(10 ** (a - b)), [cm(x) for x in (10, 100, 1000, 10000)], f"Each place to the left is worth 10 times as much; {a - b} {"place" if a - b == 1 else "places"} apart is {cm(10 ** (a - b))} times.", CK(f"10**{a - b}"))
 
 PL = ['one', 'ten', 'hundred', 'thousand', 'ten thousand', 'hundred thousand']
 def g2B_make():

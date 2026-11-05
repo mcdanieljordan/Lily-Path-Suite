@@ -11,7 +11,7 @@ from (values
 ('111.5.b.2.A',3,'A number has 8 ten thousands, 2 hundreds, and 9 ones. It has no thousands and no tens. What is the number?','["80,209", "82,009", "8,209", "829"]'::jsonb,0,'Use a zero as a placeholder in the empty thousands and tens places.','original'),
 ('111.5.b.2.B',3,'In the number 71,832, what is the value of the digit 1?','["10,000", "1,000", "1", "100"]'::jsonb,1,'The 1 is in the thousand place, so its value is 1,000.','original'),
 ('111.5.b.2.B',2,'In the number 25,987, what is the value of the digit 8?','["80,000", "8", "80", "800"]'::jsonb,2,'The 8 is in the ten place, so its value is 80.','original'),
-('111.5.b.2.B',4,'The digit 8 in 800 has a value that is how many times the value of the digit 8 in 80?','["100", "10,000", "1,000", "10"]'::jsonb,3,'Each place to the left is worth 10 times as much; 1 place(s) apart is 10 times.','original'),
+('111.5.b.2.B',4,'The digit 8 in 800 has a value that is how many times the value of the digit 8 in 80?','["100", "10,000", "1,000", "10"]'::jsonb,3,'Each place to the left is worth 10 times as much; 1 place apart is 10 times.','original'),
 ('111.5.b.2.B',2,'How many hundreds make 1 thousand?','["10", "10,000", "100", "1,000"]'::jsonb,0,'Each place is 10 times the place to its right, so 1 step(s) is 10.','original'),
 ('111.5.b.2.B',3,'How many thousands make 1 hundred thousand?','["10", "100", "1,000", "10,000"]'::jsonb,1,'Each place is 10 times the place to its right, so 2 step(s) is 100.','original'),
 ('111.5.b.2.C',2,'On a number line, 43 is between which two consecutive multiples of 10?','["30 and 40", "50 and 60", "40 and 50", "60 and 70"]'::jsonb,2,'40 ≤ 43 < 50, and these are neighbors in the count by 10s.','original'),

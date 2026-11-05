@@ -5,7 +5,9 @@ import random, json, re
 from fractions import Fraction as F
 
 class Bank:
-    def __init__(self, prefix, seed):
+    def __init__(self, prefix, seed, no_neg=False, norm_dup=False):
+        self.no_neg = no_neg
+        self.norm_dup = norm_dup
         self.P = prefix
         self.R = random.Random(seed)
         self.out = []
@@ -15,6 +17,7 @@ class Bank:
         R = self.R
         right = str(right)
         wrong = list(dict.fromkeys(str(w) for w in wrong if str(w) != right))
+        if self.no_neg: wrong = [w for w in wrong if not re.match(r'^-\d', w)]
         fr = re.compile(r'^(\d+)/(\d+)$')
         mr = fr.match(right)
         if mr:   # never leave an equivalent fraction among the wrong answers
@@ -25,11 +28,12 @@ class Bank:
                     continue
                 keep.append(w)
             wrong = keep
-        if len(wrong) < need or q in self.seen:
+        key = re.sub(r'[^a-z0-9]', '', q.lower()) if self.norm_dup else q
+        if len(wrong) < need or key in self.seen:
             return False
         opts = R.sample(wrong, need) + [right]
         R.shuffle(opts)
-        self.seen.add(q)
+        self.seen.add(key)
         it = {"c": self.P + code, "d": d, "q": q, "o": opts, "a": opts.index(right), "e": e}
         if chk: it["chk"] = chk
         self.out.append(it)

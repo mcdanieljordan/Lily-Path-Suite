@@ -431,6 +431,13 @@ html[data-theme="holo"] .compact .side h4{font-size:17px;padding:0 4px}
 /* question layer */
 html[data-theme="holo"] .qtext{font-family:var(--body);font-weight:700;font-size:46px;line-height:1.12;text-shadow:0 0 14px rgba(var(--accRgb),.45)}
 html[data-theme="holo"] .qtext.eq{font-family:var(--disp);font-size:62px}
+/* long bank questions (word problems, data) shrink so all four answers stay on screen */
+html[data-theme] .qtext.qt-m{font-size:40px;line-height:1.14}
+html[data-theme] .qtext.qt-l{font-size:34px;line-height:1.16}
+html[data-theme] .qtext.qt-xl{font-size:30px;line-height:1.18}
+html[data-theme] .opts.om .opt{font-size:30px;min-height:76px}
+html[data-theme] .opts.ol{grid-template-columns:1fr;gap:10px}
+html[data-theme] .opts.ol .opt{font-size:26px;min-height:62px}
 html[data-theme="holo"] .opt{border-width:1px;border-radius:8px;font-size:40px;background:linear-gradient(160deg,rgba(var(--accRgb),.22),rgba(var(--accRgb),.06));text-shadow:0 0 10px rgba(var(--accRgb),.6)}
 html[data-theme="holo"] .opt:hover:not(:disabled){filter:none;box-shadow:0 0 26px rgba(var(--accRgb),.85),inset 0 0 20px rgba(var(--accRgb),.3)}
 html[data-theme="holo"] .opt b{background:var(--acc);color:#04101E;text-shadow:none;border-radius:8px;font-family:var(--disp);font-weight:700}
@@ -2574,6 +2581,9 @@ function mountQuestion(q,{seconds,contLabel,onDone}){
   $('#qtext').textContent=q.q;
   {const tn=$('#tkNote');if(tn&&q.teks)tn.innerHTML=tkNoteHtml(q);}
   if(q.q.length<=22&&/[=+×÷−%]/.test(q.q))$('#qtext').classList.add('eq');
+  {const L=q.q.length,M=Math.max(...q.opts.map(o=>String(o).length)),qt=$('#qtext'),ho=$('#qopts');
+   if(L>200)qt.classList.add('qt-xl');else if(L>130)qt.classList.add('qt-l');else if(L>90)qt.classList.add('qt-m');
+   if(M>38)ho.classList.add('ol');else if(M>16)ho.classList.add('om');}
   const host=$('#qopts');let answered=false,elapsed=0,extra=0,paused=false,lastT=performance.now(),lastSec=-1;
   const frac=()=>seconds?Math.min(1,elapsed/((seconds+extra)*1000)):1;
   const btns=q.opts.map((o,i)=>{const b=el('button','opt',`<b>${'ABCD'[i]}</b><span></span>`);b.type='button';b.style.setProperty('--oi',i);$('span',b).textContent=o;b.onclick=()=>finish(i);host.append(b);return b;});

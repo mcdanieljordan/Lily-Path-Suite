@@ -1495,12 +1495,58 @@ const CATS=[
 const TILES=CATS.length*ROWS;
 /* difficulty ladder per row: [grade offset, tier]. 100 = prerequisite from a grade below, 500 = preview of the next grade up */
 const LADDER=[[-1,1],[0,0],[0,2],[0,3],[1,1]];
-function getQuestion(ci,row,grade){
-  if(CATS[ci].tk&&CATS[ci].tk[row])return tkQuestion(CATS[ci],row);
+/* ---------- shared question bank (Supabase table question_bank) ----------
+   Original, TEKS-tagged questions that every Zynth app can read (anyone can read; only the owner can write). They load in the background
+   for the grades in play. If the table is missing, empty or unreachable the built-in questions are used, so a game never waits or breaks. */
+const QB_URL='https://aiczpuoskwzqtzvoomll.supabase.co/rest/v1/question_bank';
+const QB_SUBJ={math:'Mathematics',sci:'Science',ela:'English Language Arts and Reading',hist:'Social Studies'};
+const QB_ROW_D=[3,2,3,4,2];   /* target difficulty (1-5) for the five rows; row 1 comes from the grade below, row 5 previews the grade above */
+const QB={sets:{},seen:{},tries:{},q:[],run:false,off:false};
+const qbK=(s,g)=>s+'|'+g;
+/* one request at a time: if the table does not exist yet, the first answer (404) switches the loader off instead of firing a dozen more */
+function qbLoad(s,g){
+  g=Math.max(0,Math.min(12,g|0));const k=qbK(s,g);
+  if(QB.off||QB.seen[k]||typeof fetch!=='function')return;
+  QB.seen[k]=1;QB.q.push([s,g,k]);qbPump();
+}
+function qbPump(){
+  if(QB.run||QB.off||!QB.q.length)return;
+  QB.run=true;const [s,g,k]=QB.q.shift();
+  fetch(`${QB_URL}?select=id,teks_code,difficulty,prompt,choices,answer_idx,explanation&subject=eq.${encodeURIComponent(s)}&grade_num=eq.${g}&limit=2000`,{headers:TK_HDR})
+    .then(r=>{if(r.status===404){QB.off=true;throw 0;}if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+    .then(a=>{if(!Array.isArray(a))throw 0;QB.sets[k]=a.filter(x=>x&&typeof x.prompt==='string'&&Array.isArray(x.choices)&&x.choices.length>=2&&x.answer_idx>=0&&x.answer_idx<x.choices.length);})
+    .catch(()=>{if(!QB.off&&(QB.tries[k]=(QB.tries[k]||0)+1)<2)delete QB.seen[k];})   /* a hiccup gets one more try the next time a board starts */
+    .finally(()=>{QB.run=false;qbPump();});
+}
+/* start loading what this game will need: every subject for each squad's grade first, then the grade below and above, plus the standards on TEKS columns */
+function qbWarm(){
+  try{
+    const gs=[...new Set((G&&G.teams?G.teams:(setup&&setup.teams)||[]).map(t=>+t.grade||0))],subs=Object.values(QB_SUBJ);
+    CATS.forEach(c=>(c.tk||[]).forEach(t=>qbLoad(t.s,t.g)));
+    gs.forEach(g=>subs.forEach(s=>qbLoad(s,g)));
+    gs.forEach(g=>subs.forEach(s=>{qbLoad(s,g-1);qbLoad(s,g+1);}));
+  }catch(e){}
+}
+function qbPick(s,g,row,code,avoid){
+  const set=QB.sets[qbK(s,Math.max(0,Math.min(12,g|0)))];if(!set||!set.length)return null;
+  const A=hist().asked;
+  let c=set.filter(x=>!A[x.prompt]&&x.prompt!==avoid&&!(G&&G.usedQ.has(x.prompt)));
+  if(code)c=c.filter(x=>x.teks_code===code);
+  if(!c.length)return null;
+  const want=QB_ROW_D[row]||3;let best=9;
+  c.forEach(x=>{const d=Math.abs((+x.difficulty||3)-want);if(d<best)best=d;});
+  const pool=c.filter(x=>Math.abs((+x.difficulty||3)-want)===best);
+  const x=pool[Math.floor(Math.random()*pool.length)];
+  const right=x.choices[x.answer_idx],opts=shuffle(x.choices);
+  return{q:x.prompt,opts,ans:opts.indexOf(right),exp:x.explanation||'',bank:x.id};
+}
+function getQuestion(ci,row,grade,avoid){
+  if(CATS[ci].tk&&CATS[ci].tk[row])return tkQuestion(CATS[ci],row,avoid);
   const key=CATS[ci].key;
   let [dg,tier]=LADDER[row];
   if(grade+dg<0){dg=0;tier=Math.min(tier,0);}
   const g=Math.max(0,Math.min(10,grade+dg));
+  if(QB_SUBJ[key]){const bq=qbPick(QB_SUBJ[key],g,row,null,avoid);if(bq){bq.grade=g;bq.row=row;bq.teks=null;return bq;}}
   const q=key==='math'?build(buildMath(g,tier)):build(dec(BANK[g][key][tier]));
   q.grade=g;q.row=row;q.teks=null;
   return q;
@@ -1508,7 +1554,7 @@ function getQuestion(ci,row,grade){
 function freshQuestion(ci,row,grade,avoid){
   let q,dup=true;const A=hist().asked;
   for(let i=0;i<40;i++){
-    q=getQuestion(ci,row,grade);
+    q=getQuestion(ci,row,grade,avoid);
     dup=G.usedQ.has(q.q)||!!A[q.q]||q.q===avoid;
     if(!dup)break;
   }
@@ -1634,7 +1680,7 @@ function colsFor(type){
   return[1,2,3,4,5].map(i=>({key:base.key,name:base.name+' '+i}));
 }
 function newBoardRec(type){const b={id:Math.random().toString(36).slice(2,9),type,cols:colsFor(type),created:Date.now(),tiles:{},done:false};hist().boards.push(b);saveHist();return b;}
-function useCols(b){CATS.splice(0,CATS.length,...b.cols.map(c=>({...c})));}
+function useCols(b){CATS.splice(0,CATS.length,...b.cols.map(c=>({...c})));qbWarm();}
 function recordTile(q){const b=boardById(G.board);if(!b)return;b.tiles[S.key]={q:q.q,a:q.judged?'Judged by the teacher':q.opts[q.ans],exp:q.exp||'',by:S.atk.name,ok:null,at:Date.now(),val:S.value,teks:q.teks?{c:q.teks.c,g:q.teks.g,t:tkCut(q.teks.t,400)}:null};saveHist();}
 function markTile(ok){const b=boardById(G.board);if(b&&S&&b.tiles[S.key]){b.tiles[S.key].ok=ok;saveHist();}}
 function peekHtml(b,k){
@@ -1789,10 +1835,12 @@ function tkJudged(col,row){
   return{q:'Squad challenge: '+tkCut(t.t,330),opts:['Got it!','Not yet'],ans:0,judged:true,grade:t.g,row,
     exp:'TEKS '+t.c+' (Grade '+tkGl(t.g)+')'+(t.k?'. '+tkCut(t.k,200):'.'),teks:{c:t.c,g:t.g,s:t.s,t:t.t}};
 }
-function tkQuestion(col,row){
+function tkQuestion(col,row,avoid){
   const t=col.tk[row],bk=tkBank(t.s);
-  if(!bk||col.qm==='judge')return tkJudged(col,row);
+  if(col.qm==='judge')return tkJudged(col,row);
   const g=Math.max(0,Math.min(10,t.g));
+  {const bq=qbPick(t.s,g,row,t.c,avoid);if(bq){bq.grade=g;bq.row=row;bq.teks={c:t.c,g:t.g,s:t.s,t:t.t};return bq;}}
+  if(!bk)return tkJudged(col,row);
   const q=bk==='math'?build(buildMath(g,[0,1,2,3,3][row])):build(dec(BANK[g][bk][row%4]));
   q.grade=g;q.row=row;q.teks={c:t.c,g:t.g,s:t.s,t:t.t};
   return q;
@@ -2839,6 +2887,7 @@ function refreshHandoff(){
   const a=applySharedClass(),b=importHandoff();
   if(a||b){setup=loadSetup();renderSetup();bjNote(b?'Groups from Leader Locator loaded: '+meta.current:'Class: '+meta.current);}
 }
+qbWarm();
 window.addEventListener('focus',refreshHandoff);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshHandoff();});
 window.addEventListener('storage',e=>{if(e.key==='lily-groups-handoff'||e.key==='lily-current-class')refreshHandoff();});

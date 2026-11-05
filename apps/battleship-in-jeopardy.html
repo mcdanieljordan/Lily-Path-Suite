@@ -1898,13 +1898,16 @@ document.addEventListener('input',e=>{
 
 /* ---------- follow the class picked in Ribbit Rabbit / Leader Locator ---------- */
 const nmC=s=>String(s||'').toLowerCase().replace(/\(synced\)/g,'').replace(/[^a-z0-9]/g,'');
+/* "Kb (P2)" in Ribbit Rabbit and "Kb" in Leader Locator are the same class: exact match first, then match ignoring anything in brackets (only when that is unambiguous) */
+const nmT=s=>nmC(String(s||'').split('(')[0]);
+function findClass(list,name){const a=list.find(n=>nmC(n)===nmC(name));if(a)return a;const q=nmT(name);if(!q)return null;const m=list.filter(n=>nmT(n)===q);return m.length===1?m[0]:null;}
 let _ccAt=0;
 function applySharedClass(){
   let o=null;try{o=JSON.parse(localStorage.getItem('lily-current-class')||'null');}catch(e){}
   if(!o||!o.name||o.src==='bj'||!o.at||o.at<=_ccAt)return false;
   _ccAt=o.at;
   const name=cleanName(o.name).slice(0,24);if(!name)return false;
-  const hit=meta.list.find(n=>nmC(n)===nmC(name))||name;
+  const hit=findClass(meta.list,name)||name;
   if(hit===meta.current)return false;
   if(!meta.list.includes(hit))meta.list.push(hit);
   meta.current=hit;saveMeta();return true;

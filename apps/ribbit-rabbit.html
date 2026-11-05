@@ -3027,12 +3027,16 @@ function rrPublishClass(){
 function rrApplySharedClass(){
   let o=null;try{o=JSON.parse(localStorage.getItem('lily-current-class')||'null')}catch(e){}
   if(!o||!o.at||o.src===_rrId||o.at<=_rrCcAt)return;
-  _rrCcAt=o.at;
   const nm=s=>String(s||'').toLowerCase().replace(/\(synced\)/g,'').replace(/[^a-z0-9]/g,'');
   let hit=o.id?rosters.find(r=>r.remoteId&&String(r.remoteId)===String(o.id)):null;
   if(!hit)hit=rosters.find(r=>nm(r.name)===nm(o.name));
+  if(!hit){const nt=x=>nm(String(x||'').split('(')[0]),q=nt(o.name),m=rosters.filter(r=>nt(r.name)===q);if(q&&m.length===1)hit=m[0]}
   if(!hit){const c=nm(o.name);if(c)hit=rosters.find(r=>nm(r.name).indexOf(c)===0)}
-  const sel=document.getElementById('rosterSelect');if(!hit||!sel||sel.value===hit.id)return;
+  const sel=document.getElementById('rosterSelect');
+  /* only use up this pick once the class is really found (rosters can still be loading); otherwise keep trying */
+  if(!hit||!sel)return;
+  _rrCcAt=o.at;
+  if(sel.value===hit.id)return;
   _rrApplying=true;sel.value=hit.id;sel.dispatchEvent(new Event('change'));_rrApplying=false;
 }
 function lastInit(s){

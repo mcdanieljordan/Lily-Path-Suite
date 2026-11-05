@@ -42,7 +42,7 @@ function seedLib() {
     app('a5', 'BASIS Olympics', G + 'Lily-Path-Suite/apps/basis-olympics.html', 'apps/basis-olympics.html'),
     app('a6', 'Great Prompts', G + 'GreatPrompts-TeachersEdition/', 'apps/great-prompts.html'),
     app('a7', 'Tons of Teaching Tools', '', 'apps/tons-of-teaching-tools.html'),
-    app('a8', 'Battleship Jeopardy', G + 'Battleship-in-Jeopardy/', 'apps/battleship-in-jeopardy.html'),
+    app('a8', 'Battleship Jeopardy', G + 'Lily-Path-Suite/apps/battleship-in-jeopardy.html', 'apps/battleship-in-jeopardy.html'),
     ai('a9', 'Gemini', 'https://gemini.google.com/app'),
     ai('a10', 'Claude', 'https://claude.ai/new'),
     ai('a11', 'ChatGPT', 'https://chatgpt.com/'),
@@ -70,7 +70,7 @@ function seed() {
   return {
     day: defaultDay(),
     periods, plan,
-    seedV: 8,
+    seedV: 9,
     lib: seedLib(),
   };
 }
@@ -86,6 +86,8 @@ if (S.seedV < 5) { const g = S.lib.find(i => i.id === 'a6'); if (g && !g.local) 
 if (S.seedV < 6) { const have = new Set(S.lib.map(i => i.id)); S.lib.push(...seedLib().filter(i => i.type === 'ai' && !have.has(i.id))); S.seedV = 6; }
 if (S.seedV < 7) { const o = S.lib.find(i => i.id === 'a5'); if (o && o.seeded && /basisolympics/.test(o.url || '')) o.url = G + 'Lily-Path-Suite/apps/basis-olympics.html'; S.seedV = 7; }
 if (S.seedV < 8) { const fresh = seedLib(); for (const id of ['a0', 'a1', 'a2']) { const o = S.lib.find(i => i.id === id), n = fresh.find(i => i.id === id); if (o && o.seeded && n) { o.url = n.url; o.local = n.local; } } S.seedV = 8; }
+/* v9: Battleship Jeopardy now opens the suite copy (class sharing + saved boards), not the old standalone page */
+if (S.seedV < 9) { const o = S.lib.find(i => i.id === 'a8'), n = seedLib().find(i => i.id === 'a8'); if (o && n && /Battleship-in-Jeopardy\/?$/i.test(o.url || '')) { o.url = n.url; o.local = n.local; } S.seedV = 9; }
 if (!S.at) S.at = FRESH ? 0 : Date.now();
 let syncSoon = () => {};
 const save = () => { S.at = Date.now(); try { localStorage.setItem(KEY, JSON.stringify({ ...S, lib: S.lib.filter(i => !i.blob && !i.temp) })); } catch (e) {} syncSoon(); };
@@ -748,7 +750,7 @@ const BIJ_WRITE = d => { try {
 } catch (e) { return false; } };
 function sendToBij(data, over) {
   let it = item('a8') || S.lib.find(i => /battleship/i.test(i.name || ''));
-  if (!it) { it = { id: 'a8', type: 'tool', name: 'Battleship Jeopardy', url: G + 'Battleship-in-Jeopardy/', local: 'apps/battleship-in-jeopardy.html', seeded: 1 }; S.lib.push(it); save(); renderToday(); }
+  if (!it) { it = { id: 'a8', type: 'tool', name: 'Battleship Jeopardy', url: G + 'Lily-Path-Suite/apps/battleship-in-jeopardy.html', local: 'apps/battleship-in-jeopardy.html', seeded: 1 }; S.lib.push(it); save(); renderToday(); }
   const had = ent(it.id), cur = active;
   openItem(it.id, had ? null : (cur !== TODAY_TAB ? cur : null));
   const o = ent(it.id), wv = o && o.el._wv; if (!wv) { toast('Battleship needs its link first'); return; }
@@ -782,7 +784,7 @@ applyTheme();
 renderTabs(); renderToday();
 
 /* ---------------- sync across devices (Supabase) ---------------- */
-const SEEDV = 8;
+const SEEDV = 9;
 const SYNC_URL = G + 'Lily-Path-Suite/apps/sync.html';
 const sy = { el: null, loaded: null, in: false, timer: 0 };
 const syb = $('#syncbtn');

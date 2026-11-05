@@ -3013,6 +3013,28 @@ function sFolders(s){if(!Array.isArray(s.folderIds))s.folderIds=s.folderId?[s.fo
 let nameMode=(function(){try{return localStorage.getItem('rr_nameMode')||'first'}catch(e){return 'first'}})();
 function nickOf(s){return nameMode==='nick'&&s&&s.nickname&&String(s.nickname).trim()?String(s.nickname).trim():''}
 function dispFirst(s){return nickOf(s)||String(s.firstName||s.name||'').trim().split(/\s+/)[0]||'?'}
+
+const _rrId='rr'+Math.random().toString(36).slice(2,6);let _rrCcAt=0,_rrApplying=false;
+function rrPublishClass(){
+  if(_rrApplying)return;
+  const sel=document.getElementById('rosterSelect'),r=sel&&rosters.find(x=>x.id===sel.value);if(!r)return;
+  let name=r.name||'',id=r.remoteId?String(r.remoteId):'';
+  try{if(id&&window.RRAuth&&RRAuth.className){const n=RRAuth.className(id);if(n)name=n}}catch(e){}
+  name=name.replace(/\s*\(synced\)\s*$/i,'');
+  const at=Date.now();_rrCcAt=at;
+  try{localStorage.setItem('lily-current-class',JSON.stringify({id,name,at,src:_rrId}))}catch(e){}
+}
+function rrApplySharedClass(){
+  let o=null;try{o=JSON.parse(localStorage.getItem('lily-current-class')||'null')}catch(e){}
+  if(!o||!o.at||o.src===_rrId||o.at<=_rrCcAt)return;
+  _rrCcAt=o.at;
+  const nm=s=>String(s||'').toLowerCase().replace(/\(synced\)/g,'').replace(/[^a-z0-9]/g,'');
+  let hit=o.id?rosters.find(r=>r.remoteId&&String(r.remoteId)===String(o.id)):null;
+  if(!hit)hit=rosters.find(r=>nm(r.name)===nm(o.name));
+  if(!hit){const c=nm(o.name);if(c)hit=rosters.find(r=>nm(r.name).indexOf(c)===0)}
+  const sel=document.getElementById('rosterSelect');if(!hit||!sel||sel.value===hit.id)return;
+  _rrApplying=true;sel.value=hit.id;sel.dispatchEvent(new Event('change'));_rrApplying=false;
+}
 function lastInit(s){
   if(nickOf(s))return '';
   const ln=(s.lastName||'').trim();if(!ln)return '';
@@ -3321,6 +3343,9 @@ function setupEvents(){
 
 
   // Attendance
+  /* share the picked class with Leader Locator and Battleship (same browser) */
+  document.getElementById('rosterSelect').addEventListener('change',()=>{try{rrPublishClass()}catch(e){}});
+  setInterval(()=>{try{rrApplySharedClass()}catch(e){}},2000);window.addEventListener('focus',()=>{try{rrApplySharedClass()}catch(e){}});
   document.getElementById('rosterSelect').addEventListener('change',()=>{drDeletePending=false;clearTimeout(drDeleteTimeout);document.getElementById('deleteRosterBtn').textContent='🗑';renderAttendance()});
   document.getElementById('addRosterBtn').addEventListener('click',addNewRoster);
   document.getElementById('deleteRosterBtn').addEventListener('click',deleteCurrentRoster);
@@ -6998,7 +7023,7 @@ const RRAuth=(function(){
     if(user)start();
     document.addEventListener('visibilitychange',()=>{if(!document.hidden&&user)refreshTotals()});
   }
-  return{init,logSoundPlay,scheduleSync,saveStudentMeta,archiveRemote,renameRemoteClass,importProjectWeek,syncNow:()=>enqueue(fullSync),signIn,signOut,unlock,client,encJson,decJson,hasKey:()=>!!cryptoKey,get user(){return user}};
+  return{init,className:id=>{const c=remoteClasses.find(x=>String(x.id)===String(id));return c?c.name:''},logSoundPlay,scheduleSync,saveStudentMeta,archiveRemote,renameRemoteClass,importProjectWeek,syncNow:()=>enqueue(fullSync),signIn,signOut,unlock,client,encJson,decJson,hasKey:()=>!!cryptoKey,get user(){return user}};
 })();
 window.RRAuth=RRAuth;
 

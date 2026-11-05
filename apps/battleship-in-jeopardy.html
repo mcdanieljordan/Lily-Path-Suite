@@ -1205,7 +1205,7 @@ const Voice=(()=>{
       if(m)row=+m[1]-1;else{m=t.match(/\b(?:row|level|tier)\s*([1-5])\b/);if(m)row=+m[1]-1;}
       if(ci>=0&&row>=0){
         const b=$(`.tile[data-ci="${ci}"][data-r="${row}"]`);if(!b)return null;
-        if(b.disabled)return{no:`${CATS[ci].name} ${(row+1)*100} is already used`};
+        if(b.disabled||b.classList.contains('used'))return{no:`${CATS[ci].name} ${(row+1)*100} is already used`};
         b.click();return`${CATS[ci].name} ${(row+1)*100}`;
       }
       if(ci>=0)return{no:`Add a number: "${CATS[ci].name} 300"`};
@@ -1454,12 +1454,12 @@ function getQuestion(ci,row,grade){
   return q;
 }
 function freshQuestion(ci,row,grade,avoid){
-  let q;
-  for(let i=0;i<8;i++){
+  let q;const A=hist().asked;
+  for(let i=0;i<40;i++){
     q=getQuestion(ci,row,grade);
-    if(!G.usedQ.has(q.q)&&q.q!==avoid)break;
+    if(!G.usedQ.has(q.q)&&!A[q.q]&&q.q!==avoid)break;
   }
-  G.usedQ.add(q.q);
+  G.usedQ.add(q.q);A[q.q]=Date.now();saveHist();
   return q;
 }
 
@@ -1553,6 +1553,66 @@ function loadSetup(){
   }catch(e){}
   return defaultSetup();
 }
+/* ---------- per-class memory: questions already asked, and every board played ---------- */
+const ALLCATS=[{key:'math',name:'Math'},{key:'sci',name:'Science'},{key:'ela',name:'Language Arts'},{key:'hist',name:'History & Geography'},{key:'fun',name:'Bonus Trivia'}];
+const BTYPES=[['mixed','Mixed: all 5 subjects'],['math','Math'],['sci','Science'],['ela','Language Arts'],['hist','History & Geography'],['fun','Bonus Trivia'],['random','Random mix']];
+const typeLabel=k=>(BTYPES.find(x=>x[0]===k)||[0,k])[1];
+const hk=()=>'bj3-hist-'+meta.current;
+let _hist=null,_histCls='';
+function hist(){
+  if(!_hist||_histCls!==meta.current){_histCls=meta.current;let h=store.get(hk(),null);if(!h||typeof h!=='object')h={};if(!h.asked||typeof h.asked!=='object')h.asked={};if(!Array.isArray(h.boards))h.boards=[];_hist=h;}
+  return _hist;
+}
+function saveHist(){
+  const h=hist(),ks=Object.keys(h.asked);
+  if(ks.length>4000){ks.sort((a,b)=>h.asked[a]-h.asked[b]).slice(0,ks.length-4000).forEach(k=>delete h.asked[k]);}
+  store.set(hk(),h);
+}
+const boardById=id=>hist().boards.find(b=>b.id===id)||null;
+function colsFor(type){
+  if(type==='random')return Array.from({length:5},()=>({...ALLCATS[Math.floor(Math.random()*5)]}));
+  const base=ALLCATS.find(c=>c.key===type);
+  if(!base)return ALLCATS.map(c=>({...c}));
+  return[1,2,3,4,5].map(i=>({key:base.key,name:base.name+' '+i}));
+}
+function newBoardRec(type){const b={id:Math.random().toString(36).slice(2,9),type,cols:colsFor(type),created:Date.now(),tiles:{},done:false};hist().boards.push(b);saveHist();return b;}
+function useCols(b){CATS.splice(0,CATS.length,...b.cols.map(c=>({...c})));}
+function recordTile(q){const b=boardById(G.board);if(!b)return;b.tiles[S.key]={q:q.q,a:q.opts[q.ans],exp:q.exp||'',by:S.atk.name,ok:null,at:Date.now(),val:S.value};saveHist();}
+function markTile(ok){const b=boardById(G.board);if(b&&S&&b.tiles[S.key]){b.tiles[S.key].ok=ok;saveHist();}}
+function peekHtml(b,k){
+  const t=b&&b.tiles[k];if(!t)return'<p class="note">Nothing saved for this tile.</p>';
+  const [c,r]=k.split('-').map(Number);
+  return`<div class="card" style="margin-top:10px"><div class="chips"><span class="chip solid">${esc((b.cols[c]||{}).name||'')} · ${(r+1)*100}</span><span class="chip pan">${t.ok===true?'Answered right':t.ok===false?'Missed':'Not finished'}</span></div><h3 style="margin:10px 0 6px">${esc(t.q)}</h3><p><b>Answer:</b> ${esc(t.a)}</p>${t.exp?`<p>${esc(t.exp)}</p>`:''}${t.by?`<p class="note">Asked of ${esc(t.by)}</p>`:''}</div>`;
+}
+function openBoardReview(id,k){
+  const b=boardById(id);if(!b)return;
+  let g=b.cols.map(c=>`<div style="font-weight:800;text-align:center;font-size:14px">${esc(c.name)}</div>`).join('');
+  for(let r=0;r<ROWS;r++)for(let c=0;c<5;c++){
+    const key=c+'-'+r,t=b.tiles[key];
+    g+=t?`<button type="button" class="btn sm ${t.ok===false?'bad':'sun'}" style="min-height:44px;padding:4px" data-act="bpeek" data-b="${b.id}" data-k="${key}">${(r+1)*100} ${t.ok===true?'✓':t.ok===false?'✗':'•'}</button>`:`<div style="opacity:.4;text-align:center;padding-top:10px">${(r+1)*100}</div>`;
+  }
+  openModal(`<h2>${esc(typeLabel(b.type))} board · ${new Date(b.created).toLocaleDateString(undefined,{month:'short',day:'numeric'})}</h2><div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px">${g}</div><div id="rvDetail">${k?peekHtml(b,k):'<p class="note">Tap a finished tile to see its question and answer.</p>'}</div><div class="row2" style="margin-top:12px"><button class="btn" data-act="mclose">Close</button></div>`);
+}
+function boardsCard(){
+  const h=hist(),ty=setup.cfg.board||'mixed';
+  const rows=[...h.boards].reverse().slice(0,12).map(b=>{const n=Object.keys(b.tiles).length;return`<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:6px 0"><div><b>${esc(typeLabel(b.type))}</b> · ${new Date(b.created).toLocaleDateString(undefined,{month:'short',day:'numeric'})} · ${n}/${TILES} ${b.done?'· finished':'· in progress'}</div><div><button class="btn sm ghost" data-act="breview" data-b="${b.id}">Review</button>${b.done?'':` <button class="btn sm sun" data-act="bplay" data-b="${b.id}">Play</button>`}</div></div>`;}).join('')||'<p class="note">No boards yet. Start a game and every question is saved here.</p>';
+  return`<div class="card" style="margin-bottom:18px"><h3>Boards for ${esc(meta.current)}</h3><div class="field"><label class="lbl" for="selBoard">Board type</label><select id="selBoard">${BTYPES.map(([k,n])=>`<option value="${k}" ${k===ty?'selected':''}>${esc(n)}</option>`).join('')}</select></div><p class="note">This class never sees the same question twice, and finished tiles stay open.</p>${rows}<div style="margin-top:8px"><button class="btn sm" data-act="bnew">＋ Start a fresh board</button></div></div>`;
+}
+/* ---------- follow the class picked in Ribbit Rabbit / Leader Locator ---------- */
+const nmC=s=>String(s||'').toLowerCase().replace(/\(synced\)/g,'').replace(/[^a-z0-9]/g,'');
+let _ccAt=0;
+function applySharedClass(){
+  let o=null;try{o=JSON.parse(localStorage.getItem('lily-current-class')||'null');}catch(e){}
+  if(!o||!o.name||o.src==='bj'||!o.at||o.at<=_ccAt)return false;
+  _ccAt=o.at;
+  const name=cleanName(o.name).slice(0,24);if(!name)return false;
+  const hit=meta.list.find(n=>nmC(n)===nmC(name))||name;
+  if(hit===meta.current)return false;
+  if(!meta.list.includes(hit))meta.list.push(hit);
+  meta.current=hit;saveMeta();return true;
+}
+function pubClass(n){try{const at=Date.now();_ccAt=at;localStorage.setItem('lily-current-class',JSON.stringify({name:n,at,src:'bj'}));}catch(e){}}
+
 /* ---------- auto-import groups made in Leader Locator (same browser) ---------- */
 function gradeForClass(n){n=String(n||'').trim();if(/^k/i.test(n))return 0;const m=n.match(/\d/);return m?Math.min(10,+m[0]):3;}
 function importHandoff(){
@@ -1575,6 +1635,7 @@ function importHandoff(){
   if(changed){saveMeta();try{localStorage.setItem('lily-groups-imported',JSON.stringify(seen));}catch(e){}}
   return changed;
 }
+applySharedClass();
 importHandoff();
 let setup=loadSetup();
 const saveSetup=()=>store.set(ck('setup'),setup);
@@ -1613,6 +1674,7 @@ function renderSetup(){
     </div></div>
     <p class="hero">Answer to load your ammo. Land a shot on a hidden fleet. When your ship takes a hit, answer to repair the damage.</p>
     ${resume}
+    ${boardsCard()}
     <div class="grid2">
       <div class="card"><h3>Squads</h3>
         <div class="field" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><label class="lbl" for="allGrade" style="margin:0">Set every squad to</label>
@@ -1744,13 +1806,18 @@ function fit(){document.documentElement.style.setProperty('--s',Math.min(innerWi
 addEventListener('resize',fit);
 function showGame(on){$('#setup').hidden=on;$('#game').hidden=!on;document.body.classList.toggle('playing',on);if(on){fit();window.scrollTo(0,0);lastView=null;probeSpeed();}}
 
-function startGame(){
+function startGame(o){
+  o=o||{};
   saveSetup();
   const cfg={...setup.cfg};
   const fleets=assignFleets(setup.teams.length,DEFAULT_TEMPLATES,cfg.mix);
   const teams=setup.teams.map((d,i)=>{const t=makeTeam(d,i,cfg,fleets[i]);t.shape=SHAPES[i%8];t.letter=letterFor(t.name,i);t.stats.healed=0;return t;});
   const theme=cfg.surprise?pick(THEME_KEYS):cfg.theme;
   G={cfg,theme,teams,turn:0,used:new Set(),round:1,log:[],usedQ:new Set(),over:false,surge:null,turns:0,className:meta.current};
+  {const ty=setup.cfg.board||'mixed';let b=o.boardId?boardById(o.boardId):null;
+   if(!b&&!o.fresh)b=[...hist().boards].reverse().find(x=>!x.done&&x.type===ty)||null;
+   if(!b)b=newBoardRec(o.boardId?'mixed':ty);
+   G.board=b.id;useCols(b);G.used=new Set(Object.keys(b.tiles));}
   S=null;newSurge();
   $('#victory').hidden=true;showGame(true);
   log(`Battle on! ${teams.length} squads, ${cfg.hp} HP each.`,'info');
@@ -1767,6 +1834,9 @@ function resumeGame(){
     G={...s.G,used:new Set(s.G.used||[]),usedQ:new Set(s.G.usedQ||[]),over:false};
     if(G.teams.some(t=>!Array.isArray(t.ships)||!Array.isArray(t.map)))throw 0;
     if(!G.cfg.v4){G.theme='holo';G.cfg.d3=true;G.cfg.v4=true;}
+    {let b=G.board?boardById(G.board):null;
+     if(!b){b=newBoardRec('mixed');for(const k of G.used)b.tiles[k]={q:'(question was not saved)',a:'-',exp:'',by:'',ok:null,at:Date.now()};saveHist();G.board=b.id;}
+     useCols(b);for(const k of Object.keys(b.tiles))G.used.add(k);}
     S=null;
   }catch(e){store.del(ck('save'));G=null;renderSetup();return;}
   $('#victory').hidden=true;showGame(true);renderGame();
@@ -1829,7 +1899,7 @@ function boardHtml(){
   let h=CATS.map(c=>`<div class="cat"><b>${esc(c.name)}</b></div>`).join('');
   for(let r=0;r<ROWS;r++)for(let c=0;c<CATS.length;c++){
     const k=c+'-'+r,used=G.used.has(k),surge=G.surge===k&&!used;
-    h+=`<button type="button" class="tile${used?' used':''}${S&&!used?' lock':''}${surge?' surge':''}" style="--i:${r*CATS.length+c}" data-act="tile" data-ci="${c}" data-r="${r}" ${used||G.over||S?'disabled':''} aria-label="${esc(CATS[c].name)}, ${(r+1)*100} points${used?', already answered':surge?', power surge':''}">${used?ICON.check:(r+1)*100}${surge?`<span class="bolt">${ICON.bolt}</span>`:''}</button>`;
+    h+=`<button type="button" class="tile${used?' used':''}${S&&!used?' lock':''}${surge?' surge':''}" style="--i:${r*CATS.length+c}" data-act="${used?'peek':'tile'}" data-ci="${c}" data-r="${r}" ${!used&&(G.over||S)?'disabled':''} aria-label="${esc(CATS[c].name)}, ${(r+1)*100} points${used?', already answered, tap to see the question':surge?', power surge':''}">${used?ICON.check:(r+1)*100}${surge?`<span class="bolt">${ICON.bolt}</span>`:''}</button>`;
   }
   return`<section class="board">${h}</section>`;
 }
@@ -1994,12 +2064,13 @@ function mountQuestion(q,{seconds,contLabel,onDone}){
 
 function mountAmmo(){
   const atk=S.atk;
-  if(!S.ammoQ)S.ammoQ=freshQuestion(S.ci,S.row,atk.grade);
+  if(!S.ammoQ){S.ammoQ=freshQuestion(S.ci,S.row,atk.grade);recordTile(S.ammoQ);}
   const power=S.value*(S.surge?2:1),timer=G.cfg.timer;
   mountQuestion(S.ammoQ,{
     seconds:timer,
     contLabel:ok=>ok?'Ammo loaded! Pick a square':'Misfire. See the result',
     onDone:(ok,f)=>{
+      markTile(ok);
       atk.stats.asked++;atk.mi++;
       if(ok){
         atk.stats.right++;
@@ -2116,8 +2187,10 @@ function finishStrike(){
   if(alive.length<=1){renderGame();endGame('last');return;}
   let i=G.turn;do{i=(i+1)%G.teams.length;}while(!G.teams[i].alive);G.turn=i;
   if(G.used.size>=TILES){
+    {const ob=boardById(G.board);if(ob&&!ob.done){ob.done=true;saveHist();}}
     const lim=G.cfg.end==='board'?1:G.cfg.end==='two'?2:Infinity;
     if(G.round>=lim){renderGame();endGame('board');return;}
+    {const ob=boardById(G.board),nb=newBoardRec(ob?ob.type:'mixed');G.board=nb.id;useCols(nb);}
     G.used.clear();G.round++;newSurge();
     log(`Board ${G.round}! Every tile is back.`,'info');
   }
@@ -2173,6 +2246,12 @@ document.addEventListener('click',e=>{
   const a=b.dataset.act;
   const acts={
     start:()=>{if(setup.teams.length<2)return;startGame();},
+    bnew:()=>{if(setup.teams.length<2)return;startGame({fresh:true});},
+    bplay:()=>{if(setup.teams.length<2)return;startGame({boardId:b.dataset.b});},
+    breview:()=>openBoardReview(b.dataset.b),
+    bpeek:()=>{const d=$('#rvDetail');if(d)d.innerHTML=peekHtml(boardById(b.dataset.b),b.dataset.k);},
+    peek:()=>{if(G)openBoardReview(G.board,b.dataset.ci+'-'+b.dataset.r);},
+    mclose:closeModal,
     resume:()=>resumeGame(),
     discard:()=>{store.del(ck('save'));renderSetup();},
     sound:toggleSound,
@@ -2212,6 +2291,7 @@ document.addEventListener('change',e=>{
   const id=e.target.id,f=e.target.dataset&&e.target.dataset.f;
   if(f==='grade'){setup.teams[+e.target.closest('.trow').dataset.i].grade=+e.target.value;saveSetup();return;}
   if(id==='allGrade'){if(e.target.value==='')return;const g=+e.target.value;setup.teams.forEach(t=>t.grade=g);saveSetup();renderTeams();e.target.value='';return;}
+  if(id==='selBoard'){setup.cfg.board=e.target.value;saveSetup();return;}
   if(id==='selEnd'){setup.cfg.end=e.target.value;saveSetup();return;}
   if(id==='tLast'){setup.cfg.lastChance=e.target.checked;saveSetup();return;}
   if(id==='tChal'){setup.cfg.challenge=e.target.checked;saveSetup();return;}
@@ -2224,12 +2304,12 @@ document.addEventListener('change',e=>{
   if(id==='clsSel'){
     if(e.target.value==='__new'){
       openModal(`<h2>New class</h2><div class="field"><label class="lbl" for="newCls">Class name</label><input type="text" id="newCls" maxlength="24" placeholder="Example: Kb"></div><div class="row2"><button class="btn" id="newGo">Create class</button><button class="btn ghost" id="newNo">Cancel</button></div>`);
-      const go=()=>{const n=cleanName($('#newCls').value);if(!n)return;if(!meta.list.includes(n))meta.list.push(n);meta.current=n;saveMeta();setup=loadSetup();closeModal();renderSetup();};
+      const go=()=>{const n=cleanName($('#newCls').value);if(!n)return;if(!meta.list.includes(n))meta.list.push(n);meta.current=n;saveMeta();pubClass(n);setup=loadSetup();closeModal();renderSetup();};
       $('#newGo').onclick=go;$('#newCls').onkeydown=ev=>{if(ev.key==='Enter')go();};
       $('#newNo').onclick=()=>{closeModal();renderSetup();};
       return;
     }
-    meta.current=e.target.value;saveMeta();setup=loadSetup();renderSetup();
+    meta.current=e.target.value;saveMeta();pubClass(meta.current);setup=loadSetup();renderSetup();
   }
 });
 document.addEventListener('keydown',e=>{
@@ -2250,11 +2330,13 @@ fit();applyFx();renderSetup();
 function bjNote(msg){const d=document.createElement('div');d.textContent=msg;d.style.cssText='position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:99999;background:#1F9D55;color:#fff;padding:10px 18px;border-radius:12px;font:700 15px system-ui,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.35)';document.body.appendChild(d);setTimeout(()=>d.remove(),4500);}
 function refreshHandoff(){
   if(document.body.classList.contains('playing')||!$('#modal').hidden)return;
-  if(importHandoff()){setup=loadSetup();renderSetup();bjNote('Groups from Leader Locator loaded: '+meta.current);}
+  const a=applySharedClass(),b=importHandoff();
+  if(a||b){setup=loadSetup();renderSetup();bjNote(b?'Groups from Leader Locator loaded: '+meta.current:'Class: '+meta.current);}
 }
 window.addEventListener('focus',refreshHandoff);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshHandoff();});
-window.addEventListener('storage',e=>{if(e.key==='lily-groups-handoff')refreshHandoff();});
+window.addEventListener('storage',e=>{if(e.key==='lily-groups-handoff'||e.key==='lily-current-class')refreshHandoff();});
+setInterval(refreshHandoff,2500);
 if(sessionStorage.getItem('bjHandoffNote')!=='1'){try{const h=JSON.parse(localStorage.getItem('lily-groups-handoff')||'null');if(h&&h.last&&meta.current===String(h.last).slice(0,24)){sessionStorage.setItem('bjHandoffNote','1');bjNote('Using the groups from Leader Locator: '+meta.current);}}catch(e){}}
 
 (function rig(){

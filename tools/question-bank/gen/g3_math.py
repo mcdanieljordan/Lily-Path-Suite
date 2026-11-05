@@ -248,7 +248,7 @@ def g4C():
         if tot > 140: return False
         txt = ", ".join(parts[:-1]) + (", and " if len(parts) > 2 else " and ") + parts[-1]
         wr = [tot + 5, tot - 5 if tot > 5 else tot + 15, tot + 10, tot + 25, tot - 10 if tot > 10 else tot + 30]
-        return mk('4.C', 2, f"Ava has {txt}. How much money does Ava have?", money(tot), [money(w) for w in wr], f"Add the values: {' + '.join(expr)} cents = {tot} cents.", mchk("+".join(expr), tot))
+        return mk('4.C', 2, f"Ava has {txt}. How much money does Ava have?", money(tot), [money(w) for w in wr], f"Add the values: {' + '.join(x.replace('*', ' × ') for x in expr)} cents = {tot} cents.", mchk("+".join(expr), tot))
     bill = R.choice([("$1 bill", 100), ("$5 bill", 500), ("$10 bill", 1000)]); nb = R.randint(1, 2); picks = R.sample(COIN[:3], 2)
     c1, c2 = R.randint(1, 3), R.randint(1, 3); tot = nb * bill[1] + c1 * picks[0][1] + c2 * picks[1][1]
     parts = f"{nb} {bill[0]}{'s' if nb > 1 else ''}, {c1} {picks[0][0]}{'s' if c1 > 1 else ''}, and {c2} {picks[1][0]}{'s' if c2 > 1 else ''}"

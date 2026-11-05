@@ -77,7 +77,7 @@ textarea{resize:vertical;line-height:1.3}
 .th{display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 6px;border-radius:14px;border:3px solid var(--line);background:#fff;color:#10264A;font-weight:700;font-size:17px;line-height:1.1;min-height:84px}
 .th[aria-pressed=true]{background:#FFF3C4;box-shadow:0 3px 0 var(--line)}
 .th i{display:block;width:100%;height:34px;border-radius:8px;border:2px solid #10264A}
-.trow{display:grid;grid-template-columns:56px minmax(0,1fr) 150px 44px;gap:10px;align-items:start;padding:10px;border-radius:16px;background:var(--pSoft);margin-bottom:10px}
+.trow{display:grid;grid-template-columns:56px minmax(0,1fr) 150px 44px 36px;gap:10px;align-items:start;padding:10px;border-radius:16px;background:var(--pSoft);margin-bottom:10px}
 .trow .badge{width:56px;height:56px;font-size:20px}
 .trow textarea{grid-column:2 / 4;min-height:44px;font-size:18px}
 .trow .x{width:44px;height:44px;border-radius:12px;border:2px solid var(--line);background:#fff;font-size:22px;font-weight:700;color:#10264A}
@@ -130,6 +130,32 @@ textarea{resize:vertical;line-height:1.3}
 .sq>div:last-child{flex:1;min-width:0}
 .sq.on{background:var(--ink);color:var(--bgHex)}
 .sq.out{opacity:.5}
+.sq[role=button]{cursor:pointer}
+.sq[role=button]:not(.on):hover{box-shadow:inset 0 0 0 3px var(--ink)}
+.sq:focus-visible,.side .sqedit:focus-visible,.swap button:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.side .sqhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.side .sqedit{min-height:34px;padding:2px 14px;border-radius:10px;border:2px solid currentColor;background:transparent;color:inherit;font-weight:700;font-size:16px;cursor:pointer}
+.side .sqhint{font-size:15px;opacity:.85;padding:0 4px}
+.side.edit .sq{cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+.sq>div.mv:last-child{flex:none;display:flex;flex-direction:column;gap:3px}
+.sq .mv button,.trow .mv button{width:34px;height:22px;line-height:1;border-radius:6px;border:2px solid currentColor;background:transparent;color:inherit;font-size:12px;font-weight:800;cursor:pointer;padding:0}
+.dragging{position:relative;z-index:30;box-shadow:0 10px 26px rgba(0,0,0,.45);opacity:.96;transition:none!important}
+.trow .badge{cursor:grab;touch-action:none}
+.trow .mv{grid-column:5;grid-row:1 / span 2;display:flex;flex-direction:column;gap:6px}
+.trow .mv button{height:34px;font-size:15px;border:2px solid var(--line);background:#fff;color:#10264A;border-radius:8px}
+.trow .mv button:disabled{opacity:.35;cursor:default}
+details.swapd{width:100%;margin-top:14px;text-align:left}
+details.swapd summary{cursor:pointer;font-weight:700;font-size:17px;padding:6px 2px}
+.swap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:6px}
+.swap button{display:flex;align-items:center;gap:8px;min-height:40px;padding:4px 8px;border-radius:10px;border:2px solid var(--ink);background:transparent;color:var(--ink);font-weight:700;font-size:16px;text-align:left;cursor:pointer;min-width:0}
+.swap button span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tkfs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.swap.one{grid-template-columns:1fr}
+.compact .sq>div.mv:last-child{flex-direction:row;gap:4px}
+.compact .sq .mv button{width:30px;height:24px}
+.compact .side .sqhint{font-size:13px;padding:0 4px}
+mark.hit{background:#FFE066;color:#10264A;border-radius:3px;padding:0 1px}
+.brow{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:6px 0;padding:6px 0;border-bottom:1px solid rgba(128,128,128,.25)}
 .compact .sq{padding:4px 8px}.compact .sq .badge{width:30px!important;height:30px!important;font-size:13px!important}.compact .sq .nm{font-size:17px}.compact .sq .hb{margin-top:2px}.compact .side{gap:5px}
 
 /* ---------- question layer (inside the stage) ---------- */
@@ -585,7 +611,7 @@ function makeTeam(def,i,cfg,fleet){
   const ships=fleet.ships.map(s=>({key:s.key,name:SHIPS[s.key].name,len:s.cells.length,cells:s.cells,hp:per,maxHp:per,hits:0,sunk:false}));
   const map=Array.from({length:N},()=>Array(N).fill(-1));
   ships.forEach((s,si)=>s.cells.forEach(([r,c])=>map[r][c]=si));
-  const color=teamColor(i);
+  const color=teamColor(def.ci>=0?def.ci:i);
   return{name:(def.name||'').trim()||defaultName(i),members:(def.members||[]).slice(),grade:def.grade,color,ink:inkFor(color),
     ships,map,shots:Array.from({length:N},()=>Array(N).fill('')),alive:true,mi:0,tpl:fleet.tpl,
     stats:{shots:0,hits:0,sunk:0,right:0,asked:0,dealt:0,blocked:0}};
@@ -1573,13 +1599,13 @@ let meta=store.get('bj3-meta',null);
 if(!meta||!Array.isArray(meta.list)||!meta.list.length)meta={current:'Class 1',list:['Class 1']};
 const ck=k=>'bj3-'+k+'-'+meta.current;
 const saveMeta=()=>store.set('bj3-meta',meta);
-function defaultSetup(){return{teams:[0,1,2,3].map(i=>({name:defaultName(i),grade:3,members:[]})),cfg:{...DEF_CFG}};}
+function defaultSetup(){return{teams:[0,1,2,3].map(i=>({name:defaultName(i),grade:3,members:[],ci:i})),cfg:{...DEF_CFG}};}
 function migrateCfg(c){const cfg=Object.assign({},DEF_CFG,c);if(!(c&&c.v4)){cfg.theme='holo';cfg.v4=true;}return cfg;}
 function loadSetup(){
   const s=store.get(ck('setup'),null);
   try{
     if(s&&Array.isArray(s.teams)&&s.teams.length>=2&&s.teams.length<=MAX_TEAMS){
-      return{teams:s.teams.map(t=>({name:String(t.name||''),grade:Math.max(0,Math.min(10,+t.grade||0)),members:Array.isArray(t.members)?t.members.map(String):[]})),cfg:migrateCfg(s.cfg)};
+      return{teams:s.teams.map(t=>({name:String(t.name||''),grade:Math.max(0,Math.min(10,+t.grade||0)),members:Array.isArray(t.members)?t.members.map(String):[],ci:Number.isInteger(t.ci)?t.ci:-1})),cfg:migrateCfg(s.cfg)};
     }
   }catch(e){}
   return defaultSetup();
@@ -1780,7 +1806,7 @@ function tkNoteHtml(q){
 let tkb=null;
 function openTeksBuilder(){
   const cg=Math.min(8,gradeForClass(meta.current));
-  tkb={subj:'Physical Education',from:Math.max(0,cg-1),to:Math.min(8,cg+1),picks:[],pins:new Set(),judge:false,draft:null,err:'',busy:true,q:'',more:false,sel:null,cg,msg:''};
+  tkb={subj:'Physical Education',from:Math.max(0,cg-1),to:Math.min(8,cg+1),picks:[],pins:new Set(),judge:false,draft:null,err:'',busy:true,q:'',sf:'',sg:'',more:false,sel:null,cg,msg:''};
   openModal('<div id="tkRoot"></div>');
   tkRefresh(true);
 }
@@ -1797,26 +1823,53 @@ async function tkRefresh(regen){
   const T=tkb;if(!T)return;
   T.busy=true;T.err='';tkRender();
   try{
-    for(const s of tkSubjects(T.subj))await tkLoad(s);
+    for(const x of TK_SUBJ)await tkLoad(x[0]);
     if(tkb!==T)return;
     if(regen)tkRegen();
   }catch(e){if(tkb!==T)return;const m=String(e&&e.message||'');T.err=/^HTTP \d/.test(m)?"The TEKS database had a problem ("+m+"). Wait a few seconds and tap Try again.":"Couldn't reach the TEKS database. Check the internet and try again.";}
   T.busy=false;tkRender();
 }
+const tkAllRows=()=>TK_SUBJ.reduce((a,x)=>a.concat(tk.rows[x[0]]||[]),[]);
+const tkHay=r=>r.h||(r.h=(r.c+' '+r.t+' '+r.st+' '+r.tp+' '+r.k).toLowerCase());
+/* wrap the searched words in <mark>; everything else is escaped */
+function tkHl(t,ws){
+  t=String(t||'');if(!ws.length)return esc(t);
+  const re=new RegExp('('+ws.map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')','ig');
+  return t.split(re).map((p,i)=>i%2?'<mark class="hit">'+esc(p)+'</mark>':esc(p)).join('');
+}
+/* every word you type has to appear somewhere in the standard (code, strand, topic, or its text); the best matches come first */
+function tkFind(q,sf,sg){
+  const ws=String(q||'').toLowerCase().split(/\s+/).filter(Boolean);
+  if(!ws.length||ws.join('').length<2)return{ws:[],rows:[],n:0};
+  const out=[];
+  for(const r of tkAllRows()){
+    if(sf&&r.s!==sf)continue;
+    if(sg!==''&&sg!=null&&r.g!==+sg)continue;
+    const h=tkHay(r);let sc=0,ok=true;
+    for(const w of ws){
+      if(h.indexOf(w)<0){ok=false;break;}
+      sc+=(r.c.toLowerCase().indexOf(w)>=0?6:0)+((r.tp+' '+r.st).toLowerCase().indexOf(w)>=0?3:0)+(r.t.toLowerCase().indexOf(w)>=0?2:1);
+    }
+    if(ok)out.push([sc,r]);
+  }
+  out.sort((a,b)=>b[0]-a[0]||a[1].g-b[1].g||a[1].o-b[1].o);
+  return{ws,n:out.length,rows:out.slice(0,60).map(x=>x[1])};
+}
 function tkListHtml(){
-  const T=tkb,q=T.q.trim().toLowerCase();
-  const pool=tkPool(tkSubjects(T.subj)).filter(r=>r.g>=T.from&&r.g<=T.to);
-  let rows;
-  if(q.length>=2)rows=pool.filter(r=>(r.c+' '+r.t+' '+r.st+' '+r.tp).toLowerCase().includes(q)).slice(0,60);
-  else rows=pool.filter(r=>T.picks.includes(tkGk(r))).sort((a,b)=>T.picks.indexOf(tkGk(a))-T.picks.indexOf(tkGk(b))||a.g-b.g||a.o-b.o).slice(0,250);
-  if(!rows.length)return`<p class="note">${q.length>=2?'Nothing matches that search.':'Tap a strand above, or search by a word or a TEKS code.'}</p>`;
-  let h='',last='';
-  rows.forEach(r=>{
-    const k=tkGk(r);
-    if(q.length<2&&k!==last){last=k;h+=`<h4 style="margin:12px 0 4px">${esc(tkLab(r))}</h4>`;}
-    h+=`<label class="tkl"><input type="checkbox" data-tkf="pin" value="${esc(r.c)}" ${T.pins.has(r.c)?'checked':''}><span><b>${esc(r.c)}</b> · Grade ${tkGl(r.g)}${q.length>=2?` · <i>${esc(tkLab(r))}</i>`:''}<br>${esc(tkCut(r.t,230))}</span></label>`;
-  });
-  return h;
+  const T=tkb,all=tkAllRows();
+  if(!all.length)return'<p class="note">Loading TEKS…</p>';
+  const f=tkFind(T.q,T.sf,T.sg);
+  let rows,hdr='';
+  if(f.ws.length){
+    rows=f.rows;
+    if(!rows.length)return'<p class="note">Nothing matches that. Try a shorter word, or set the filters to All subjects and All grades.</p>';
+    hdr=`<p class="note">${f.n>rows.length?`Showing the best ${rows.length} of ${f.n} matches. Add a word to narrow it down.`:`${f.n} match${f.n===1?'':'es'}.`} Check one to add it to your board.</p>`;
+  }else{
+    rows=all.filter(r=>T.pins.has(r.c)).sort((a,b)=>a.g-b.g||a.o-b.o);
+    if(!rows.length)return'<p class="note">Type a word (like <i>fractions</i>, <i>throw</i> or <i>rhyme</i>) or a TEKS code. Check a result to add it to your board.</p>';
+    hdr='<p class="note">Added to your board:</p>';
+  }
+  return hdr+rows.map(r=>`<label class="tkl"><input type="checkbox" data-tkf="pin" value="${esc(r.c)}" ${T.pins.has(r.c)?'checked':''}><span><b>${tkHl(r.c,f.ws)}</b> · ${esc(TK_SHORT[r.s]||r.s)} · Grade ${tkGl(r.g)} · <i>${esc(tkLab(r))}</i>${tkSens(r)?' · adult-guided topic':''}<br>${tkHl(tkCut(r.t,230),f.ws)}</span></label>`).join('');
 }
 function tkRender(){
   const root=$('#tkRoot');if(!root||!tkb)return;
@@ -1833,8 +1886,13 @@ function tkRender(){
   if(T.err)body=`<p class="note" role="alert" style="font-size:18px">${esc(T.err)}</p><div class="row2"><button class="btn" data-tk="retry">Try again</button></div>`;
   else if(T.busy)body='<p class="note" style="font-size:20px">Loading TEKS…</p>';
   else{
-    const strands=T.subj==='*'?'<p class="note">Mix mode picks strands at random from every subject. Use the search box below to pin specific TEKS.</p>'
+    const strands=T.subj==='*'?'<p class="note">Mix mode picks strands at random from every subject. Use the search box above to pin specific TEKS.</p>'
       :`<div class="tkgrid">${groups.map(g=>`<button type="button" class="tkg" data-tk="grp" data-k="${esc(g.k)}" aria-pressed="${T.picks.includes(g.k)}">${esc(g.lab)}<small>${g.n} TEKS · Grade ${tkSpan(g.gs)}${g.sens?' · adult-guided topic':''}</small></button>`).join('')||'<p class="note">No TEKS for this subject in that grade range.</p>'}</div>`;
+    const find=`<div class="field tkfind"><label class="lbl" for="tkQ">🔎 Find a TEKS by keyword</label>
+        <input type="text" id="tkQ" placeholder="Try: fractions, rhyme, throw, map, or a TEKS code" value="${esc(T.q)}" autocomplete="off">
+        <div class="tkfs"><select id="tkSf" data-tkf="sf" aria-label="Limit the search to one subject"><option value="">All subjects</option>${TK_SUBJ.map(x=>`<option value="${esc(x[0])}" ${x[0]===T.sf?'selected':''}>${esc(x[1])}</option>`).join('')}</select>
+        <select id="tkSg" data-tkf="sg" aria-label="Limit the search to one grade"><option value="">All grades</option>${TK_GR.map((g,i)=>`<option value="${i}" ${String(i)===String(T.sg)?'selected':''}>${i===0?'Kindergarten':'Grade '+g}</option>`).join('')}</select></div>
+        <div id="tkList" class="tklist">${tkListHtml()}</div></div>`;
     const d=T.draft;
     let prev='<p class="note">No TEKS found for that subject and grade range. Try a wider range.</p>';
     if(d){
@@ -1843,13 +1901,11 @@ function tkRender(){
         if(t)prev+=`<div class="tkdet"><b>TEKS ${esc(t.c)}</b> · Grade ${tkGl(t.g)}<br>${esc(t.t)}${t.k?`<br><span class="note">${esc(t.k)}</span>`:''}</div>`;}
       else prev+='<p class="note" style="margin-top:6px">Tap any tile to read its standard. Rows climb in grade level from 100 to 500.</p>';
     }
-    body=`<div class="field"><span class="lbl">Strands (these become the columns)</span>${strands}
+    body=`${find}<div class="field"><span class="lbl">Strands (these become the columns)</span>${strands}
         <p class="note" style="margin-top:6px">${T.subj==='*'?'':T.picks.length?`${T.picks.length} of 5 picked. The rest are filled in randomly.`:'None picked, so all 5 columns are random. Tap up to 5 to choose your own.'}</p></div>
       <div class="field"><span class="lbl">Your board</span>${prev}</div>
       <div class="field"><span class="lbl">Questions</span><div class="seg" role="group"><button type="button" data-tk="qm" data-v="auto" aria-pressed="${!T.judge}">Practice questions when available</button><button type="button" data-tk="qm" data-v="judge" aria-pressed="${T.judge}">Teacher-judged challenges</button></div>
-        <p class="note" style="margin-top:6px">${noBank&&!T.judge?'This subject has no practice-question bank yet, so these tiles are teacher-judged challenges built from the standard.':'Practice questions match the subject and grade level. Every tile is tagged with its TEKS.'}</p></div>
-      <div class="field"><button type="button" class="btn sm ghost" data-tk="more">${T.more?'Hide':'Choose specific'} TEKS…</button>
-        ${T.more?`<div style="margin-top:10px"><label class="lbl" for="tkQ">Search all TEKS in this range</label><input type="text" id="tkQ" placeholder="Example: fractions, throw, 116.15" value="${esc(T.q)}" autocomplete="off"><div id="tkList" class="tklist">${tkListHtml()}</div></div>`:''}</div>`;
+        <p class="note" style="margin-top:6px">${noBank&&!T.judge?'This subject has no practice-question bank yet, so these tiles are teacher-judged challenges built from the standard.':'Practice questions match the subject and grade level. Every tile is tagged with its TEKS.'}</p></div>`;
   }
   root.innerHTML=`<h2>TEKS board builder</h2>
     <p class="note" style="margin-bottom:12px">Similar TEKS are grouped into strands. Each column is one strand and the rows climb through the grade levels you pick.</p>
@@ -1896,17 +1952,23 @@ document.addEventListener('change',e=>{
   if(f==='subj'){T.subj=e.target.value;T.picks=[];T.pins=new Set();T.q='';T.msg='';T.draft=null;tkRefresh(true);}
   else if(f==='from'){T.from=+e.target.value;if(T.to<T.from)T.to=T.from;tkRegen();tkRender();}
   else if(f==='to'){T.to=+e.target.value;if(T.from>T.to)T.from=T.to;tkRegen();tkRender();}
+  else if(f==='sf'||f==='sg'){T[f]=e.target.value;const l=$('#tkList');if(l)l.innerHTML=tkListHtml();}
   else if(f==='pin'){
-    const code=e.target.value,r=tkPool(tkSubjects(T.subj)).find(x=>x.c===code);if(!r)return;
+    const code=e.target.value,r=tkAllRows().find(x=>x.c===code);if(!r)return;
     const k=tkGk(r);
     if(e.target.checked){
-      if(!T.picks.includes(k)){
-        if(T.picks.length>=5){e.target.checked=false;T.msg='Five strands is the most a board holds. Remove one first.';tkRender();return;}
-        T.picks.push(k);
+      if(!T.picks.includes(k)&&T.picks.length>=5){e.target.checked=false;T.msg='Five strands is the most a board holds. Remove one first.';const keep=T.q;tkRender();T.q=keep;return;}
+      T.msg='';
+      /* make room for it: switch to its subject if nothing is chosen yet, otherwise make it a mixed-subject board; widen the grades to include it */
+      if(T.subj!=='*'&&T.subj!==r.s){
+        if(!T.picks.length){T.subj=r.s;T.msg='Board set to '+((TK_SUBJ.find(x=>x[0]===r.s)||[0,r.s])[1])+'.';}
+        else{T.subj='*';T.msg='Mixed-subject board: your picks come from more than one subject.';}
       }
+      if(r.g<T.from){T.from=r.g;T.msg=(T.msg?T.msg+' ':'')+'Grades widened to include Grade '+tkGl(r.g)+'.';}
+      if(r.g>T.to){T.to=r.g;T.msg=(T.msg?T.msg+' ':'')+'Grades widened to include Grade '+tkGl(r.g)+'.';}
+      if(!T.picks.includes(k))T.picks.push(k);
       T.pins.add(code);
-    }else T.pins.delete(code);
-    T.msg='';
+    }else{T.pins.delete(code);T.msg='';}
     const keep=T.q;tkRegen();T.q=keep;tkRender();
   }
 });
@@ -2037,15 +2099,24 @@ function renderSetup(){
   renderTeams();perShip();
 }
 function perShip(){const n=SHIP_KEYS.length;const p=$('#perShip');if(p)p.textContent=`Split evenly across ${n} ships: ${hpPerShip(setup.cfg.hp,n)} HP each.`;}
+/* each squad keeps its own colour and shape number, so moving it in the list never recolours it */
+function normCi(){
+  const used=new Set();
+  setup.teams.forEach(t=>{if(Number.isInteger(t.ci)&&t.ci>=0&&t.ci<MAX_TEAMS&&!used.has(t.ci))used.add(t.ci);else t.ci=-1;});
+  setup.teams.forEach(t=>{if(t.ci<0){let k=0;while(used.has(k))k++;t.ci=k;used.add(k);}});
+}
 function renderTeams(){
+  normCi();
   $('#teamList').innerHTML=setup.teams.map((t,i)=>{
-    const col=teamColor(i),L=letterFor(t.name,i);
-    return`<div class="trow" data-i="${i}"><div class="badge" style="background:${col};color:${inkFor(col)};clip-path:${CLIP[SHAPES[i%8]]};font-size:${L.length>1?17:22}px">${esc(L)}</div>
+    const col=teamColor(t.ci),L=letterFor(t.name,i);
+    return`<div class="trow" data-i="${i}"><div class="badge" style="background:${col};color:${inkFor(col)};clip-path:${CLIP[SHAPES[t.ci%8]]};font-size:${L.length>1?17:22}px" title="Drag to reorder">${esc(L)}</div>
       <input type="text" data-f="name" maxlength="28" aria-label="Squad ${i+1} name" placeholder="${esc(defaultName(i))}" value="${esc(t.name)}">
       <select data-f="grade" aria-label="Grade level for squad ${i+1}">${GRADES.map((g,gi)=>`<option value="${gi}" ${gi===t.grade?'selected':''}>${g}</option>`).join('')}</select>
       <button type="button" class="x" data-act="del-team" aria-label="Remove squad ${i+1}">✕</button>
+      <div class="mv"><button type="button" data-act="mv-team" data-d="-1" aria-label="Move squad ${i+1} up" ${i===0?'disabled':''}>▲</button><button type="button" data-act="mv-team" data-d="1" aria-label="Move squad ${i+1} down" ${i===setup.teams.length-1?'disabled':''}>▼</button></div>
       <textarea data-f="members" rows="${Math.max(1,Math.min(4,t.members.length||1))}" aria-label="Members of squad ${i+1}" placeholder="Student names, one per line">${esc(t.members.join('\n'))}</textarea></div>`;
   }).join('');
+  sortable($('#teamList'),'.trow','.badge',o=>{setup.teams=o.map(i=>setup.teams[i]);saveSetup();renderTeams();});
   const add=$('#addTeam');if(add){add.disabled=setup.teams.length>=MAX_TEAMS;add.textContent=setup.teams.length>=MAX_TEAMS?'12 squads is the most':'＋ Add squad';}
 }
 const members2arr=txt=>txt.split(/[\n,;]+/).map(cleanName).filter(Boolean);
@@ -2128,10 +2199,11 @@ function showGame(on){$('#setup').hidden=on;$('#game').hidden=!on;document.body.
 
 function startGame(o){
   o=o||{};
+  normCi();sqEdit=false;
   saveSetup();
   const cfg={...setup.cfg};
   const fleets=assignFleets(setup.teams.length,DEFAULT_TEMPLATES,cfg.mix);
-  const teams=setup.teams.map((d,i)=>{const t=makeTeam(d,i,cfg,fleets[i]);t.shape=SHAPES[i%8];t.letter=letterFor(t.name,i);t.stats.healed=0;return t;});
+  const teams=setup.teams.map((d,i)=>{const t=makeTeam(d,i,cfg,fleets[i]);t.shape=SHAPES[(d.ci>=0?d.ci:i)%8];t.letter=letterFor(t.name,i);t.stats.healed=0;return t;});
   const theme=cfg.surprise?pick(THEME_KEYS):cfg.theme;
   G={cfg,theme,teams,turn:0,used:new Set(),round:1,log:[],usedQ:new Set(),over:false,surge:null,turns:0,className:meta.current};
   {const ty=setup.cfg.board||'mixed';let b=o.boardId?boardById(o.boardId):null;
@@ -2196,7 +2268,7 @@ const ICON={
 };
 const micBtn=()=>`<button class="ibtn${Voice.on?' live':''}" data-act="voice" aria-pressed="${Voice.on}" aria-label="Voice commands ${Voice.on?'on':'off'}">${ICON.mic}</button>`;
 const topBar=chip=>`<div class="top"><div class="l"><div class="brand">Battleship Jeopardy</div><span class="chip">${esc(G.className)} · ${chip}</span><span class="chip">${esc(THEMES[G.theme].name)}</span></div>
-  <div class="r">${micBtn()}<button class="ibtn" data-act="sound" aria-label="${Snd.on?'Sound on':'Sound off'}">${Snd.on?ICON.sound:ICON.mute}</button><button class="ibtn" data-act="theme" aria-label="Change theme">${ICON.theme}</button><button class="ibtn" data-act="end" aria-label="End or leave this game">${ICON.flag}</button></div></div>`;
+  <div class="r">${S?'':'<button class="ibtn wide" data-act="boards">Boards</button>'}${micBtn()}<button class="ibtn" data-act="sound" aria-label="${Snd.on?'Sound on':'Sound off'}">${Snd.on?ICON.sound:ICON.mute}</button><button class="ibtn" data-act="theme" aria-label="Change theme">${ICON.theme}</button><button class="ibtn" data-act="end" aria-label="End or leave this game">${ICON.flag}</button></div></div>`;
 const badgeHtml=(t,size,fs,extra='')=>`<div class="badge" style="width:${size}px;height:${size}px;clip-path:${CLIP[t.shape]};background:${extra||'var(--ink)'};color:${extra?inkFor(t.color):'var(--bgHex)'};font-size:${t.letter.length>1?Math.round(fs*0.74):fs}px"><span style="padding-top:${t.shape==='triangle'?Math.round(size*.15):t.shape==='star'?Math.round(size*.06):0}px">${esc(t.letter)}</span></div>`;
 function bannerHtml(t,sub){
   const fs=Math.max(36,Math.min(76,Math.floor(1230/(Math.max(6,t.name.length)*1.02))));
@@ -2223,11 +2295,112 @@ function boardHtml(){
   }
   return`<section class="board">${h}</section>`;
 }
-function sqHtml(t,on){
+let sqEdit=false;
+function sqHtml(t,on,i,edit){
   const hp=teamHp(t),max=teamMax(t),pct=Math.round(hp/max*100);
-  return`<div class="sq${on?' on':''}${t.alive?'':' out'}">${badgeHtml(t,40,18,t.color)}<div><div class="nm">${esc(t.name)}</div><div class="hb"><div class="bar"><i style="width:${pct}%;background:${fillFor(pct)}"></i></div><span>${t.alive?hp:'OUT'}</span></div></div></div>`;
+  const tap=!edit&&t.alive&&!G.over;
+  return`<div class="sq${on?' on':''}${t.alive?'':' out'}" data-i="${i}"${tap?` role="button" tabindex="0" data-act="sq-up" aria-label="${esc(t.name)}, ${hp} HP${on?', up now':', tap to make them up'}"`:''}>${badgeHtml(t,40,18,t.color)}<div><div class="nm">${esc(t.name)}</div><div class="hb"><div class="bar"><i style="width:${pct}%;background:${fillFor(pct)}"></i></div><span>${t.alive?hp:'OUT'}</span></div></div>${edit?`<div class="mv"><button type="button" data-act="sq-mv" data-d="-1" aria-label="Move ${esc(t.name)} up" ${i===0?'disabled':''}>▲</button><button type="button" data-act="sq-mv" data-d="1" aria-label="Move ${esc(t.name)} down" ${i===G.teams.length-1?'disabled':''}>▼</button></div>`:''}</div>`;
 }
-function standingsHtml(){return`<aside class="side"><h4>Squads</h4>${G.teams.map((t,i)=>sqHtml(t,i===G.turn&&t.alive&&!G.over)).join('')}</aside>`;}
+function standingsHtml(){
+  const hint=sqEdit?'Drag a squad, or tap ▲ ▼.':G.teams.length<=8?'Tap a squad to make them up.':'';
+  return`<aside class="side${sqEdit?' edit':''}"><div class="sqhead"><h4>Squads</h4><button type="button" class="sqedit" data-act="sq-edit" aria-pressed="${sqEdit}">${sqEdit?'Done':'Reorder'}</button></div>${hint?`<div class="sqhint">${hint}</div>`:''}${G.teams.map((t,i)=>sqHtml(t,i===G.turn&&t.alive&&!G.over,i,sqEdit)).join('')}</aside>`;
+}
+/* anyone can be "up" at any time: tap a squad, or reorder the list. The turn is just G.turn, so we keep it pointed at the same squad when the list moves. */
+function sqUp(i){
+  const t=G&&G.teams[i];if(!t||!t.alive||G.over||sqEdit)return;
+  if(S){giveTo(i);return;}
+  if(i===G.turn)return;
+  G.turn=i;Snd.play('click');Voice.say(t.name+' is up');renderGame();saveGame();
+}
+function reorderTeams(order){
+  if(!G||S)return;
+  const cur=G.teams[G.turn];
+  G.teams=order.map(i=>G.teams[i]);G.turn=G.teams.indexOf(cur);
+  saveGame();renderGame();
+}
+function moveTeam(from,to){
+  if(!G||S||to<0||to>=G.teams.length||from===to)return;
+  const o=G.teams.map((_,i)=>i);o.splice(to,0,o.splice(from,1)[0]);reorderTeams(o);
+}
+/* drag-to-reorder: grab an item, slide it past its neighbours, drop. onDrop gets the old positions in their new order. */
+function sortable(host,itemSel,startSel,onDrop){
+  if(!host||host._sort)return;host._sort=1;
+  host.addEventListener('pointerdown',e=>{
+    if(e.button>0)return;
+    const it=e.target.closest(itemSel);
+    if(!it||!host.contains(it)||!e.target.closest(startSel)||e.target.closest('input,textarea,select,button'))return;
+    e.preventDefault();
+    const items=()=>[...host.querySelectorAll(itemSel)];
+    const before=items().map(x=>x.dataset.i).join();
+    const grab=e.clientY-it.getBoundingClientRect().top;
+    it.classList.add('dragging');
+    const place=y=>{it.style.transform='';const nat=it.getBoundingClientRect();it.style.transform=`translateY(${Math.round(y-grab-nat.top)}px)`;};
+    const mid=el=>{const r=el.getBoundingClientRect();return r.top+r.height/2;};
+    let lastY=e.clientY;
+    const move=ev=>{
+      lastY=ev.clientY;
+      const c=lastY-grab+it.offsetHeight/2,p=it.previousElementSibling,n=it.nextElementSibling;
+      if(p&&p.matches(itemSel)&&c<mid(p))p.before(it);
+      else if(n&&n.matches(itemSel)&&c>mid(n))n.after(it);
+      place(lastY);
+    };
+    /* a long list: hold the item near the top or bottom edge of the screen and the page scrolls */
+    const auto=setInterval(()=>{
+      if(lastY<70)scrollBy(0,-18);else if(lastY>innerHeight-70)scrollBy(0,18);else return;
+      move({clientY:lastY});
+    },30);
+    const end=()=>{
+      clearInterval(auto);
+      removeEventListener('pointermove',move);removeEventListener('pointerup',end);removeEventListener('pointercancel',end);
+      it.classList.remove('dragging');it.style.transform='';
+      const after=items().map(x=>x.dataset.i);
+      if(after.join()!==before)onDrop(after.map(Number));
+    };
+    addEventListener('pointermove',move);addEventListener('pointerup',end);addEventListener('pointercancel',end);
+    place(e.clientY);
+  });
+}
+/* hand the question that is on screen to a different squad (before it has been answered) */
+function giveTo(i){
+  const t=G.teams[i];
+  if(!S||!t||!t.alive||t===S.atk||!['target','challenge','ammo'].includes(S.step))return;
+  const old=S.atk;
+  S.atk=t;G.turn=i;
+  const foes=G.teams.filter(x=>x!==t&&x.alive);
+  if(S.target===t||(S.target&&!S.target.alive))S.target=null;
+  if(!S.target&&foes.length===1)S.target=foes[0];
+  if(S.step==='ammo'&&old.grade!==t.grade)S.ammoQ=null;
+  {const b=boardById(G.board);if(b&&b.tiles[S.key]){b.tiles[S.key].by=t.name;saveHist();}}
+  log(`${old.name} hands the question to ${t.name}.`,'info');
+  Snd.play('click');Voice.say(t.name+' is up');
+  goStep(S.target?S.step:'target');
+  saveGame();
+}
+const swapHtml=()=>{
+  const o=G.teams.map((t,i)=>[t,i]).filter(([t])=>t.alive&&t!==S.atk);
+  if(!o.length)return'';
+  return`<details class="swapd"><summary>Wrong squad?</summary><div class="swap${o.length<=6?' one':''}">${o.map(([t,i])=>`<button type="button" data-act="give" data-i="${i}">${badgeHtml(t,28,13,t.color)}<span>${esc(t.name)}</span></button>`).join('')}</div></details>`;
+};
+/* ---------- boards: switch between this class's saved boards without leaving the game ---------- */
+function enterBoard(b){
+  G.board=b.id;useCols(b);G.used=new Set(Object.keys(b.tiles));
+  const open=[];for(let c=0;c<CATS.length;c++)for(let r=0;r<ROWS;r++)if(!G.used.has(c+'-'+r))open.push(c+'-'+r);
+  G.surge=open.length?pick(open):null;
+  log(`Switched to ${bLabel(b)}.`,'info');
+  closeModal();renderGame();saveGame();
+}
+function openBoardSwitch(){
+  if(!G||S||G.over)return;
+  const rows=[...hist().boards].reverse().slice(0,20).map(b=>{
+    const n=Object.keys(b.tiles).length,cur=b.id===G.board,fin=b.done||n>=TILES;
+    const act=cur?'<span class="chip solid">Playing now</span>':fin?`<button class="btn sm ghost" data-act="breview" data-b="${b.id}">Review</button>`:`<button class="btn sm sun" data-act="bswitch" data-b="${b.id}">Switch to this</button>`;
+    return`<div class="brow"><div><b>${esc(bLabel(b))}</b> · ${esc(new Date(b.created).toLocaleDateString(undefined,{month:'short',day:'numeric'}))} · ${n}/${TILES} ${fin?'· finished':'· in progress'}</div><div>${act}</div></div>`;
+  }).join('')||'<p class="note">No boards yet.</p>';
+  const ob=boardById(G.board);
+  openModal(`<h2>Boards for ${esc(G.className)}</h2><p class="note" style="margin-bottom:8px">Switch any time. Squads, HP and fleets stay as they are, and every board keeps its answered tiles.</p>${rows}
+    <div class="field" style="margin-top:14px"><label class="lbl" for="selNewB">Start a new board</label><div style="display:flex;gap:10px;flex-wrap:wrap"><select id="selNewB" style="width:auto;min-width:200px">${BTYPES.map(([k,n])=>`<option value="${k}">${esc(n)}</option>`).join('')}</select><button class="btn sm" data-act="bmake">＋ New board</button>${ob&&ob.type==='teks'?'<button class="btn sm sun" data-act="bteks">Next TEKS board (same settings)</button>':''}</div></div>
+    <div class="row2" style="margin-top:14px"><button class="btn ghost" data-act="mclose">Close</button></div>`);
+}
 function turnHtml(){
   const t=G.teams[G.turn];applyTheme(G.theme,t.color);
   const left=TILES-G.used.size,lim=G.cfg.end==='board'?1:G.cfg.end==='two'?2:0;
@@ -2252,7 +2425,7 @@ function renderGame(){
   stage.classList.toggle('compact',G.teams.length>8);
   stage.classList.toggle('d3',!!G.cfg.d3);
   /* camera move only when the screen really changes: zoom in to a question, pull back to the board */
-  const view=S?'s:'+S.step:'b:'+G.turn+':'+G.round;
+  const view=S?'s:'+S.step:'b:'+(G.teams[G.turn]?G.teams[G.turn].name:G.turn)+':'+G.round;
   let anim='';
   if(view!==lastView){
     anim=S?(S.step==='result'?'out':'in'):(lastView&&lastView[0]==='s'?'out':'boot');
@@ -2260,6 +2433,7 @@ function renderGame(){
   }
   stage.dataset.anim=anim;
   stage.innerHTML=S?strikeHtml():turnHtml();
+  {const sd=$('.side',stage);if(sd&&sqEdit)sortable(sd,'.sq','.sq',reorderTeams);}
 }
 
 /* ============================ strike flow ============================ */
@@ -2267,6 +2441,7 @@ const STEP_NAMES={target:'Pick your target',challenge:'Challenge time',ammo:'Loa
 function openStrike(ci,row){
   if(S||G.over)return;
   const key=ci+'-'+row;if(G.used.has(key))return;
+  sqEdit=false;
   const atk=G.teams[G.turn],foes=G.teams.filter(t=>t!==atk&&t.alive);
   S={atk,key,ci,row,value:(row+1)*100,surge:G.surge===key,step:'target',target:foes.length===1?foes[0]:null,mult:1,dmg:0,si:-1,shot:null,res:null,ammoQ:null,replQ:null,idea:pick(IDEAS),hit:null,rep:null};
   Snd.play('pick');if(S.surge)setTimeout(()=>Snd.play('surge'),180);
@@ -2307,7 +2482,7 @@ function strikeHtml(){
     left=infoLeft();
     mid=`${stepChip()}<div class="targets">${foes.map(t=>{const i=G.teams.indexOf(t);return`<button type="button" class="tgt${S.target===t?' sel':''}" style="--tc:${t.color};--ti:${inkFor(t.color)}" data-act="pick-target" data-i="${i}">${badgeHtml(t,48,20,'var(--ti)').replace('color:'+inkFor(t.color),'color:var(--tc)')}<span><b>${esc(t.name)}</b><small>${teamHp(t)} HP · ${shipsAfloat(t)} ship${shipsAfloat(t)===1?'':'s'} afloat</small></span></button>`;}).join('')}</div>
       <button class="btn lg block" data-act="lock" ${S.target?'':'disabled'}>${S.target?'Lock on '+esc(S.target.name):'Pick a squad'}</button>`;
-    right=`<aside class="qright"><div class="cap">Changed your mind?</div><button class="btn sm ghost" data-act="cancel-strike" style="border-color:var(--ink);color:var(--ink)">Back to the board</button></aside>`;
+    right=`<aside class="qright"><div class="cap">Changed your mind?</div><button class="btn sm ghost" data-act="cancel-strike" style="border-color:var(--ink);color:var(--ink)">Back to the board</button>${swapHtml()}</aside>`;
   }else if(S.step==='challenge'){
     sub='Teacher challenge: you judge it';
     left=infoLeft();
@@ -2315,13 +2490,13 @@ function strikeHtml(){
       <div class="fb" style="font-size:34px;line-height:1.25"><div class="cap" style="margin-bottom:6px">Idea (or make up your own)</div><div id="idea">${esc(S.idea)}</div></div>
       <div class="opts"><button class="btn lg" data-act="chal-ok">Completed</button><button class="btn lg bad" data-act="chal-no">Missed</button></div>
       <button class="btn sm ghost" data-act="idea" style="align-self:flex-start">Another idea</button>`;
-    right=`<aside class="qright"><div class="cap">${esc(memberUp(atk)||atk.name)}</div><div style="font-size:24px;font-weight:700">is up</div></aside>`;
+    right=`<aside class="qright"><div class="cap">${esc(memberUp(atk)||atk.name)}</div><div style="font-size:24px;font-weight:700">is up</div>${swapHtml()}</aside>`;
   }else if(S.step==='ammo'){
     const power=S.value*(S.surge?2:1);
     sub=`${esc(memberUp(atk)?memberUp(atk)+', you\'re up! ':'')}Answer to load the ammo`;
     left=infoLeft(`<div class="note-box" style="margin-top:10px">${power} damage if right${timer?'<br>Fast answers add up to +50%':''}</div>`);
     mid=`${stepChip()}${qMid}`;
-    right=`<aside class="qright">${ringHtml(timer)}<div style="font-size:22px;font-weight:700;line-height:1.25;margin-top:6px">Read it out loud, then pick a letter.</div></aside>`;
+    right=`<aside class="qright">${ringHtml(timer)}<div style="font-size:22px;font-weight:700;line-height:1.25;margin-top:6px">Read it out loud, then pick a letter.</div>${swapHtml()}</aside>`;
   }else if(S.step==='fire'){
     sub=`Ammo loaded: ${S.dmg} damage${S.mult>1?` (speed x${S.mult})`:''}. Call a square!`;
     left=infoLeft(`<div class="note-box" style="margin-top:10px">${S.dmg} damage</div>`);
@@ -2538,7 +2713,7 @@ function endGame(reason){
   Snd.play('win');FX.rain(4200);FX.fireworks(6);Voice.say(winners.length===1?top.name+' wins':'It is a tie');
 }
 function toSetup(){
-  stopTimer();S=null;G=null;
+  stopTimer();S=null;G=null;sqEdit=false;
   $('#modal').hidden=true;$('#victory').hidden=true;
   showGame(false);renderSetup();
 }
@@ -2584,6 +2759,15 @@ document.addEventListener('click',e=>{
     'add-team':()=>{if(setup.teams.length<MAX_TEAMS){setup.teams.push({name:defaultName(setup.teams.length),grade:setup.teams[0]?setup.teams[0].grade:3,members:[]});saveSetup();renderTeams();}},
     'del-team':()=>{const i=+b.closest('.trow').dataset.i;if(setup.teams.length>2){setup.teams.splice(i,1);saveSetup();renderTeams();}},
     tile:()=>openStrike(+b.dataset.ci,+b.dataset.r),
+    'sq-up':()=>sqUp(+b.dataset.i),
+    'sq-edit':()=>{sqEdit=!sqEdit;renderGame();},
+    'sq-mv':()=>{const i=+b.closest('.sq').dataset.i,d=+b.dataset.d;moveTeam(i,i+d);const nb=$(`.sq[data-i="${i+d}"] [data-d="${d}"]`);if(nb&&!nb.disabled)nb.focus({preventScroll:true});},
+    give:()=>giveTo(+b.dataset.i),
+    'mv-team':()=>{const i=+b.closest('.trow').dataset.i,d=+b.dataset.d,j=i+d;if(j<0||j>=setup.teams.length)return;setup.teams.splice(j,0,setup.teams.splice(i,1)[0]);saveSetup();renderTeams();const nb=$(`.trow[data-i="${j}"] [data-d="${d}"]`);if(nb&&!nb.disabled)nb.focus({preventScroll:true});},
+    boards:openBoardSwitch,
+    bswitch:()=>{const bb=boardById(b.dataset.b);if(bb&&G&&!S&&!G.over)enterBoard(bb);},
+    bmake:()=>{if(!G||S||G.over)return;enterBoard(newBoardRec(($('#selNewB')||{}).value||'mixed'));},
+    bteks:()=>{if(!G||S||G.over)return;const ob=boardById(G.board);if(ob&&ob.type==='teks')enterBoard(tkNextBoard(ob));},
     'pick-target':()=>{S.target=G.teams[+b.dataset.i];Snd.play('click');renderGame();},
     lock:()=>{Snd.play('click');Voice.say('Target locked: '+S.target.name);goStep(G.cfg.challenge?'challenge':'ammo');},
     'cancel-strike':closeStrike,
@@ -2635,6 +2819,7 @@ document.addEventListener('change',e=>{
 });
 document.addEventListener('keydown',e=>{
   if(e.metaKey||e.ctrlKey||e.altKey)return;
+  if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.matches&&e.target.matches('.sq[role=button]')){e.preventDefault();e.target.click();return;}
   if(e.key==='Escape'&&!$('#modal').hidden){closeModal();return;}
   const tag=(e.target&&e.target.tagName)||'';
   if(!S||!qHandle||/INPUT|TEXTAREA|SELECT/.test(tag))return;

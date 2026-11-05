@@ -1658,19 +1658,38 @@ function tkLab(r){const a=tkAb(r.st);return a+(r.tp&&!a.toLowerCase().includes(r
 function tkSpan(set){const a=[...set].sort((x,y)=>x-y);return a.length===1?tkGl(a[0]):tkGl(a[0])+'–'+tkGl(a[a.length-1]);}
 
 /* ---- load standards from Supabase (public read) ---- */
-const tk={rows:{},pending:{}};
+const tk={rows:{},pending:{},all:null,allP:null};
+/* The database answers "give me every standard" in under half a second, but it takes ~45 s (and fails with HTTP 500) when asked for one subject,
+   so we fetch everything in pages once, keep it for this visit, and sort the subjects out here. */
+const TK_HDR={apikey:TK_KEY,Authorization:'Bearer '+TK_KEY};
+const TK_PAGE=1000;
+function tkFetchAll(){
+  if(tk.all)return Promise.resolve(tk.all);
+  if(tk.allP)return tk.allP;
+  const base=`${TK_URL}?select=id,code,grade_num,subject,strand,topic,kns,stmt,ord&order=grade_num.asc,ord.asc,id.asc&limit=${TK_PAGE}`;
+  const page=async off=>{
+    let err;
+    for(let t=0;t<2;t++){
+      try{const r=await fetch(`${base}&offset=${off}`,{headers:TK_HDR});if(!r.ok)throw new Error('HTTP '+r.status);const a=await r.json();if(!Array.isArray(a))throw new Error('bad data');return a;}
+      catch(e){err=e;await new Promise(res=>setTimeout(res,600));}
+    }
+    throw err;
+  };
+  return tk.allP=(async()=>{
+    let out=[];
+    /* keep asking from where the last page ended until a page comes back empty (the server may cap a page below 1000) */
+    for(let n=0;n<40;n++){const a=await page(out.length);if(!a.length)break;out=out.concat(a);}
+    const seen=new Set();
+    tk.all=out.filter(r=>{const k=String(r.id||r.code)+'|'+r.subject;if(seen.has(k))return false;seen.add(k);return true;});
+    tk.allP=null;return tk.all;
+  })().catch(e=>{tk.allP=null;throw e;});
+}
 function tkLoad(subj){
   if(tk.rows[subj])return Promise.resolve(tk.rows[subj]);
-  if(tk.pending[subj])return tk.pending[subj];
-  const u=`${TK_URL}?subject=eq.${encodeURIComponent(subj)}&select=code,grade_num,strand,topic,kns,stmt,ord&order=grade_num.asc,ord.asc&limit=1000`;
-  return tk.pending[subj]=fetch(u,{headers:{apikey:TK_KEY,Authorization:'Bearer '+TK_KEY}})
-    .then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
-    .then(a=>{
-      if(!Array.isArray(a))throw new Error('bad data');
-      tk.rows[subj]=a.map(r=>({c:String(r.code),g:+r.grade_num,s:subj,st:String(r.strand||''),tp:String(r.topic||''),k:tkTxt(r.kns),t:tkTxt(r.stmt),o:+r.ord||0}));
-      delete tk.pending[subj];return tk.rows[subj];
-    })
-    .catch(e=>{delete tk.pending[subj];throw e;});
+  return tkFetchAll().then(all=>{
+    tk.rows[subj]=all.filter(r=>r.subject===subj).map(r=>({c:String(r.code),g:+r.grade_num,s:subj,st:String(r.strand||''),tp:String(r.topic||''),k:tkTxt(r.kns),t:tkTxt(r.stmt),o:+r.ord||0}));
+    return tk.rows[subj];
+  });
 }
 const tkSubjects=subj=>subj==='*'?TK_SUBJ.map(x=>x[0]):[subj];
 const tkPool=subjs=>subjs.reduce((a,s)=>a.concat(tk.rows[s]||[]),[]);
@@ -1781,7 +1800,7 @@ async function tkRefresh(regen){
     for(const s of tkSubjects(T.subj))await tkLoad(s);
     if(tkb!==T)return;
     if(regen)tkRegen();
-  }catch(e){if(tkb!==T)return;T.err="Couldn't reach the TEKS database ("+(e&&e.message||'offline')+"). Check the internet and try again.";}
+  }catch(e){if(tkb!==T)return;const m=String(e&&e.message||'');T.err=/^HTTP \d/.test(m)?"The TEKS database had a problem ("+m+"). Wait a few seconds and tap Try again.":"Couldn't reach the TEKS database. Check the internet and try again.";}
   T.busy=false;tkRender();
 }
 function tkListHtml(){

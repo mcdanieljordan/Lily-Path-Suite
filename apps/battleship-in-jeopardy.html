@@ -1553,6 +1553,29 @@ function loadSetup(){
   }catch(e){}
   return defaultSetup();
 }
+/* ---------- auto-import groups made in Leader Locator (same browser) ---------- */
+function gradeForClass(n){n=String(n||'').trim();if(/^k/i.test(n))return 0;const m=n.match(/\d/);return m?Math.min(10,+m[0]):3;}
+function importHandoff(){
+  let h=null;try{h=JSON.parse(localStorage.getItem('lily-groups-handoff')||'null');}catch(e){}
+  if(!h||!h.classes)return false;
+  let seen={};try{seen=JSON.parse(localStorage.getItem('lily-groups-imported')||'{}')||{};}catch(e){}
+  let changed=false;
+  for(const cls of Object.keys(h.classes)){
+    const v=h.classes[cls];
+    if(!v||!Array.isArray(v.teams)||v.teams.length<2||(seen[cls]||0)>=(v.at||0))continue;
+    const name=cleanName(cls).slice(0,24)||'Class 1';
+    const old=store.get('bj3-setup-'+name,null);
+    const gr=old&&Array.isArray(old.teams)&&old.teams[0]?Math.max(0,Math.min(10,+old.teams[0].grade||0)):gradeForClass(name);
+    const teams=v.teams.slice(0,MAX_TEAMS).map(x=>({name:cleanName(x.name).slice(0,28)||'Squad',grade:gr,members:(x.members||[]).map(String)}));
+    if(!meta.list.includes(name))meta.list.push(name);
+    store.set('bj3-setup-'+name,{teams,cfg:old&&old.cfg?old.cfg:{...DEF_CFG}});
+    seen[cls]=v.at||Date.now();changed=true;
+    if(h.last===cls)meta.current=name;
+  }
+  if(changed){saveMeta();try{localStorage.setItem('lily-groups-imported',JSON.stringify(seen));}catch(e){}}
+  return changed;
+}
+importHandoff();
 let setup=loadSetup();
 const saveSetup=()=>store.set(ck('setup'),setup);
 const letterFor=(name,i)=>{const n=String(name||'').trim();if(/^[A-Za-z]{1,2}\d{1,2}$/.test(n))return n.toUpperCase();return(n[0]||String(i+1)).toUpperCase();};
@@ -2224,6 +2247,16 @@ addEventListener('pointerdown',()=>Snd.unlock(),{once:true});
 Snd.vol=typeof setup.cfg.vol==='number'?setup.cfg.vol:.85;
 Snd.load();
 fit();applyFx();renderSetup();
+function bjNote(msg){const d=document.createElement('div');d.textContent=msg;d.style.cssText='position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:99999;background:#1F9D55;color:#fff;padding:10px 18px;border-radius:12px;font:700 15px system-ui,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.35)';document.body.appendChild(d);setTimeout(()=>d.remove(),4500);}
+function refreshHandoff(){
+  if(document.body.classList.contains('playing')||!$('#modal').hidden)return;
+  if(importHandoff()){setup=loadSetup();renderSetup();bjNote('Groups from Leader Locator loaded: '+meta.current);}
+}
+window.addEventListener('focus',refreshHandoff);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshHandoff();});
+window.addEventListener('storage',e=>{if(e.key==='lily-groups-handoff')refreshHandoff();});
+if(sessionStorage.getItem('bjHandoffNote')!=='1'){try{const h=JSON.parse(localStorage.getItem('lily-groups-handoff')||'null');if(h&&h.last&&meta.current===String(h.last).slice(0,24)){sessionStorage.setItem('bjHandoffNote','1');bjNote('Using the groups from Leader Locator: '+meta.current);}}catch(e){}}
+
 (function rig(){
   const p=$('#holoBg .parts');
   if(p)for(let i=0;i<18;i++){const d=document.createElement('i');d.style.cssText=`left:${(Math.random()*100).toFixed(1)}%;--d:${(8+Math.random()*10).toFixed(1)}s;--dl:${(-Math.random()*14).toFixed(1)}s;--z:${(2+Math.random()*4).toFixed(1)}px`;p.append(d);}

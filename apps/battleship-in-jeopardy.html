@@ -479,6 +479,31 @@ html.lite #stage.d3 .tile:hover:not(:disabled){transform:none}
 #setup{position:relative;z-index:2}
 #game{z-index:2}
 
+
+/* TEKS boards */
+.cat.long b{font-size:15px!important;line-height:1.1}
+.cat.xl b{font-size:12px!important;line-height:1.1}
+.tile .tg{position:absolute;left:8px;bottom:5px;font-family:var(--body);font-size:14px;font-weight:700;letter-spacing:.04em;opacity:.8;text-shadow:none}
+.grid3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}
+@media (max-width:640px){.grid3{grid-template-columns:1fr}}
+.tkgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}
+.tkg{min-height:56px;text-align:left;padding:6px 12px;border-radius:12px;border:3px solid var(--line);background:#fff;color:#10264A;font-weight:700;font-size:17px;line-height:1.15;cursor:pointer}
+.tkg small{display:block;font-weight:600;opacity:.72;font-size:14px;margin-top:2px}
+.tkg[aria-pressed=true]{background:var(--tile);color:var(--tileInk);box-shadow:var(--tsh)}
+html[data-theme="holo"] .tkg{background:rgba(2,8,22,.6);color:#EAFDFF;border:1px solid rgba(var(--accRgb),.7);border-radius:8px}
+html[data-theme="holo"] .tkg[aria-pressed=true]{background:var(--acc);color:#04101E;box-shadow:0 0 16px rgba(var(--accRgb),.7)}
+.tkp{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.tkph{display:flex;align-items:center;justify-content:center;text-align:center;font-weight:800;font-size:13px;line-height:1.1;padding:4px;min-height:44px;border-radius:8px;background:var(--head);color:var(--headInk)}
+.tkpt{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:50px;border-radius:8px;border:1px solid var(--tline);background:var(--tile);color:var(--tileInk);font-size:14px;line-height:1.15;cursor:pointer}
+.tkpt b{font-size:17px}
+.tkpt.on{outline:3px solid #FFC857}
+.tkdet{margin-top:10px;padding:12px 14px;border-radius:12px;background:rgba(128,128,128,.16);font-size:17px;line-height:1.3}
+.tklist{max-height:320px;overflow:auto;margin-top:8px}
+.tkl{display:flex;gap:10px;align-items:flex-start;padding:8px 4px;border-bottom:1px solid rgba(128,128,128,.28);font-size:16px;line-height:1.3;cursor:pointer}
+.tkl input{width:22px;height:22px;flex:none;margin-top:2px}
+.tknote{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tknote .chip{font-size:16px;padding:4px 12px}
+.tknote p{flex-basis:100%;font-size:18px;line-height:1.25;opacity:.85}
 </style>
 </head>
 <body>
@@ -1445,6 +1470,7 @@ const TILES=CATS.length*ROWS;
 /* difficulty ladder per row: [grade offset, tier]. 100 = prerequisite from a grade below, 500 = preview of the next grade up */
 const LADDER=[[-1,1],[0,0],[0,2],[0,3],[1,1]];
 function getQuestion(ci,row,grade){
+  if(CATS[ci].tk&&CATS[ci].tk[row])return tkQuestion(CATS[ci],row);
   const key=CATS[ci].key;
   let [dg,tier]=LADDER[row];
   if(grade+dg<0){dg=0;tier=Math.min(tier,0);}
@@ -1454,12 +1480,17 @@ function getQuestion(ci,row,grade){
   return q;
 }
 function freshQuestion(ci,row,grade,avoid){
-  let q;const A=hist().asked;
+  let q,dup=true;const A=hist().asked;
   for(let i=0;i<40;i++){
     q=getQuestion(ci,row,grade);
-    if(!G.usedQ.has(q.q)&&!A[q.q]&&q.q!==avoid)break;
+    dup=G.usedQ.has(q.q)||!!A[q.q]||q.q===avoid;
+    if(!dup)break;
   }
-  G.usedQ.add(q.q);A[q.q]=Date.now();saveHist();
+  /* a TEKS tile never repeats a canned question: fall back to a teacher-judged challenge */
+  if(dup&&CATS[ci].tk&&CATS[ci].tk[row]&&!q.judged)q=tkJudged(CATS[ci],row);
+  G.usedQ.add(q.q);A[q.q]=Date.now();
+  if(q.teks)A['T:'+q.teks.c]=Date.now();
+  saveHist();
   return q;
 }
 
@@ -1557,6 +1588,7 @@ function loadSetup(){
 const ALLCATS=[{key:'math',name:'Math'},{key:'sci',name:'Science'},{key:'ela',name:'Language Arts'},{key:'hist',name:'History & Geography'},{key:'fun',name:'Bonus Trivia'}];
 const BTYPES=[['mixed','Mixed: all 5 subjects'],['math','Math'],['sci','Science'],['ela','Language Arts'],['hist','History & Geography'],['fun','Bonus Trivia'],['random','Random mix']];
 const typeLabel=k=>(BTYPES.find(x=>x[0]===k)||[0,k])[1];
+const bLabel=b=>b.type==='teks'?'TEKS · '+(b.label||'board'):typeLabel(b.type);
 const hk=()=>'bj3-hist-'+meta.current;
 let _hist=null,_histCls='';
 function hist(){
@@ -1577,12 +1609,12 @@ function colsFor(type){
 }
 function newBoardRec(type){const b={id:Math.random().toString(36).slice(2,9),type,cols:colsFor(type),created:Date.now(),tiles:{},done:false};hist().boards.push(b);saveHist();return b;}
 function useCols(b){CATS.splice(0,CATS.length,...b.cols.map(c=>({...c})));}
-function recordTile(q){const b=boardById(G.board);if(!b)return;b.tiles[S.key]={q:q.q,a:q.opts[q.ans],exp:q.exp||'',by:S.atk.name,ok:null,at:Date.now(),val:S.value};saveHist();}
+function recordTile(q){const b=boardById(G.board);if(!b)return;b.tiles[S.key]={q:q.q,a:q.judged?'Judged by the teacher':q.opts[q.ans],exp:q.exp||'',by:S.atk.name,ok:null,at:Date.now(),val:S.value,teks:q.teks?{c:q.teks.c,g:q.teks.g,t:tkCut(q.teks.t,400)}:null};saveHist();}
 function markTile(ok){const b=boardById(G.board);if(b&&S&&b.tiles[S.key]){b.tiles[S.key].ok=ok;saveHist();}}
 function peekHtml(b,k){
   const t=b&&b.tiles[k];if(!t)return'<p class="note">Nothing saved for this tile.</p>';
   const [c,r]=k.split('-').map(Number);
-  return`<div class="card" style="margin-top:10px"><div class="chips"><span class="chip solid">${esc((b.cols[c]||{}).name||'')} · ${(r+1)*100}</span><span class="chip pan">${t.ok===true?'Answered right':t.ok===false?'Missed':'Not finished'}</span></div><h3 style="margin:10px 0 6px">${esc(t.q)}</h3><p><b>Answer:</b> ${esc(t.a)}</p>${t.exp?`<p>${esc(t.exp)}</p>`:''}${t.by?`<p class="note">Asked of ${esc(t.by)}</p>`:''}</div>`;
+  return`<div class="card" style="margin-top:10px"><div class="chips"><span class="chip solid">${esc((b.cols[c]||{}).name||'')} · ${(r+1)*100}</span><span class="chip pan">${t.ok===true?'Answered right':t.ok===false?'Missed':'Not finished'}</span></div><h3 style="margin:10px 0 6px">${esc(t.q)}</h3>${t.teks?`<p class="note"><b>TEKS ${esc(t.teks.c)}</b> · Grade ${tkGl(t.teks.g)}: ${esc(t.teks.t)}</p>`:''}<p><b>Answer:</b> ${esc(t.a)}</p>${t.exp?`<p>${esc(t.exp)}</p>`:''}${t.by?`<p class="note">Asked of ${esc(t.by)}</p>`:''}</div>`;
 }
 function openBoardReview(id,k){
   const b=boardById(id);if(!b)return;
@@ -1591,13 +1623,279 @@ function openBoardReview(id,k){
     const key=c+'-'+r,t=b.tiles[key];
     g+=t?`<button type="button" class="btn sm ${t.ok===false?'bad':'sun'}" style="min-height:44px;padding:4px" data-act="bpeek" data-b="${b.id}" data-k="${key}">${(r+1)*100} ${t.ok===true?'✓':t.ok===false?'✗':'•'}</button>`:`<div style="opacity:.4;text-align:center;padding-top:10px">${(r+1)*100}</div>`;
   }
-  openModal(`<h2>${esc(typeLabel(b.type))} board · ${new Date(b.created).toLocaleDateString(undefined,{month:'short',day:'numeric'})}</h2><div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px">${g}</div><div id="rvDetail">${k?peekHtml(b,k):'<p class="note">Tap a finished tile to see its question and answer.</p>'}</div><div class="row2" style="margin-top:12px"><button class="btn" data-act="mclose">Close</button></div>`);
+  openModal(`<h2>${esc(bLabel(b))} board · ${new Date(b.created).toLocaleDateString(undefined,{month:'short',day:'numeric'})}</h2><div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px">${g}</div><div id="rvDetail">${k?peekHtml(b,k):'<p class="note">Tap a finished tile to see its question and answer.</p>'}</div>${b.type==='teks'?`<details style="margin-top:10px"><summary style="cursor:pointer;font-weight:700">Standards on this board (${b.cols.reduce((n,c)=>n+(c.tk?c.tk.length:0),0)})</summary>${b.cols.map(c=>`<h4 style="margin:10px 0 4px">${esc(c.name)}</h4>${(c.tk||[]).map(t=>`<p class="note" style="margin:2px 0"><b>${esc(t.c)}</b> · Gr ${tkGl(t.g)}: ${esc(tkCut(t.t,160))}</p>`).join('')}`).join('')}</details>`:''}<div class="row2" style="margin-top:12px"><button class="btn" data-act="mclose">Close</button></div>`);
 }
 function boardsCard(){
   const h=hist(),ty=setup.cfg.board||'mixed';
-  const rows=[...h.boards].reverse().slice(0,12).map(b=>{const n=Object.keys(b.tiles).length;return`<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:6px 0"><div><b>${esc(typeLabel(b.type))}</b> · ${new Date(b.created).toLocaleDateString(undefined,{month:'short',day:'numeric'})} · ${n}/${TILES} ${b.done?'· finished':'· in progress'}</div><div><button class="btn sm ghost" data-act="breview" data-b="${b.id}">Review</button>${b.done?'':` <button class="btn sm sun" data-act="bplay" data-b="${b.id}">Play</button>`}</div></div>`;}).join('')||'<p class="note">No boards yet. Start a game and every question is saved here.</p>';
-  return`<div class="card" style="margin-bottom:18px"><h3>Boards for ${esc(meta.current)}</h3><div class="field"><label class="lbl" for="selBoard">Board type</label><select id="selBoard">${BTYPES.map(([k,n])=>`<option value="${k}" ${k===ty?'selected':''}>${esc(n)}</option>`).join('')}</select></div><p class="note">This class never sees the same question twice, and finished tiles stay open.</p>${rows}<div style="margin-top:8px"><button class="btn sm" data-act="bnew">＋ Start a fresh board</button></div></div>`;
+  const rows=[...h.boards].reverse().slice(0,12).map(b=>{const n=Object.keys(b.tiles).length;return`<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:6px 0"><div><b>${esc(bLabel(b))}</b> · ${new Date(b.created).toLocaleDateString(undefined,{month:'short',day:'numeric'})} · ${n}/${TILES} ${b.done?'· finished':'· in progress'}</div><div><button class="btn sm ghost" data-act="breview" data-b="${b.id}">Review</button>${b.done?'':` <button class="btn sm sun" data-act="bplay" data-b="${b.id}">Play</button>`}</div></div>`;}).join('')||'<p class="note">No boards yet. Start a game and every question is saved here.</p>';
+  return`<div class="card" style="margin-bottom:18px"><h3>Boards for ${esc(meta.current)}</h3><div class="field"><label class="lbl" for="selBoard">Board type</label><select id="selBoard">${BTYPES.map(([k,n])=>`<option value="${k}" ${k===ty?'selected':''}>${esc(n)}</option>`).join('')}</select></div><p class="note">This class never sees the same question twice, and finished tiles stay open.</p>${rows}<div style="margin-top:8px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn sm" data-act="bnew">＋ Start a fresh board</button><button class="btn sm sun" data-tk="open">🎯 Build a TEKS board</button></div></div>`;
 }
+/* ============================ TEKS boards ============================ */
+const TK_URL='https://aiczpuoskwzqtzvoomll.supabase.co/rest/v1/teks_game';
+const TK_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFpY3pwdW9za3d6cXR6dm9vbWxsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4MzczNjgsImV4cCI6MjEwNDQxMzM2OH0.ttZE_4PrGb7qCJjcOKdahv4lH02JrWR4BpePsXC4gpA';
+/* [database subject, name shown, practice-question bank key or null] */
+const TK_SUBJ=[['Mathematics','Math','math'],['Science','Science','sci'],['English Language Arts and Reading','Reading & Language Arts','ela'],['Social Studies','Social Studies','hist'],
+  ['Physical Education','Physical Education',null],['Health Education','Health',null],['Technology Applications','Technology',null],['Music','Music',null],['Art','Art',null],['Theatre','Theatre',null]];
+const TK_SHORT={'Mathematics':'Math','Science':'Science','English Language Arts and Reading':'Reading','Social Studies':'Soc. Studies','Physical Education':'PE','Health Education':'Health','Technology Applications':'Tech','Music':'Music','Art':'Art','Theatre':'Theatre'};
+const TK_ABBR={'Developing and sustaining foundational language skills':'Foundational language skills','Mathematical process standards':'Math processes','Scientific and engineering practices':'Science practices',
+  'Injury and violence prevention and safety':'Safety & injury prevention','Movement patterns and movement skills':'Movement skills','Health, physical activity, and fitness':'Fitness & health',
+  'Social and emotional health':'Social & emotional','Alcohol, tobacco, and other drugs':'Alcohol, tobacco & drugs','Healthy eating and physical activity':'Healthy eating & activity',
+  'Mental health and wellness':'Mental health','Reproductive and sexual health':'Reproductive health','Data literacy, management, and representation':'Data literacy',
+  'Practical technology concepts':'Technology concepts','Creativity and innovation':'Creativity & innovation','Inquiry and research':'Inquiry & research','Expressions, equations, and relationships':'Expressions & equations'};
+const TK_GR=['K','1','2','3','4','5','6','7','8'];
+const tkGl=g=>g===0?'K':String(g);
+const tkCap=s=>s?s[0].toUpperCase()+s.slice(1):'';
+const tkAb=s=>TK_ABBR[s]||s;
+const tkBank=s=>((TK_SUBJ.find(x=>x[0]===s)||[])[2])||null;
+const tkGk=r=>r.s+'|'+r.st+'|'+r.tp;
+const tkSens=r=>/reproductive|sexual/i.test(r.st+' '+r.tp);
+function tkTxt(s){
+  s=String(s||'').replace(/\s+/g,' ').trim().replace(/[;,]\s*(and|or)?$/,'').replace(/\s+(and|or)$/,'');
+  if(!s)return'';s=s[0].toUpperCase()+s.slice(1);return/[.!?)]$/.test(s)?s:s+'.';
+}
+function tkCut(s,n){s=String(s||'');if(s.length<=n)return s;const c=s.slice(0,n),i=c.lastIndexOf(' ');return c.slice(0,i>n*.6?i:n).replace(/[\s,;:(]+$/,'')+'…';}
+function tkLab(r){const a=tkAb(r.st);return a+(r.tp&&!a.toLowerCase().includes(r.tp.toLowerCase())?' · '+tkCap(r.tp):'');}
+function tkSpan(set){const a=[...set].sort((x,y)=>x-y);return a.length===1?tkGl(a[0]):tkGl(a[0])+'–'+tkGl(a[a.length-1]);}
+
+/* ---- load standards from Supabase (public read) ---- */
+const tk={rows:{},pending:{}};
+function tkLoad(subj){
+  if(tk.rows[subj])return Promise.resolve(tk.rows[subj]);
+  if(tk.pending[subj])return tk.pending[subj];
+  const u=`${TK_URL}?subject=eq.${encodeURIComponent(subj)}&select=code,grade_num,strand,topic,kns,stmt,ord&order=grade_num.asc,ord.asc&limit=1000`;
+  return tk.pending[subj]=fetch(u,{headers:{apikey:TK_KEY,Authorization:'Bearer '+TK_KEY}})
+    .then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+    .then(a=>{
+      if(!Array.isArray(a))throw new Error('bad data');
+      tk.rows[subj]=a.map(r=>({c:String(r.code),g:+r.grade_num,s:subj,st:String(r.strand||''),tp:String(r.topic||''),k:tkTxt(r.kns),t:tkTxt(r.stmt),o:+r.ord||0}));
+      delete tk.pending[subj];return tk.rows[subj];
+    })
+    .catch(e=>{delete tk.pending[subj];throw e;});
+}
+const tkSubjects=subj=>subj==='*'?TK_SUBJ.map(x=>x[0]):[subj];
+const tkPool=subjs=>subjs.reduce((a,s)=>a.concat(tk.rows[s]||[]),[]);
+
+/* ---- build 5 columns (strands) x 5 rows (climbing grade levels) ---- */
+const tkTargets=(from,to)=>[0,1,2,3,4].map(r=>Math.round(from+(to-from)*r/4));
+function tkCol(rows,o,used,A){
+  const tg=tkTargets(o.from,o.to),slots=Array(5).fill(null);
+  rows.filter(r=>o.pins.has(r.c)).sort((a,b)=>a.g-b.g||a.o-b.o).slice(0,5).forEach(r=>{
+    let best=-1,bd=99;tg.forEach((g,i)=>{if(!slots[i]){const d=Math.abs(g-r.g);if(d<bd){bd=d;best=i;}}});
+    if(best>=0){slots[best]=r;used.add(r.c);}
+  });
+  for(let i=0;i<5;i++){
+    if(slots[i])continue;
+    let cand=rows.filter(r=>!used.has(r.c));
+    if(!cand.length)cand=rows.slice();
+    const md=Math.min(...cand.map(r=>Math.abs(r.g-tg[i])));
+    cand=cand.filter(r=>Math.abs(r.g-tg[i])===md);
+    const fresh=cand.filter(r=>!A['T:'+r.c]);
+    const r=pick(fresh.length?fresh:cand);
+    slots[i]=r;used.add(r.c);
+  }
+  slots.sort((a,b)=>a.g-b.g||a.o-b.o);
+  const r0=rows[0];
+  return{key:tkBank(r0.s)||'tk',name:(o.any?TK_SHORT[r0.s]+': ':'')+tkLab(r0),
+    tk:slots.map(r=>({c:r.c,g:r.g,s:r.s,t:tkCut(r.t,600),k:tkCut(r.k,300)})),qm:o.judge?'judge':'auto'};
+}
+function tkGen(pool,o){
+  const inR=pool.filter(r=>r.g>=o.from&&r.g<=o.to),groups=new Map();
+  inR.forEach(r=>{const k=tkGk(r);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(r);});
+  if(!groups.size)return null;
+  const A=hist().asked;
+  const keys=o.picks.filter(k=>groups.has(k)).slice(0,5);
+  const span=k=>new Set(groups.get(k).map(r=>r.g)).size+Math.random()*2+(groups.get(k).length>=5?1:0);
+  let rest=[...groups.keys()].filter(k=>!keys.includes(k)&&!tkSens(groups.get(k)[0]));
+  rest=o.any?shuffle(rest):rest.sort((a,b)=>span(b)-span(a));
+  const cnt={};keys.forEach(k=>{const s=groups.get(k)[0].s;cnt[s]=(cnt[s]||0)+1;});
+  const later=[];
+  for(const k of rest){
+    if(keys.length>=5)break;
+    const s=groups.get(k)[0].s;
+    if(o.any&&(cnt[s]||0)>=2){later.push(k);continue;}
+    keys.push(k);cnt[s]=(cnt[s]||0)+1;
+  }
+  for(const k of later){if(keys.length>=5)break;keys.push(k);}
+  for(let i=0;keys.length<5&&keys.length;i++)keys.push(keys[i%keys.length]);
+  if(!keys.length)return null;
+  const used=new Set();
+  return keys.map(k=>tkCol(groups.get(k),o,used,A));
+}
+function tkLabel(o){
+  const s=o.subj==='*'?'Mixed subjects':(TK_SUBJ.find(x=>x[0]===o.subj)||[0,o.subj])[1];
+  return s+' · '+(o.from===o.to?'Grade '+tkGl(o.from):'Grades '+tkGl(o.from)+'–'+tkGl(o.to));
+}
+function newTeksRec(cols,label,cfg){
+  const b={id:Math.random().toString(36).slice(2,9),type:'teks',label,cfg,cols,created:Date.now(),tiles:{},done:false};
+  hist().boards.push(b);saveHist();return b;
+}
+/* the next board after a cleared one: fresh standards from the same settings if they are loaded, else the same columns */
+function tkNextBoard(ob){
+  const c=ob.cfg;let cols=null;
+  try{
+    if(c&&tkSubjects(c.subj).every(s=>tk.rows[s]))cols=tkGen(tkPool(tkSubjects(c.subj)),{subj:c.subj,from:c.from,to:c.to,picks:c.picks||[],pins:new Set(),judge:!!c.judge,any:c.subj==='*'});
+  }catch(e){cols=null;}
+  return newTeksRec(cols||ob.cols.map(x=>({...x})),ob.label,c);
+}
+
+/* ---- questions for a TEKS tile ---- */
+function tkJudged(col,row){
+  const t=col.tk[row];
+  return{q:'Squad challenge: '+tkCut(t.t,330),opts:['Got it!','Not yet'],ans:0,judged:true,grade:t.g,row,
+    exp:'TEKS '+t.c+' (Grade '+tkGl(t.g)+')'+(t.k?'. '+tkCut(t.k,200):'.'),teks:{c:t.c,g:t.g,s:t.s,t:t.t}};
+}
+function tkQuestion(col,row){
+  const t=col.tk[row],bk=tkBank(t.s);
+  if(!bk||col.qm==='judge')return tkJudged(col,row);
+  const g=Math.max(0,Math.min(10,t.g));
+  const q=bk==='math'?build(buildMath(g,[0,1,2,3,3][row])):build(dec(BANK[g][bk][row%4]));
+  q.grade=g;q.row=row;q.teks={c:t.c,g:t.g,s:t.s,t:t.t};
+  return q;
+}
+function tkNoteHtml(q){
+  const t=q.teks;
+  return`<div class="tknote"><span class="chip pan">TEKS ${esc(t.c)}</span><span class="chip pan">Grade ${tkGl(t.g)}</span><span class="chip pan">${q.judged?'Teacher judges':'Practice question'}</span>${q.judged?'':`<p>${esc(tkCut(t.t,230))}</p>`}</div>`;
+}
+
+/* ---- the builder window ---- */
+let tkb=null;
+function openTeksBuilder(){
+  const cg=Math.min(8,gradeForClass(meta.current));
+  tkb={subj:'Physical Education',from:Math.max(0,cg-1),to:Math.min(8,cg+1),picks:[],pins:new Set(),judge:false,draft:null,err:'',busy:true,q:'',more:false,sel:null,cg,msg:''};
+  openModal('<div id="tkRoot"></div>');
+  tkRefresh(true);
+}
+const tkOpts=()=>({subj:tkb.subj,from:tkb.from,to:tkb.to,picks:tkb.picks,pins:tkb.pins,judge:tkb.judge,any:tkb.subj==='*'});
+function tkRegen(){
+  const T=tkb,pool=tkPool(tkSubjects(T.subj));
+  const keys=new Set(pool.filter(r=>r.g>=T.from&&r.g<=T.to).map(tkGk));
+  T.picks=T.picks.filter(k=>keys.has(k));
+  const codes=new Set(pool.filter(r=>r.g>=T.from&&r.g<=T.to&&T.picks.includes(tkGk(r))).map(r=>r.c));
+  T.pins=new Set([...T.pins].filter(c=>codes.has(c)));
+  T.draft=tkGen(pool,tkOpts());T.sel=null;
+}
+async function tkRefresh(regen){
+  const T=tkb;if(!T)return;
+  T.busy=true;T.err='';tkRender();
+  try{
+    for(const s of tkSubjects(T.subj))await tkLoad(s);
+    if(tkb!==T)return;
+    if(regen)tkRegen();
+  }catch(e){if(tkb!==T)return;T.err="Couldn't reach the TEKS database ("+(e&&e.message||'offline')+"). Check the internet and try again.";}
+  T.busy=false;tkRender();
+}
+function tkListHtml(){
+  const T=tkb,q=T.q.trim().toLowerCase();
+  const pool=tkPool(tkSubjects(T.subj)).filter(r=>r.g>=T.from&&r.g<=T.to);
+  let rows;
+  if(q.length>=2)rows=pool.filter(r=>(r.c+' '+r.t+' '+r.st+' '+r.tp).toLowerCase().includes(q)).slice(0,60);
+  else rows=pool.filter(r=>T.picks.includes(tkGk(r))).sort((a,b)=>T.picks.indexOf(tkGk(a))-T.picks.indexOf(tkGk(b))||a.g-b.g||a.o-b.o).slice(0,250);
+  if(!rows.length)return`<p class="note">${q.length>=2?'Nothing matches that search.':'Tap a strand above, or search by a word or a TEKS code.'}</p>`;
+  let h='',last='';
+  rows.forEach(r=>{
+    const k=tkGk(r);
+    if(q.length<2&&k!==last){last=k;h+=`<h4 style="margin:12px 0 4px">${esc(tkLab(r))}</h4>`;}
+    h+=`<label class="tkl"><input type="checkbox" data-tkf="pin" value="${esc(r.c)}" ${T.pins.has(r.c)?'checked':''}><span><b>${esc(r.c)}</b> · Grade ${tkGl(r.g)}${q.length>=2?` · <i>${esc(tkLab(r))}</i>`:''}<br>${esc(tkCut(r.t,230))}</span></label>`;
+  });
+  return h;
+}
+function tkRender(){
+  const root=$('#tkRoot');if(!root||!tkb)return;
+  const T=tkb,sh=$('#sheet'),top=sh.scrollTop;
+  const subjOpts=[['*','Any subject (random mix)']].concat(TK_SUBJ.map(x=>[x[0],x[1]]));
+  const gOpts=cur=>TK_GR.map((g,i)=>`<option value="${i}" ${i===cur?'selected':''}>${i===0?'Kindergarten':'Grade '+g}</option>`).join('');
+  const pool=tkPool(tkSubjects(T.subj)).filter(r=>r.g>=T.from&&r.g<=T.to);
+  const gm=new Map();
+  pool.forEach(r=>{const k=tkGk(r);if(!gm.has(k))gm.set(k,{k,lab:tkLab(r),sens:tkSens(r),n:0,gs:new Set()});const g=gm.get(k);g.n++;g.gs.add(r.g);});
+  const groups=[...gm.values()].sort((a,b)=>b.gs.size-a.gs.size||b.n-a.n);
+  const presets=[[T.cg,T.cg,'My class (Gr '+tkGl(T.cg)+')'],[0,2,'K–2'],[3,5,'3–5'],[0,5,'K–5'],[6,8,'6–8']];
+  const noBank=T.subj==='*'||!tkBank(T.subj);
+  let body='';
+  if(T.err)body=`<p class="note" role="alert" style="font-size:18px">${esc(T.err)}</p><div class="row2"><button class="btn" data-tk="retry">Try again</button></div>`;
+  else if(T.busy)body='<p class="note" style="font-size:20px">Loading TEKS…</p>';
+  else{
+    const strands=T.subj==='*'?'<p class="note">Mix mode picks strands at random from every subject. Use the search box below to pin specific TEKS.</p>'
+      :`<div class="tkgrid">${groups.map(g=>`<button type="button" class="tkg" data-tk="grp" data-k="${esc(g.k)}" aria-pressed="${T.picks.includes(g.k)}">${esc(g.lab)}<small>${g.n} TEKS · Grade ${tkSpan(g.gs)}${g.sens?' · adult-guided topic':''}</small></button>`).join('')||'<p class="note">No TEKS for this subject in that grade range.</p>'}</div>`;
+    const d=T.draft;
+    let prev='<p class="note">No TEKS found for that subject and grade range. Try a wider range.</p>';
+    if(d){
+      prev=`<div class="tkp">${d.map(c=>`<div class="tkph">${esc(c.name)}</div>`).join('')}${[0,1,2,3,4].map(r=>d.map((c,ci)=>{const t=c.tk[r];return`<button type="button" class="tkpt${T.sel===ci+'-'+r?' on':''}" data-tk="peek" data-k="${ci}-${r}" title="${esc(t.c)}"><b>${(r+1)*100}</b><span>Gr ${tkGl(t.g)}${T.pins.has(t.c)?' 📌':''}</span></button>`;}).join('')).join('')}</div>`;
+      if(T.sel){const [ci,r]=T.sel.split('-').map(Number),t=d[ci]&&d[ci].tk[r];
+        if(t)prev+=`<div class="tkdet"><b>TEKS ${esc(t.c)}</b> · Grade ${tkGl(t.g)}<br>${esc(t.t)}${t.k?`<br><span class="note">${esc(t.k)}</span>`:''}</div>`;}
+      else prev+='<p class="note" style="margin-top:6px">Tap any tile to read its standard. Rows climb in grade level from 100 to 500.</p>';
+    }
+    body=`<div class="field"><span class="lbl">Strands (these become the columns)</span>${strands}
+        <p class="note" style="margin-top:6px">${T.subj==='*'?'':T.picks.length?`${T.picks.length} of 5 picked. The rest are filled in randomly.`:'None picked, so all 5 columns are random. Tap up to 5 to choose your own.'}</p></div>
+      <div class="field"><span class="lbl">Your board</span>${prev}</div>
+      <div class="field"><span class="lbl">Questions</span><div class="seg" role="group"><button type="button" data-tk="qm" data-v="auto" aria-pressed="${!T.judge}">Practice questions when available</button><button type="button" data-tk="qm" data-v="judge" aria-pressed="${T.judge}">Teacher-judged challenges</button></div>
+        <p class="note" style="margin-top:6px">${noBank&&!T.judge?'This subject has no practice-question bank yet, so these tiles are teacher-judged challenges built from the standard.':'Practice questions match the subject and grade level. Every tile is tagged with its TEKS.'}</p></div>
+      <div class="field"><button type="button" class="btn sm ghost" data-tk="more">${T.more?'Hide':'Choose specific'} TEKS…</button>
+        ${T.more?`<div style="margin-top:10px"><label class="lbl" for="tkQ">Search all TEKS in this range</label><input type="text" id="tkQ" placeholder="Example: fractions, throw, 116.15" value="${esc(T.q)}" autocomplete="off"><div id="tkList" class="tklist">${tkListHtml()}</div></div>`:''}</div>`;
+  }
+  root.innerHTML=`<h2>TEKS board builder</h2>
+    <p class="note" style="margin-bottom:12px">Similar TEKS are grouped into strands. Each column is one strand and the rows climb through the grade levels you pick.</p>
+    <div class="grid3"><div class="field"><label class="lbl" for="tkSubj">Subject</label><select id="tkSubj" data-tkf="subj">${subjOpts.map(([v,n])=>`<option value="${esc(v)}" ${v===T.subj?'selected':''}>${esc(n)}</option>`).join('')}</select></div>
+      <div class="field"><label class="lbl" for="tkFrom">From</label><select id="tkFrom" data-tkf="from">${gOpts(T.from)}</select></div>
+      <div class="field"><label class="lbl" for="tkTo">To</label><select id="tkTo" data-tkf="to">${gOpts(T.to)}</select></div></div>
+    <div class="chips" style="margin-bottom:14px">${presets.map(([a,b,n])=>`<button type="button" class="btn sm ghost" data-tk="range" data-v="${a}-${b}">${esc(n)}</button>`).join('')}</div>
+    ${body}
+    ${T.msg?`<p class="note" role="status">${esc(T.msg)}</p>`:''}
+    <div class="row2" style="margin-top:14px"><button class="btn sun" data-tk="reroll" ${T.busy||T.err?'disabled':''}>🎲 Reroll</button><button class="btn" data-tk="build" ${T.draft&&!T.busy?'':'disabled'}>Save board</button><button class="btn" data-tk="play" ${T.draft&&!T.busy&&setup.teams.length>=2?'':'disabled'}>Build &amp; play now</button><button class="btn ghost" data-act="mclose">Close</button></div>`;
+  sh.scrollTop=top;
+}
+function tkBuild(play){
+  const T=tkb;if(!T||!T.draft)return;
+  const b=newTeksRec(T.draft.map(c=>({...c,qm:T.judge?'judge':'auto'})),tkLabel(T),{subj:T.subj,from:T.from,to:T.to,picks:T.picks.slice(),judge:T.judge});
+  tkb=null;closeModal();
+  if(play&&setup.teams.length>=2){startGame({boardId:b.id});return;}
+  renderSetup();bjNote('TEKS board saved. Press Play on it below.');
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-tk]');if(!b||b.disabled)return;
+  const a=b.dataset.tk;
+  if(a==='open'){openTeksBuilder();return;}
+  const T=tkb;if(!T)return;
+  if(a==='range'){const [x,y]=b.dataset.v.split('-').map(Number);T.from=x;T.to=y;tkRegen();tkRender();}
+  else if(a==='grp'){
+    const k=b.dataset.k,i=T.picks.indexOf(k);
+    if(i>=0){T.picks.splice(i,1);T.pins=new Set([...T.pins].filter(c=>{const r=tkPool(tkSubjects(T.subj)).find(x=>x.c===c);return r&&tkGk(r)!==k;}));}
+    else if(T.picks.length>=5){T.msg='Five strands is the most a board holds. Tap one to remove it first.';tkRender();return;}
+    else T.picks.push(k);
+    T.msg='';tkRegen();tkRender();
+  }
+  else if(a==='reroll'){T.msg='';tkRegen();tkRender();}
+  else if(a==='qm'){T.judge=b.dataset.v==='judge';if(T.draft)T.draft.forEach(c=>{c.qm=T.judge?'judge':'auto';});tkRender();}
+  else if(a==='peek'){T.sel=T.sel===b.dataset.k?null:b.dataset.k;tkRender();}
+  else if(a==='more'){T.more=!T.more;tkRender();}
+  else if(a==='retry'){tkRefresh(true);}
+  else if(a==='build')tkBuild(false);
+  else if(a==='play')tkBuild(true);
+});
+document.addEventListener('change',e=>{
+  const f=e.target.dataset&&e.target.dataset.tkf;if(!f||!tkb)return;
+  const T=tkb;
+  if(f==='subj'){T.subj=e.target.value;T.picks=[];T.pins=new Set();T.q='';T.msg='';T.draft=null;tkRefresh(true);}
+  else if(f==='from'){T.from=+e.target.value;if(T.to<T.from)T.to=T.from;tkRegen();tkRender();}
+  else if(f==='to'){T.to=+e.target.value;if(T.from>T.to)T.from=T.to;tkRegen();tkRender();}
+  else if(f==='pin'){
+    const code=e.target.value,r=tkPool(tkSubjects(T.subj)).find(x=>x.c===code);if(!r)return;
+    const k=tkGk(r);
+    if(e.target.checked){
+      if(!T.picks.includes(k)){
+        if(T.picks.length>=5){e.target.checked=false;T.msg='Five strands is the most a board holds. Remove one first.';tkRender();return;}
+        T.picks.push(k);
+      }
+      T.pins.add(code);
+    }else T.pins.delete(code);
+    T.msg='';
+    const keep=T.q;tkRegen();T.q=keep;tkRender();
+  }
+});
+document.addEventListener('input',e=>{
+  if(e.target.id!=='tkQ'||!tkb)return;
+  tkb.q=e.target.value;const l=$('#tkList');if(l)l.innerHTML=tkListHtml();
+});
+
 /* ---------- follow the class picked in Ribbit Rabbit / Leader Locator ---------- */
 const nmC=s=>String(s||'').toLowerCase().replace(/\(synced\)/g,'').replace(/[^a-z0-9]/g,'');
 let _ccAt=0;
@@ -1896,10 +2194,10 @@ function leftHtml(t){
     <div class="cap" style="margin-top:8px">Fleet</div><div style="display:grid;gap:8px">${shipsHtml(t)}</div></aside>`;
 }
 function boardHtml(){
-  let h=CATS.map(c=>`<div class="cat"><b>${esc(c.name)}</b></div>`).join('');
+  let h=CATS.map(c=>`<div class="cat${c.name.length>46?' xl':c.name.length>26?' long':''}" title="${esc(c.name)}"><b>${esc(c.name)}</b></div>`).join('');
   for(let r=0;r<ROWS;r++)for(let c=0;c<CATS.length;c++){
     const k=c+'-'+r,used=G.used.has(k),surge=G.surge===k&&!used;
-    h+=`<button type="button" class="tile${used?' used':''}${S&&!used?' lock':''}${surge?' surge':''}" style="--i:${r*CATS.length+c}" data-act="${used?'peek':'tile'}" data-ci="${c}" data-r="${r}" ${!used&&(G.over||S)?'disabled':''} aria-label="${esc(CATS[c].name)}, ${(r+1)*100} points${used?', already answered, tap to see the question':surge?', power surge':''}">${used?ICON.check:(r+1)*100}${surge?`<span class="bolt">${ICON.bolt}</span>`:''}</button>`;
+    h+=`<button type="button" class="tile${used?' used':''}${S&&!used?' lock':''}${surge?' surge':''}" style="--i:${r*CATS.length+c}" data-act="${used?'peek':'tile'}" data-ci="${c}" data-r="${r}" ${!used&&(G.over||S)?'disabled':''} aria-label="${esc(CATS[c].name)}, ${(r+1)*100} points${used?', already answered, tap to see the question':surge?', power surge':''}">${used?ICON.check:(r+1)*100}${CATS[c].tk&&CATS[c].tk[r]?`<span class="tg">Gr ${tkGl(CATS[c].tk[r].g)}</span>`:''}${surge?`<span class="bolt">${ICON.bolt}</span>`:''}</button>`;
   }
   return`<section class="board">${h}</section>`;
 }
@@ -1980,7 +2278,7 @@ function strikeHtml(){
   const top=topBar(`${esc(STEP_NAMES[S.step])}`);
   let sub='',left='',mid='',right='';
   const timer=G.cfg.timer;
-  const qMid=`<div class="qtext" id="qtext"></div><div class="opts" id="qopts"></div><div id="fbHost"></div>`;
+  const qMid=`<div class="qtext" id="qtext"></div><div class="opts" id="qopts"></div><div id="tkNote"></div><div id="fbHost"></div>`;
   if(S.step==='target'){
     const foes=G.teams.filter(t=>t!==atk&&t.alive);
     sub=`${esc(memberUp(atk)?memberUp(atk)+', ':'')}choose who to fire on`;
@@ -2029,6 +2327,7 @@ function strikeHtml(){
 /* ---------- one question UI, used for ammo and repair ---------- */
 function mountQuestion(q,{seconds,contLabel,onDone}){
   $('#qtext').textContent=q.q;
+  {const tn=$('#tkNote');if(tn&&q.teks)tn.innerHTML=tkNoteHtml(q);}
   if(q.q.length<=22&&/[=+×÷−%]/.test(q.q))$('#qtext').classList.add('eq');
   const host=$('#qopts');let answered=false,elapsed=0,extra=0,paused=false,lastT=performance.now(),lastSec=-1;
   const frac=()=>seconds?Math.min(1,elapsed/((seconds+extra)*1000)):1;
@@ -2039,8 +2338,8 @@ function mountQuestion(q,{seconds,contLabel,onDone}){
     btns.forEach((b,k)=>{b.disabled=true;if(k===q.ans)b.classList.add('ok');else if(k===i)b.classList.add('no');else b.classList.add('dim');});
     if(ok){Snd.play('correct');const [x,y]=FX.center(btns[q.ans]);FX.confetti(x,y,28);}else{Snd.play('wrong');FX.shake($('#stage'));}
     const fb=el('div','fb '+(ok?'ok':'no'));
-    fb.innerHTML=`<h3>${ok?'Correct!':timedOut?'Time ran out':'Not quite'}</h3><p></p>`;
-    $('p',fb).textContent=(ok?'':`The answer is ${q.opts[q.ans]}. `)+q.exp;
+    fb.innerHTML=`<h3>${q.judged?(ok?'Nailed it!':timedOut?'Time ran out':'Not yet'):ok?'Correct!':timedOut?'Time ran out':'Not quite'}</h3><p></p>`;
+    $('p',fb).textContent=q.judged?(q.exp||''):(ok?'':`The answer is ${q.opts[q.ans]}. `)+q.exp;
     const go=el('button','btn lg block',contLabel(ok,f));go.type='button';go.style.marginTop='10px';
     fb.append(go);$('#fbHost').append(fb);go.focus({preventScroll:true});
     go.onclick=()=>{Snd.play('click');onDone(ok,f);};
@@ -2190,7 +2489,7 @@ function finishStrike(){
     {const ob=boardById(G.board);if(ob&&!ob.done){ob.done=true;saveHist();}}
     const lim=G.cfg.end==='board'?1:G.cfg.end==='two'?2:Infinity;
     if(G.round>=lim){renderGame();endGame('board');return;}
-    {const ob=boardById(G.board),nb=newBoardRec(ob?ob.type:'mixed');G.board=nb.id;useCols(nb);}
+    {const ob=boardById(G.board),nb=ob&&ob.type==='teks'?tkNextBoard(ob):newBoardRec(ob?ob.type:'mixed');G.board=nb.id;useCols(nb);}
     G.used.clear();G.round++;newSurge();
     log(`Board ${G.round}! Every tile is back.`,'info');
   }

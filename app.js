@@ -90,9 +90,30 @@ if (S.seedV < 8) { const fresh = seedLib(); for (const id of ['a0', 'a1', 'a2'])
 if (S.seedV < 9) { const o = S.lib.find(i => i.id === 'a8'), n = seedLib().find(i => i.id === 'a8'); if (o && n && /Battleship-in-Jeopardy\/?$/i.test(o.url || '')) { o.url = n.url; o.local = n.local; } S.seedV = 9; }
 if (!S.at) S.at = FRESH ? 0 : Date.now();
 let syncSoon = () => {};
-const save = () => { S.at = Date.now(); try { localStorage.setItem(KEY, JSON.stringify({ ...S, lib: S.lib.filter(i => !i.blob && !i.temp) })); } catch (e) {} syncSoon(); };
+const save = () => { S.at = Date.now(); try { localStorage.setItem(KEY, JSON.stringify({ ...S, wk: undefined, lib: S.lib.filter(i => !i.blob && !i.temp) })); } catch (e) {} syncSoon(); };
 const item = id => S.lib.find(i => i.id === id);
-const slot = (pid, day = S.day) => ((S.plan[day] ||= {})[pid] ||= { cls: '', items: [] });
+/* weeks: each Monday-dated week keeps its own plan, so past lessons are never overwritten */
+const pad2 = n => String(n).padStart(2, '0');
+const isoDate = d => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+const mondayOf = d => { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return isoDate(x); };
+const parseISO = k => { const [y, m, d] = k.split('-').map(Number); return new Date(y, m - 1, d); };
+const shiftWeek = (k, n) => { const d = parseISO(k); d.setDate(d.getDate() + 7 * n); return isoDate(d); };
+const dayDate = (wk, day) => { const d = parseISO(wk); d.setDate(d.getDate() + DAYS.findIndex(x => x[0] === day)); return d; };
+function migrateWeeks(o) {
+  o.weeks ||= {};
+  if (o.plan) { const k = mondayOf(new Date()); o.weeks[k] ||= o.plan; delete o.plan; }
+  return o;
+}
+migrateWeeks(S); S.wk = mondayOf(new Date());
+function prevCls(pid, day, wk) {
+  const ks = Object.keys(S.weeks).filter(k => k < wk).sort();
+  for (let i = ks.length - 1; i >= 0; i--) { const c = ((S.weeks[ks[i]][day] || {})[pid]); if (c && c.cls) return c.cls; }
+  return '';
+}
+const slot = (pid, day = S.day, wk = S.wk) => {
+  const w = ((S.weeks[wk] ||= {})[day] ||= {});
+  return w[pid] ||= { cls: prevCls(pid, day, wk), items: [] };
+};
 
 /* ---------------- helpers ---------------- */
 const EXT = {
@@ -164,7 +185,7 @@ async function editItem(id) {
   if (!r) return;
   if (r === 'delete') {
     S.lib = S.lib.filter(i => i.id !== id);
-    for (const d in S.plan) for (const p in S.plan[d]) S.plan[d][p].items = S.plan[d][p].items.filter(c => c.id !== id);
+    for (const w in S.weeks) for (const d in S.weeks[w]) for (const p in S.weeks[w][d]) S.weeks[w][d][p].items = S.weeks[w][d][p].items.filter(c => c.id !== id);
     closeTab(id);
   } else {
     it.name = r.name || it.name;
@@ -220,6 +241,7 @@ function periodHTML(p, i) {
     <button class="del" data-act="delp" title="Remove period">✕</button>
   </div>`;
 }
+const dayHas = d => Object.values((S.weeks[S.wk] || {})[d] || {}).some(c => c.items && c.items.length);
 function greet() { const h = new Date().getHours(); return h < 12 ? 'Good morning ☀️' : h < 17 ? 'Good afternoon 🌤️' : 'Good evening 🌙'; }
 function renderToday() {
   const tools = S.lib.filter(i => i.type === 'tool' || i.type === 'page');
@@ -262,8 +284,11 @@ function renderToday() {
   </aside>
   <div class="day">
     <div class="hero">
-      <div class="hero-t"><span class="hi">${greet()}</span><h1>${dayName}</h1><span class="date">${new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}</span></div>
-      <div class="seg">${DAYS.map(([k, n]) => `<button data-act="day" data-d="${k}" class="${k === S.day ? 'on' : ''}">${n}</button>`).join('')}</div>
+      <div class="hero-t"><span class="hi">${greet()}</span><h1>${dayName}</h1><span class="date">${dayDate(S.wk, S.day).toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</span></div>
+      <div class="hero-r">
+        <div class="wknav"><button data-act="wk" data-n="-1" title="Previous week">◀</button><span>Week of ${parseISO(S.wk).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span><button data-act="wk" data-n="1" title="Next week">▶</button>${S.wk === mondayOf(new Date()) ? '' : '<button data-act="wk0">This week</button>'}<button data-act="export" title="Save this week as a file">Export week</button></div>
+        <div class="seg">${DAYS.map(([k, n]) => `<button data-act="day" data-d="${k}" class="${k === S.day ? 'on' : ''}">${n} ${dayDate(S.wk, k).getDate()}${dayHas(k) ? ' •' : ''}</button>`).join('')}</div>
+      </div>
     </div>
     ${S.periods.map((p, i) => periodHTML(p, i)).join('')}
     <button class="addp" data-act="addp">+ Add period</button>
@@ -271,6 +296,18 @@ function renderToday() {
   markNow();
 }
 
+function exportWeek() {
+  const wk = S.wk, w = S.weeks[wk] || {};
+  const days = DAYS.map(([k, n]) => ({
+    day: n, date: isoDate(dayDate(wk, k)),
+    periods: S.periods.map(p => { const c = (w[k] || {})[p.id]; return { period: p.label, time: p.time, class: c ? c.cls : '', lessons: c ? c.items.map(i => item(i.id)).filter(Boolean).map(it => ({ name: it.name, type: it.type, link: it.url || '' })) : [] }; }).filter(p => p.lessons.length),
+  }));
+  const out = { app: 'Lily Path', weekOf: wk, exported: new Date().toISOString(), days };
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' }));
+  a.download = `lily-path-week-${wk}.json`; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000); toast('Week exported');
+}
 function parseRange(t) {
   const m = String(t).match(/(\d{1,2})[:.](\d{2})\s*(am|pm)?\s*[–\-—to]+\s*(\d{1,2})[:.](\d{2})\s*(am|pm)?/i);
   if (!m) return null;
@@ -279,7 +316,7 @@ function parseRange(t) {
 }
 function markNow() {
   const d = new Date(), mins = d.getHours() * 60 + d.getMinutes();
-  const isToday = d.getDay() >= 1 && d.getDay() <= 5 && DAYS[d.getDay() - 1][0] === S.day;
+  const isToday = S.wk === mondayOf(d) && d.getDay() >= 1 && d.getDay() <= 5 && DAYS[d.getDay() - 1][0] === S.day;
   S.periods.forEach(p => {
     const el = $(`.period[data-pid="${p.id}"]`); if (!el) return;
     const r = parseRange(p.time);
@@ -319,6 +356,9 @@ todayEl.addEventListener('click', e => {
   if (act === 'rm') { e.stopPropagation(); slot(pEl.dataset.pid).items.splice(+host.dataset.chip, 1); save(); return renderToday(); }
   if (act === 'open') return openItem(host.dataset.lib || host.dataset.id);
   if (act === 'day') { S.day = a.dataset.d; save(); return renderToday(); }
+  if (act === 'wk') { S.wk = shiftWeek(S.wk, +a.dataset.n); return renderToday(); }
+  if (act === 'wk0') { S.wk = mondayOf(new Date()); return renderToday(); }
+  if (act === 'export') return exportWeek();
   if (act === 'add-tool') return addLink('tool');
   if (act === 'add-link') return addLink('link');
   if (act === 'add-ai') return addLink('ai');
@@ -808,7 +848,7 @@ async function syCall(fn, arg) {
   if (IS_APP) return withTimeout(sy.el.executeJavaScript(`(async()=>{await window.__ready;return await window.lilySync.${fn}(${arg === undefined ? '' : JSON.stringify(arg)});})()`), 30000);
   const w = sy.el.contentWindow; await w.__ready; return w.lilySync[fn](arg);
 }
-const syPayload = () => { const o = { ...S, lib: S.lib.filter(i => !i.path && !i.blob && !i.temp) }; delete o.day; return o; };
+const syPayload = () => { const o = { ...S, lib: S.lib.filter(i => !i.path && !i.blob && !i.temp) }; delete o.day; delete o.wk; return o; };
 async function syPush() {
   if (!sy.in) return;
   try { await syCall('push', syPayload()); syState('ok', 'Synced'); } catch (e) { syState('err', 'Sync failed: ' + e.message); }
@@ -818,7 +858,7 @@ function applyRemote(r) {
   const keep = S.lib.filter(i => i.path || i.blob || i.temp);
   const ids = new Set((r.lib || []).map(i => i.id));
   r.lib = (r.lib || []).concat(keep.filter(i => !ids.has(i.id)));
-  r.day = S.day;
+  r.day = S.day; migrateWeeks(r); r.wk = S.wk;
   S = r;
   try { localStorage.setItem(KEY, JSON.stringify({ ...S, lib: S.lib.filter(i => !i.blob && !i.temp) })); } catch (e) {}
   for (const o of [...open]) if (!item(o.id)) closeTab(o.id);

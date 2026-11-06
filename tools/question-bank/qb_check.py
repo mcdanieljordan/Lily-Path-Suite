@@ -39,7 +39,7 @@ def check_files(paths, strict_codes=None):
                 sv = [sum(F(t) for t in str(x).split(' + ')) for x in o]
                 if len(set(sv)) != len(sv): bad.append((where, f"sum options with the same value {o}")); continue
             right = str(o[a]).strip()
-            if len(norm(right)) >= 4 and norm(right) in norm(it['q']) and not re.fullmatch(r'[\d.,/$%\s-]+', right):
+            if len(norm(right)) >= 4 and norm(right) in norm(it['q']) and not re.fullmatch(r'[\d.,/$%\s\-\u2212:\u00f7\u00d7+=()^<>\u00b0\u00b2\u00b3a-z]{0,2}[\d.,/$%\s\-\u2212:\u00f7\u00d7+=()^<>\u00b0\u00b2\u00b3]*', right):
                 bad.append((where, f"answer given away in the question: {right!r}")); continue
             if re.search(r'\b(all|none) of the above\b|\bboth [a-d] and [a-d]\b', ' '.join(map(str, o)), re.I):
                 bad.append((where, "no 'all/none of the above' style options")); continue

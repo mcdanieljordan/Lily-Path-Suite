@@ -302,7 +302,17 @@ function exportWeek() {
     day: n, date: isoDate(dayDate(wk, k)),
     periods: S.periods.map(p => { const c = (w[k] || {})[p.id]; return { period: p.label, time: p.time, class: c ? c.cls : '', lessons: c ? c.items.map(i => item(i.id)).filter(Boolean).map(it => ({ name: it.name, type: it.type, link: it.url || '' })) : [] }; }).filter(p => p.lessons.length),
   }));
-  const out = { app: 'Lily Path', weekOf: wk, exported: new Date().toISOString(), days };
+  /* class totals from Ribbit Rabbit: counts only, no student names or IDs */
+  let classes = [];
+  try {
+    const sm = JSON.parse(localStorage.getItem('lily-week-summary') || 'null');
+    const from = isoDate(dayDate(wk, 'mon')), to = isoDate(dayDate(wk, 'fri'));
+    if (sm) classes = sm.classes.map(c => {
+      const ds = c.days.filter(d => d.date >= from && d.date <= to);
+      return { class: c.name, students: c.students, daysTaught: ds.length, present: ds.reduce((a, d) => a + d.present, 0), absent: ds.reduce((a, d) => a + d.absent, 0), points: ds.reduce((a, d) => a + d.points, 0), byDay: ds };
+    }).filter(c => c.daysTaught);
+  } catch (e) {}
+  const out = { app: 'Lily Path', weekOf: wk, exported: new Date().toISOString(), days, classAttendanceAndPoints: classes };
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' }));
   a.download = `lily-path-week-${wk}.json`; document.body.appendChild(a); a.click(); a.remove();

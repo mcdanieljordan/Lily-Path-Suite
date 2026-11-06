@@ -5640,6 +5640,28 @@ function classWeeks(rid){
   for(const b of pbBonuses[rid]||[]){const wk=dMonday(b.date),w=m[wk]||(m[wk]={total:0,students:{},days:new Set()});w.total+=b.pts}
   return m;
 }
+/* Lily Path bridge: publish COUNTS ONLY (no student names or IDs) so Lily Path's "Export week" can include them */
+function lilyPublishSummary(){
+  try{
+    if(!rosters.length||!Object.keys(attendance).length)return;
+    const classes=rosters.map(r=>{
+      let name=r.name||'';try{if(r.remoteId&&window.RRAuth&&RRAuth.className){const n=RRAuth.className(String(r.remoteId));if(n)name=n}}catch(e){}
+      name=name.replace(/\s*\(synced\)\s*$/i,'');
+      const days={};
+      for(const a of Object.values(attendance)){
+        if(a.rosterId!==r.id||!a.date)continue;
+        const d=days[a.date]||(days[a.date]={date:a.date,present:0,absent:0,other:0,points:0});
+        for(const x of a.records||[]){const st=x.status||'unmarked';if(st==='present')d.present++;else if(st==='absent')d.absent++;else if(st!=='unmarked')d.other++;d.points+=x.pointsApplied||0}
+      }
+      for(const b of pbBonuses[r.id]||[]){const d=days[b.date]||(days[b.date]={date:b.date,present:0,absent:0,other:0,points:0});d.points+=b.pts}
+      return{name,students:r.students.length,days:Object.values(days).filter(d=>d.present||d.absent||d.other||d.points).sort((x,y)=>x.date<y.date?-1:1)};
+    });
+    localStorage.setItem('lily-week-summary',JSON.stringify({at:Date.now(),classes}));
+  }catch(e){}
+}
+setInterval(lilyPublishSummary,15000);
+window.addEventListener('pagehide',lilyPublishSummary);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)lilyPublishSummary()});
 let showAllAbsent=false;
 function syncSeeAbsentBtn(){const b=document.getElementById('seeAbsentBtn');if(b){b.classList.toggle('primary',showAllAbsent);b.textContent=showAllAbsent?'🙈 Hide Absent':'👀 See All Absent'}}
 function renderWeeksModal(){

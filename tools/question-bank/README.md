@@ -30,5 +30,8 @@ No released STAAR items are copied here. Released tests and blueprints are used 
 - Social Studies 6-8 is finished: Grade 6 = 115 (`g6_ss_v1`, 66 standards, commit 7f2cb4c), Grade 7 = 102 (`g7_ss_v1`, 71, commit fed0486), Grade 8 = 123 (`g8_ss_v1`, 97, commit b2371e0); total Social Studies 886.
 - PE 6-8 is finished: Grade 6 = 76 (`g6_pe_v1`, 38 standards, commit d002ae1), Grade 7 = 74 (`g7_pe_v1`, 37, commit b4c40e7), Grade 8 = 73 (`g8_pe_v1`, 37, commit eb245a2); total PE 602. Health 6 = 202 (`g6_health_v1`, 101 standards, commit 2821cae); Health 7-8 are absent from the TEKS data; total Health 838.
 - Technology Applications 6-8 is finished: Grade 6 = 72 (`g6_tech_v1`, 36 standards, commit 2af9274), Grade 7 = 72 (`g7_tech_v1`, 36, commit 0004f89), Grade 8 = 76 (`g8_tech_v1`, 38, commit 205c7d6); total Tech 451. Middle school (6-8) is complete in every subject.
-- Next (in order): high school, then the obscure TEKS.
+- Health 7-8 exists in the TEKS data as one course "Grades 7-8" (codes 115.27.b.*, grade_num stays null): 206 questions, 106 standards (`g78_health_v1`, commit 33734d6). Health total 1,044; bank total 8,573.
+- High school is stored by course (grade_level null, grade_num null, `course` = the course title). Started: Algebra I (`hs_alg1_v1`, 147 questions, 49 standards, codes 111.39.c.*, commit b184f5d). Bank total 8,720.
+- Still open from middle school: Fine Arts Middle School 1-3 (Art 117.202-204, Dance 117.205-207, Music 117.208-210, Theatre 117.211-213, about 260 standards) and Math Advanced 6-8 (111.29-31, 198 standards).
+- Next (in order): rest of high school (Geometry 111.41, Algebra II 111.40, Biology 112.42, Chemistry 112.43, Physics 112.45, English I-IV 110.36-39, US History 113.41, World History 113.42, Government 113.44, Economics, Health I/II, PE, Tech), then the obscure TEKS.
 - Battleship reads the bank already (commit 706637e) and falls back to its built-in questions when the table is missing or empty.

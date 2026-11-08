@@ -1,0 +1,46 @@
+insert into public.question_bank (teks_code, teks_item_id, subject, grade_num, course, difficulty, qtype, prompt, choices, answer_idx, explanation, source, status, gen_batch)
+select distinct on (v.prompt) v.code, i.id, d.subject,
+       case when i.grade_level = 'K' then 0 when i.grade_level ~ '^[0-9]+' then substring(i.grade_level from '^[0-9]+')::smallint end,
+       case when i.grade_level is null then i.grade_course_title end,
+       v.diff, 'mc', v.prompt, v.choices, v.ans, v.expl, v.src, 'checked', 'g2_tech_v1'
+from (values
+('126.3.c.4',3,'Online maps help drivers find the fastest way. This shows how technology can impact...','["a community", "a cloud", "a rock", "a tree"]'::jsonb,0,'Technology changes how communities work.','original'),
+('126.3.c.4',4,'A school gets tablets that let students read books in many languages. One impact on the community is...','["no one can read", "more students can read and learn", "computers disappear", "fewer books exist"]'::jsonb,1,'Technology can open access.','original'),
+('126.c.6',3,'A bar graph made in a spreadsheet to show favorite pets is a data...','["song", "story", "visualization", "toy"]'::jsonb,2,'Visualizations show data.','original'),
+('126.c.6',3,'Drawing one picture for each vote, with each picture counting the same, is a...','["poem", "menu", "map", "pictograph"]'::jsonb,3,'Pictographs use pictures.','original'),
+('126.c.6',3,'A tool that helps you build a chart from your class survey is a...','["digital tool", "ruler only", "paper clip", "crayon only"]'::jsonb,0,'Digital tools make graphs.','original'),
+('126.3.c.7',2,'When you chat in a class online space, you should be...','["silly all the time", "respectful and responsible", "silent forever", "rude"]'::jsonb,1,'Responsible interactions.','original'),
+('126.3.c.7',3,'A kind way to answer a classmate''s online comment is to...','["post a secret", "repeat it loudly", "say something helpful and polite", "ignore the topic and be mean"]'::jsonb,2,'Be respectful.','original'),
+('126.3.c.1.A',3,'To bake a cake you can break the problem into sequential steps like gather, mix, bake. This is...','["skipping", "forgetting", "guessing", "decomposing"]'::jsonb,3,'Decompose into steps.','original'),
+('126.3.c.1.B',4,'2, 4, 6, 8, ... You predict the next number is...','["10", "12", "9", "7"]'::jsonb,0,'The pattern adds two.','original'),
+('126.3.c.1.B',4,'Square, circle, circle, square, circle, circle, square. Your prediction for what comes next is...','["nothing", "two circles", "a triangle", "two squares"]'::jsonb,1,'A repeating pattern.','original'),
+('126.3.c.1.C',3,'Looking over a plan with an adult to see if every step is listed is...','["ignoring a plan", "losing a plan", "analyzing a plan", "tearing a plan"]'::jsonb,2,'Analyze checks the steps.','original'),
+('126.3.c.1.D',4,'If it is raining, then take an umbrella. This is a...','["loop", "variable", "bug", "conditional"]'::jsonb,3,'If-then statements are conditionals.','original'),
+('126.3.c.1.D',4,'Your robot does not turn at the corner. Finding and fixing the mistake in your steps is...','["troubleshooting", "decorating", "sleeping", "erasing"]'::jsonb,0,'Troubleshoot means fix problems.','original'),
+('126.3.c.2.A',4,'In code, a box that holds a value that can change, like a score, is a...','["valley", "variable", "vowel", "vehicle"]'::jsonb,1,'Variables store changing values.','original'),
+('126.3.c.2.A',4,'A game score goes from 0 to 5 to 10. The score is stored in a...','["loop", "noun", "variable", "sentence"]'::jsonb,2,'Variables change.','original'),
+('126.3.c.2.B',4,'Using one command to repeat a move three times is a...','["rest", "menu", "fact", "loop"]'::jsonb,3,'Loops repeat actions.','original'),
+('126.3.c.2.B',3,'Instead of writing ''step'' ten times, a loop lets you write ''repeat ten times: step''. A loop makes code...','["shorter", "silent", "longer", "slower"]'::jsonb,0,'Loops save steps.','original'),
+('126.3.c.3.A',3,'Telling a teammate your idea clearly and listening to theirs is effective...','["snacking", "communication", "napping", "jumping"]'::jsonb,1,'Communication helps design work.','original'),
+('126.3.c.3.B',3,'Trying your invention, seeing what works and then improving it is testing and...','["forgetting", "hiding", "reflecting", "ignoring"]'::jsonb,2,'Testing and reflecting improve designs.','original'),
+('126.3.c.5.A',3,'Which is non-numerical data?','["students'' ages", "the number of books", "inches of rain", "favorite book genres"]'::jsonb,3,'Genres are categories, not numbers.','original'),
+('126.3.c.5.A',3,'Keeping a record of whether each day is sunny, cloudy or rainy is collecting non-numerical...','["data", "shoes", "snacks", "trash"]'::jsonb,0,'Weather types are categories.','original'),
+('126.3.c.5.B',3,'You are given the keyword ''volcano'' and a safe website list. You search by typing the keyword and checking...','["any page", "the approved sites", "nothing", "only ads"]'::jsonb,1,'Use provided sources.','original'),
+('126.3.c.8.A',3,'Using school devices only for learning tasks, as your AUP says, is...','["free play", "careless use", "acceptable use", "rule breaking"]'::jsonb,2,'Follow the policy.','original'),
+('126.3.c.8.B',3,'Copying a classmate''s online drawing and saying it''s yours is wrong because digital content has...','["ovens", "ears", "oceans", "owners"]'::jsonb,3,'Respect creators.','original'),
+('126.3.c.9.A',3,'A strong password is...','["long and mixes letters and numbers", "your name", "the word password", "1234"]'::jsonb,0,'Strong passwords are hard to guess.','original'),
+('126.3.c.9.A',3,'When you finish on a shared computer, you should...','["share your login", "log off", "leave it open", "turn it off by pulling the plug"]'::jsonb,1,'Log off.','original'),
+('126.3.c.9.B',4,'Information that anyone can see, like a school mascot, is...','["secret", "private", "public", "locked"]'::jsonb,2,'Public information is open.','original'),
+('126.3.c.9.B',4,'Your home address and password are...','["shareable with strangers", "always okay to post", "public", "private"]'::jsonb,3,'Private information stays protected.','original'),
+('126.3.c.9.C',3,'Sending hurtful messages to someone online again and again is an example of...','["cyberbullying", "teamwork", "research", "typing"]'::jsonb,0,'Cyberbullying is hurtful online behavior.','original'),
+('126.3.c.10.A',3,'Making a slideshow to share with your class is creating and sharing...','["shoes", "content", "snacks", "toys"]'::jsonb,1,'You create content.','original'),
+('126.3.c.10.B',3,'A speaker and a monitor are both...','["snacks", "pencils", "output devices", "input devices"]'::jsonb,2,'They give out sound or pictures.','original'),
+('126.3.c.10.B',4,'A microphone and a scanner bring information in. They are...','["software", "output devices", "monitors", "input devices"]'::jsonb,3,'They send data in.','original'),
+('126.3.c.10.C',3,'Looking over a classmate''s digital project and giving kind feedback is...','["reviewing digital artifacts", "printing them upside down", "deleting them", "hiding them"]'::jsonb,0,'Reviewing gives feedback.','original'),
+('126.3.c.10.D',2,'Good keyboarding means your back is...','["bent over the desk", "straight and supported", "twisted", "lying down"]'::jsonb,1,'Good posture.','original'),
+('126.3.c.10.E',3,'The key you press with shift and 2 to type the @ sign is a key with a...','["broken role", "silent role", "secondary action", "primary letter only"]'::jsonb,2,'Keys have secondary actions.','original'),
+('126.3.c.10.E',3,'To type the question mark symbol you usually hold...','["enter", "backspace", "space bar", "shift"]'::jsonb,3,'Shift reaches secondary characters.','original')
+) as v(code, diff, prompt, choices, ans, expl, src)
+join public.teks_items i on i.code = v.code and i.is_standard
+join public.teks_documents d on d.id = i.document_id and d.subject = 'Technology Applications' and d.language = 'en'
+on conflict (fingerprint) do nothing;

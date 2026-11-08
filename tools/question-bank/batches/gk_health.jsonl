@@ -1,0 +1,67 @@
+{"c": "115.12.b.1", "d": 2, "q": "Which body part pumps blood around your body?", "o": ["heart", "elbow", "ear", "toe"], "a": 0, "e": "The heart pumps blood."}
+{"c": "115.12.b.1", "d": 2, "q": "Which body part helps you breathe air in and out?", "o": ["teeth", "lungs", "hair", "knees"], "a": 1, "e": "Lungs take in air."}
+{"c": "115.12.b.1", "d": 2, "q": "Which body part helps you think and feel?", "o": ["elbow", "toe", "brain", "hair"], "a": 2, "e": "The brain controls the body."}
+{"c": "115.12.b.1", "d": 2, "q": "Which body part do you use to chew food?", "o": ["toes", "elbows", "ears", "teeth"], "a": 3, "e": "Teeth break up food."}
+{"c": "115.12.b.2.A", "d": 2, "q": "Who is a trusted adult who can help you when you feel sick?", "o": ["a parent or a school nurse", "a toy", "a stranger on the street", "a pet rock"], "a": 0, "e": "Trusted adults give health help."}
+{"c": "115.12.b.2.A", "d": 2, "q": "If you do not feel well at school, you should tell...", "o": ["a stranger", "your teacher", "nobody", "the wall"], "a": 1, "e": "Teachers can get you help."}
+{"c": "115.12.b.2.B", "d": 2, "q": "Which habit helps keep your teeth healthy?", "o": ["eating candy all day", "never brushing", "brushing twice a day", "sharing toothbrushes"], "a": 2, "e": "Brushing removes germs and food."}
+{"c": "115.12.b.2.B", "d": 2, "q": "When should you wash your hands?", "o": ["never", "only on holidays", "only on Mondays", "before you eat and after using the bathroom"], "a": 3, "e": "Washing stops germs from spreading."}
+{"c": "115.12.b.2.B", "d": 2, "q": "What do you use with water to wash your hands well?", "o": ["soap", "sand", "mud", "glue"], "a": 0, "e": "Soap helps remove germs."}
+{"c": "115.12.b.2.C", "d": 2, "q": "Germs can spread when someone...", "o": ["reads a book", "coughs without covering their mouth", "smiles", "waves hello"], "a": 1, "e": "Coughs spread germs through the air."}
+{"c": "115.12.b.2.C", "d": 2, "q": "A good way to cover your cough is to cough into your...", "o": ["bare hand", "food", "elbow", "friend's face"], "a": 2, "e": "An elbow keeps germs from spreading."}
+{"c": "115.12.b.2.C", "d": 2, "q": "A shot from a doctor that helps protect you from certain sicknesses is called a...", "o": ["book", "toy", "snack", "vaccine"], "a": 3, "e": "Vaccines help prevent disease."}
+{"c": "115.12.b.2.D", "d": 2, "q": "If you see tiny bugs in your hair that make your head itch, tell...", "o": ["a grown-up or the nurse", "your pet", "a stranger", "the wall"], "a": 0, "e": "Adults know how to treat lice."}
+{"c": "115.12.b.2.D", "d": 2, "q": "After a mosquito bites you, you can help stop the itching by...", "o": ["eating more bugs", "telling a grown-up and washing the bite", "scratching hard", "ignoring it forever"], "a": 1, "e": "Clean bites and tell an adult."}
+{"c": "115.12.b.3.A", "d": 2, "q": "Feeling happy, sad, or mad are all...", "o": ["toys", "foods", "feelings", "colors"], "a": 2, "e": "Feelings are emotions."}
+{"c": "115.12.b.3.A", "d": 2, "q": "When you smile and laugh at a party, you are likely feeling...", "o": ["sleepy", "hungry", "angry", "happy"], "a": 3, "e": "Smiling shows happiness."}
+{"c": "115.12.b.3.B", "d": 2, "q": "Taking slow, deep breaths can help you feel...", "o": ["calm", "dizzy all day", "angrier", "louder"], "a": 0, "e": "Deep breaths relax your body."}
+{"c": "115.12.b.3.B", "d": 2, "q": "When you feel mad, a good calm-down idea is to...", "o": ["throw things", "count to ten", "hit someone", "yell"], "a": 1, "e": "Counting helps you pause."}
+{"c": "115.12.b.3.C", "d": 2, "q": "A friend can influence you. A good friend would encourage you to...", "o": ["do something unsafe", "break rules", "do something kind", "tease others"], "a": 2, "e": "Good friends encourage good choices."}
+{"c": "115.12.b.3.D", "d": 2, "q": "To make a new friend, you can say...", "o": ["\"You can't play.\"", "nothing and hide", "\"Go away.\"", "\"Hi, my name is ... Do you want to play?\""], "a": 3, "e": "Friendly words start friendships."}
+{"c": "115.12.b.3.E", "d": 2, "q": "Showing respect when talking to someone means you...", "o": ["listen and use kind words", "shout", "ignore them", "interrupt"], "a": 0, "e": "Respect includes listening."}
+{"c": "115.12.b.3.F", "d": 2, "q": "If you and a friend want the same toy, you can...", "o": ["grab it", "take turns", "hit", "yell"], "a": 1, "e": "Sharing solves problems."}
+{"c": "115.12.b.4.A", "d": 2, "q": "Telling the truth shows the quality of being...", "o": ["mean", "silly", "honest", "sneaky"], "a": 2, "e": "Truth-telling is honesty."}
+{"c": "115.12.b.4.A", "d": 2, "q": "Being kind means you...", "o": ["push others", "ignore friends", "tease", "help and speak nicely"], "a": 3, "e": "Kindness helps others."}
+{"c": "115.12.b.4.B", "d": 2, "q": "A goal is something you...", "o": ["want to do or get better at", "throw away", "lose", "forget"], "a": 0, "e": "Goals are things you work toward."}
+{"c": "115.12.b.4.B", "d": 2, "q": "A healthy goal for a kindergartner could be...", "o": ["skip lunch", "brush my teeth every night", "stay up all night", "eat only sweets"], "a": 1, "e": "Healthy goals support good habits."}
+{"c": "115.12.b.5", "d": 2, "q": "When you feel very worried, who can you talk to?", "o": ["a stranger", "a toy only", "a trusted adult", "nobody"], "a": 2, "e": "Trusted adults can help."}
+{"c": "115.12.b.5", "d": 2, "q": "When you feel sad, a helpful thing to do is...", "o": ["keep it a secret forever", "hit a wall", "yell", "talk about it with someone you trust"], "a": 3, "e": "Sharing feelings helps."}
+{"c": "115.12.b.6.A", "d": 2, "q": "What do you need to drink every day to stay healthy?", "o": ["water", "candy", "nothing", "soda only"], "a": 0, "e": "Water keeps your body working."}
+{"c": "115.12.b.6.A", "d": 2, "q": "Your body is made mostly of...", "o": ["candy", "water", "paper", "sand"], "a": 1, "e": "The human body is mostly water."}
+{"c": "115.12.b.6.B", "d": 2, "q": "A healthy portion of a snack is...", "o": ["a giant bucket", "a whole cake", "a small handful", "ten bags"], "a": 2, "e": "Small portions are healthy."}
+{"c": "115.12.b.6.C", "d": 2, "q": "Which food helps your body grow strong?", "o": ["candy", "chips", "soda", "vegetables and fruits"], "a": 3, "e": "Fruits and vegetables help growth."}
+{"c": "115.12.b.6.C", "d": 2, "q": "Milk, cheese, and yogurt are foods in which group?", "o": ["dairy", "vegetable", "grain", "meat"], "a": 0, "e": "Dairy comes from milk."}
+{"c": "115.12.b.6.C", "d": 2, "q": "Which group includes chicken, eggs, and beans?", "o": ["dairy", "protein", "fruit", "candy"], "a": 1, "e": "Protein builds muscles."}
+{"c": "115.12.b.6.D", "d": 2, "q": "Which is a healthy snack?", "o": ["soda", "cookies only", "apple slices", "candy bar"], "a": 2, "e": "Fruit is a healthy snack."}
+{"c": "115.12.b.6.D", "d": 2, "q": "Which is an unhealthy snack?", "o": ["cheese", "banana", "carrot sticks", "a bag of candy"], "a": 3, "e": "Candy has lots of sugar."}
+{"c": "115.12.b.7.A", "d": 2, "q": "If a friend has a food allergy, you should not...", "o": ["share your food with them", "be kind", "ask what they can eat", "wash your hands"], "a": 0, "e": "Sharing food can cause harm."}
+{"c": "115.12.b.7.A", "d": 2, "q": "Respecting someone with a food allergy means you...", "o": ["tell them to eat it", "do not tease them", "trade food with them", "laugh"], "a": 1, "e": "Respect keeps everyone safe."}
+{"c": "115.12.b.7.B", "d": 2, "q": "Which habit helps you stay healthy?", "o": ["skipping meals", "staying up all night", "getting enough sleep", "never moving"], "a": 2, "e": "Sleep helps your body rest."}
+{"c": "115.12.b.7.B", "d": 2, "q": "Playing outside every day helps your...", "o": ["toys", "crayons", "bed", "body stay strong"], "a": 3, "e": "Active play builds strength."}
+{"c": "115.12.b.8.A", "d": 2, "q": "If there is an emergency, you should tell...", "o": ["a trusted adult right away", "a stranger", "nobody", "your pet"], "a": 0, "e": "Adults can call for help."}
+{"c": "115.12.b.8.A", "d": 2, "q": "In an emergency, a grown-up may call...", "o": ["a restaurant", "911", "your friend", "your toy"], "a": 1, "e": "911 connects to emergency help."}
+{"c": "115.12.b.8.B", "d": 2, "q": "A seat belt in a car helps...", "o": ["make the car faster", "clean the car", "keep you safe in a crash", "play music"], "a": 2, "e": "Seat belts protect riders."}
+{"c": "115.12.b.8.B", "d": 2, "q": "When riding a bike, you wear a...", "o": ["scarf", "blindfold", "swimsuit", "helmet"], "a": 3, "e": "Helmets protect heads."}
+{"c": "115.12.b.8.B", "d": 2, "q": "A booster seat helps a young child...", "o": ["sit high enough for the seat belt to fit", "sleep", "stand", "play games"], "a": 0, "e": "Boosters make the belt fit."}
+{"c": "115.12.b.9.A", "d": 2, "q": "A trusted adult is someone who...", "o": ["is a stranger", "helps keep you safe", "asks you to keep secrets", "hurts you"], "a": 1, "e": "Trusted adults keep kids safe."}
+{"c": "115.12.b.9.A", "d": 2, "q": "Which person is likely a trusted adult?", "o": ["a stranger at the park", "someone you just met online", "your teacher", "a person who offers candy"], "a": 2, "e": "Teachers are trusted."}
+{"c": "115.12.b.9.B", "d": 2, "q": "If someone asks you to do something unsafe, you can say...", "o": ["\"Okay\"", "\"Maybe\"", "nothing", "\"No!\" and tell a trusted adult"], "a": 3, "e": "Saying no protects you."}
+{"c": "115.12.b.9.C", "d": 2, "q": "Personal space is...", "o": ["the space around your body", "the whole room", "a toy", "a car"], "a": 0, "e": "Personal space is your own area."}
+{"c": "115.12.b.9.C", "d": 2, "q": "Appropriate boundaries mean...", "o": ["everyone can touch you", "you decide who touches you", "you keep secrets", "you must hug everyone"], "a": 1, "e": "Your body belongs to you."}
+{"c": "115.12.b.10.A", "d": 2, "q": "Which is a safe place to play?", "o": ["a construction site", "a parking lot", "a fenced playground with grown-ups", "a busy road"], "a": 2, "e": "Safe places keep you protected."}
+{"c": "115.12.b.10.B", "d": 2, "q": "Which object can be dangerous for a young child?", "o": ["a crayon", "a pillow", "a book", "scissors"], "a": 3, "e": "Sharp objects can cut."}
+{"c": "115.12.b.10.B", "d": 2, "q": "If you find a knife, you should...", "o": ["not touch it and tell an adult", "play with it", "throw it", "hide it"], "a": 0, "e": "Tell a grown-up."}
+{"c": "115.12.b.10.C", "d": 2, "q": "You should know your home...", "o": ["favorite color", "address", "snack", "pet's name only"], "a": 1, "e": "Knowing your address helps in emergencies."}
+{"c": "115.12.b.11", "d": 2, "q": "If you see something online that scares you, you should...", "o": ["click more", "share it", "tell a trusted adult", "keep it secret"], "a": 2, "e": "Adults can help."}
+{"c": "115.12.b.11", "d": 2, "q": "Before using a tablet, you should ask...", "o": ["the wall", "nobody", "a stranger", "a parent or teacher"], "a": 3, "e": "Grown-ups supervise screen time."}
+{"c": "115.12.b.12.A", "d": 2, "q": "Bullying is when someone...", "o": ["is mean to another on purpose again and again", "shares a toy", "helps a friend", "says hello"], "a": 0, "e": "Bullying is repeated unkind behavior."}
+{"c": "115.12.b.12.A", "d": 2, "q": "A bystander is someone who...", "o": ["does the bullying", "sees bullying happen", "is the one bullied", "is a teacher"], "a": 1, "e": "Bystanders can help."}
+{"c": "115.12.b.12.B", "d": 2, "q": "You can discourage bullying by...", "o": ["watching quietly", "joining in", "being kind and telling an adult", "laughing"], "a": 2, "e": "Kindness stops bullying."}
+{"c": "115.12.b.12.C", "d": 2, "q": "If someone bullies you, you should...", "o": ["keep it secret", "run away forever", "hit back", "tell a parent or trusted adult"], "a": 3, "e": "Adults can help."}
+{"c": "115.12.b.12.D", "d": 2, "q": "If someone makes you feel unsafe or uncomfortable, you should...", "o": ["get help from a trusted adult", "pretend nothing happened", "hide", "keep quiet"], "a": 0, "e": "Tell someone you trust."}
+{"c": "115.12.b.13.A", "d": 2, "q": "Medicine should be taken only when...", "o": ["you feel like it", "a parent or doctor says it is okay", "a friend gives it", "you find it"], "a": 1, "e": "Medicine must be given by a trusted adult."}
+{"c": "115.12.b.13.A", "d": 2, "q": "If you find a pill on the floor, you should...", "o": ["share it", "hide it", "not touch it and tell an adult", "eat it"], "a": 2, "e": "Unknown pills can harm."}
+{"c": "115.12.b.13.B", "d": 2, "q": "Smoking is harmful because it hurts your...", "o": ["hair", "toes", "elbows", "lungs"], "a": 3, "e": "Smoke harms the lungs."}
+{"c": "115.12.b.13.B", "d": 2, "q": "Which is unsafe for children?", "o": ["alcohol", "milk", "water", "juice"], "a": 0, "e": "Alcohol harms the body."}
+{"c": "115.12.b.14", "d": 2, "q": "A person who cares for you and helps you make healthy choices is a...", "o": ["risk", "protective factor", "danger", "problem"], "a": 1, "e": "Caring adults protect kids."}
+{"c": "115.12.b.14", "d": 2, "q": "Having a trusted adult to talk to helps you stay...", "o": ["lonely", "hidden", "safe", "worried"], "a": 2, "e": "Support keeps you safer."}

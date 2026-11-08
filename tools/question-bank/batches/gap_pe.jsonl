@@ -1,0 +1,10 @@
+{"c": "116.12.b.7", "d": 2, "q": "Which is a fun outdoor activity a kindergartner can do at a park?", "o": ["playing on a playground", "watching TV", "sleeping in a closet", "doing homework in bed"], "a": 0, "e": "Parks offer outdoor play."}
+{"c": "116.12.b.7", "d": 2, "q": "When you play outside on a hot day, it is smart to take breaks in the...", "o": ["hot sun", "shade", "oven", "car"], "a": 1, "e": "Shade helps you cool down."}
+{"c": "116.13.b.7", "d": 2, "q": "Which outdoor activity is a good way to explore nature with a grown-up?", "o": ["sleeping", "staying in a dark room", "walking on a trail", "playing video games"], "a": 2, "e": "Trails show you nature."}
+{"c": "116.13.b.7", "d": 2, "q": "On a nature walk, you should stay on the trail so you...", "o": ["pick every flower", "run into traffic", "hide", "do not get lost"], "a": 3, "e": "Trails keep you safe."}
+{"c": "116.16.b.5", "d": 3, "q": "Which dance style uses a group pattern like a line or a square set to music?", "o": ["a folk dance", "a nap", "a race", "a quiz"], "a": 0, "e": "Folk dances use set patterns."}
+{"c": "116.16.b.5", "d": 3, "q": "When you keep your movements in time with music, you are showing...", "o": ["sleep", "rhythm", "silence", "stillness"], "a": 1, "e": "Rhythm matches the beat."}
+{"c": "116.16.b.5", "d": 3, "q": "A jump rope routine done to music uses...", "o": ["random jumping", "no beat", "a rhythm pattern", "a race"], "a": 2, "e": "Routines follow a rhythm."}
+{"c": "116.17.b.5", "d": 4, "q": "A dance routine that repeats steps in a set pattern to music is a...", "o": ["nap", "rest", "random shuffle", "choreographed sequence"], "a": 3, "e": "Choreography organizes movement."}
+{"c": "116.17.b.5", "d": 4, "q": "Keeping the tempo of a dance means you...", "o": ["move at the speed of the music", "run away", "stop", "move randomly"], "a": 0, "e": "Tempo is the speed of the beat."}
+{"c": "116.17.b.5", "d": 4, "q": "Working with a group to create a rhythmic routine requires...", "o": ["ignoring the music", "cooperating and counting beats together", "working alone", "arguing"], "a": 1, "e": "Groups count the beat."}

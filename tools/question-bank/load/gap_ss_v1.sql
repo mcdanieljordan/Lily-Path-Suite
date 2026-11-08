@@ -1,0 +1,29 @@
+insert into public.question_bank (teks_code, teks_item_id, subject, grade_num, course, difficulty, qtype, prompt, choices, answer_idx, explanation, source, status, gen_batch)
+select distinct on (v.prompt) v.code, i.id, d.subject,
+       case when i.grade_level = 'K' then 0 when i.grade_level ~ '^[0-9]+' then substring(i.grade_level from '^[0-9]+')::smallint end,
+       case when i.grade_level is null then i.grade_course_title end,
+       v.diff, 'mc', v.prompt, v.choices, v.ans, v.expl, v.src, 'checked', 'gap_ss_v1'
+from (values
+('113.12.c.16.A',2,'A first grader says, "Our class has 12 desks." Which is a fact that can be checked by counting?','["There are 12 desks in the room.", "Desks are the best furniture.", "Desks are boring.", "Everyone loves desks."]'::jsonb,0,'A fact can be proven with evidence.','original'),
+('113.12.c.16.C',2,'You want to learn what a firefighter does. Which is a good oral source?','["asking a stranger about cooking", "asking a firefighter who visits the class", "reading a recipe", "guessing from a cartoon"]'::jsonb,1,'Talking to a real person who does the job is a valid source.','original'),
+('113.12.c.17.C',3,'After a class trip to a farm, which shows what you learned in a picture?','["drawing nothing", "erasing the page", "drawing the animals you saw", "copying a friend''s name"]'::jsonb,2,'You can communicate learning by drawing.','original'),
+('113.12.c.17.F',2,'While a classmate is speaking during circle time, you should...','["make loud noises", "talk over them", "walk away", "look at them and wait your turn"]'::jsonb,3,'Respectful listening follows classroom rules.','original'),
+('113.13.c.15.A',3,'A second grader reads that a town has one library. Which statement is a fact?','["The town has one library.", "The library is the prettiest building.", "It is the best place ever.", "Everybody should visit it daily."]'::jsonb,0,'Facts can be shown with evidence.','original'),
+('113.13.c.16.E',3,'After studying your neighborhood, which way could you share what you learned in writing?','["throw away your paper", "write a short paragraph about it", "hide your notes", "only whisper"]'::jsonb,1,'Writing is one way to communicate information.','original'),
+('113.13.c.16.G',2,'What is a good rule when a classmate is answering a question?','["leave your seat", "shout your own answer", "raise your hand and listen quietly", "interrupt them"]'::jsonb,2,'Respectful listening is a classroom procedure.','original'),
+('113.14.c.15.D',3,'You studied a map of your town and want to share it. Which way is speaking aloud?','["erasing the map", "folding the map", "drawing a second map", "giving a short talk about the map"]'::jsonb,3,'Oral communication means speaking.','original'),
+('113.14.c.15.E',3,'Which is a picture-based way to show where places are in your school?','["draw a map of the school", "clap your hands", "write a long poem about lunch", "count the chairs"]'::jsonb,0,'Maps are visual material.','original'),
+('113.15.c.14.B',2,'Which is the title of the official state song of Texas?','["Jingle Bells", "Texas, Our Texas", "Yankee Doodle", "America the Beautiful"]'::jsonb,1,'Texas, Our Texas is the state song.','original'),
+('113.15.c.21.C',3,'You researched the Alamo for a project. How can you show your ideas aloud?','["ask to skip", "keep your notes secret", "give a short oral report", "only write your name"]'::jsonb,2,'Oral reports share research aloud.','original'),
+('113.15.c.21.D',3,'Which of these is a written product a student could make after Texas research?','["a lunch menu", "a guess without notes", "a blank page", "a journal entry written as a settler"]'::jsonb,3,'Journal entries and reports are written material.','original'),
+('113.16.c.10.C',3,'Which shows the benefit of free enterprise to a shopper?','["several stores compete, so shoppers find lower prices", "only one store sets any price", "goods are never sold", "stores are forbidden"]'::jsonb,0,'Competition gives customers choice and better prices.','original'),
+('113.16.c.25.C',3,'After research on the Constitution, a student presents findings to the class. This is...','["writing a poem", "expressing ideas orally", "reading silently", "drawing a map"]'::jsonb,1,'Speaking uses oral communication.','original'),
+('113.16.c.25.D',3,'A student makes an outline, a timeline, and a report about the Revolution. These are examples of...','["recipes", "dance moves", "written and visual material", "math facts"]'::jsonb,2,'Outlines and reports are student-created material.','original'),
+('113.16.c.25.E',4,'In a class debate on whether to build a new park, a student disagrees politely and listens to others. This shows...','["an argument that insults others", "ignoring all views", "refusing to speak", "civil discourse about an issue"]'::jsonb,3,'Respectful disagreement is civil discourse.','original'),
+('113.11.c.13.C',2,'A kindergartner wants to learn about community helpers. Which is a good picture source?','["looking at photos of firefighters and teachers", "looking at photos of random clouds", "ignoring the topic", "asking a cat"]'::jsonb,0,'Visuals help gather information.','original'),
+('113.11.c.14.C',2,'After a lesson on neighbors, a kindergartner can share learning by...','["running away", "drawing a picture and telling about it", "hiding the paper", "refusing to answer"]'::jsonb,1,'Drawing and telling communicates ideas.','original'),
+('113.11.c.14.E',2,'When your teacher is giving directions, the best choice is to...','["talk to a friend", "walk around", "be quiet and listen", "play with toys"]'::jsonb,2,'Listening respectfully follows classroom rules.','original')
+) as v(code, diff, prompt, choices, ans, expl, src)
+join public.teks_items i on i.code = v.code and i.is_standard
+join public.teks_documents d on d.id = i.document_id and d.subject = 'Social Studies' and d.language = 'en'
+on conflict (fingerprint) do nothing;

@@ -1,0 +1,45 @@
+insert into public.question_bank (teks_code, teks_item_id, subject, grade_num, course, difficulty, qtype, prompt, choices, answer_idx, explanation, source, status, gen_batch)
+select distinct on (v.prompt) v.code, i.id, d.subject,
+       case when i.grade_level = 'K' then 0 when i.grade_level ~ '^[0-9]+' then substring(i.grade_level from '^[0-9]+')::smallint end,
+       case when i.grade_level is null then i.grade_course_title end,
+       v.diff, 'mc', v.prompt, v.choices, v.ans, v.expl, v.src, 'checked', 'g1_tech_v1'
+from (values
+('126.2.c.C',3,'Making a list of directions that moves a toy robot across a grid is creating a...','["sequence of code", "story title", "game score", "snack list"]'::jsonb,0,'Code is steps in order.','original'),
+('126.2.c.C',3,'A block program tells a character: step, step, turn. If you swap the steps and the turn, the character will...','["sing", "end up somewhere different", "stay the same", "disappear"]'::jsonb,1,'Order changes the result.','original'),
+('126.2.c.4',3,'Phones and video calls help families far away to talk. This shows how technology has impacted...','["trees", "rocks", "communities", "clouds"]'::jsonb,2,'Technology changes how people connect.','original'),
+('126.2.c.4',3,'Computers in libraries help people find books. This is an example of technology helping...','["a mountain", "an animal", "a lake", "a community"]'::jsonb,3,'Technology affects communities.','original'),
+('126.2.c.6',2,'A respectful way to talk to a classmate online is to use...','["kind words", "mean words", "capital letters to yell", "silly insults"]'::jsonb,0,'Respect applies online.','original'),
+('126.2.c.6',3,'If a friend posts something and you disagree, a respectful response is to...','["make fun of them", "say it politely", "ignore all rules", "share their secret"]'::jsonb,1,'Disagree respectfully.','original'),
+('126.2.c.1.A',2,'You need to wash your hands. The first step is to...','["dry your hands", "leave the room", "turn on the water", "put on a coat"]'::jsonb,2,'Break the task into ordered steps.','original'),
+('126.2.c.1.A',3,'Breaking a big problem into small, ordered pieces is called...','["ignoring", "forgetting", "guessing", "decomposing"]'::jsonb,3,'Decompose means break down.','original'),
+('126.2.c.1.B',2,'Every morning you brush teeth after breakfast. The pattern in your routine is...','["the same order each day", "no steps", "no order", "a different order each day"]'::jsonb,0,'Patterns repeat.','original'),
+('126.2.c.1.B',3,'Many recipes start with gathering ingredients. This is a pattern in solving...','["only math", "everyday tasks", "only art", "nothing"]'::jsonb,1,'Patterns appear in tasks.','original'),
+('126.2.c.1.C',3,'Writing numbered directions for tying your shoe is making a simple...','["anthem", "animal", "algorithm", "apple"]'::jsonb,2,'Algorithms are step-by-step instructions.','original'),
+('126.2.c.1.C',3,'A good algorithm for brushing your teeth lists the steps...','["with one step missing", "with no steps", "in a random order", "in the right order"]'::jsonb,3,'Order matters.','original'),
+('126.2.c.3.A',3,'Listening carefully and thinking quickly about new ideas helps you with a...','["design process", "nap", "lunch", "recess game"]'::jsonb,0,'Mental agility supports design.','original'),
+('126.2.c.3.B',3,'Asking questions, brainstorming and drawing a plan are parts of a...','["bus ride", "design process", "lunch menu", "spelling test"]'::jsonb,1,'Design processes solve problems.','original'),
+('126.2.c.3.B',3,'Drawing the order of events for your project before building it is called...','["forgetting", "sleeping", "storyboarding", "hiding"]'::jsonb,2,'Storyboards plan visually.','original'),
+('126.2.c.5.A',3,'Asking classmates their favorite pet and writing the answers is collecting...','["shoes", "toys", "trash", "data"]'::jsonb,3,'Data is collected information.','original'),
+('126.2.c.5.A',3,'Tracking how many students ride the bus each day is collecting data about people''s...','["daily routines", "foods", "shoes", "clothes"]'::jsonb,0,'Routines can be counted.','original'),
+('126.2.c.5.B',3,'A keyword you type into a search tool helps the computer to...','["play music only", "find matching information", "draw a picture", "turn off"]'::jsonb,1,'Keywords drive searches.','original'),
+('126.2.c.7.A',3,'Following your school''s rules for devices, called the AUP, means you show...','["no rules", "bad habits", "acceptable use", "silly play"]'::jsonb,2,'Follow the AUP.','original'),
+('126.2.c.7.B',3,'A song or picture online belongs to its maker. Asking permission before using it shows respect for the...','["oven", "ocean", "ear", "owner"]'::jsonb,3,'Digital content has owners.','original'),
+('126.2.c.8.A',2,'To keep your account safe, you should never share your...','["password", "lunch box", "favorite color", "shoe size"]'::jsonb,0,'Protect login information.','original'),
+('126.2.c.8.A',3,'Logging off a school computer when you finish keeps your account...','["slow", "safe", "messy", "loud"]'::jsonb,1,'Log off to protect.','original'),
+('126.2.c.8.B',3,'Which is unsafe to share online?','["your favorite animal", "your favorite song", "where you go to school and live", "your favorite book"]'::jsonb,2,'Identifying information is unsafe.','original'),
+('126.2.c.8.C',3,'Using the internet to repeatedly say mean things to someone is called...','["studying", "typing", "sharing", "cyberbullying"]'::jsonb,3,'Cyberbullying is online meanness.','original'),
+('126.2.c.8.C',3,'If you see cyberbullying, you should tell...','["a trusted adult", "a stranger", "nobody", "the bully"]'::jsonb,0,'Get help from an adult.','original'),
+('126.2.c.9.A',3,'Using a drawing app to make your own poster is creating an...','["copy", "original product", "mistake", "erase"]'::jsonb,1,'Original work is new.','original'),
+('126.2.c.9.B',2,'A printer that makes paper copies is an...','["animal", "input device", "output device", "chair"]'::jsonb,2,'Output devices give results.','original'),
+('126.2.c.9.B',3,'A keyboard and a mouse are...','["output devices", "snacks", "software", "input devices"]'::jsonb,3,'Input devices send data in.','original'),
+('126.2.c.9.B',3,'The programs that tell a computer what to do are called...','["software", "a screen", "a desk", "hardware"]'::jsonb,0,'Software is a program.','original'),
+('126.2.c.9.C',3,'Putting your finished work in a named folder is file...','["dancing", "management", "painting", "jumping"]'::jsonb,1,'File management keeps work organized.','original'),
+('126.2.c.9.C',3,'Working with a classmate on the same online document is...','["erasing", "hiding", "collaboration", "competition"]'::jsonb,2,'Collaboration means working together.','original'),
+('126.2.c.9.D',2,'When you type, your feet should be...','["up on the desk", "in the air", "crossed over the chair", "flat on the floor"]'::jsonb,3,'Good ergonomics.','original'),
+('126.2.c.9.D',3,'Good keyboarding means keeping your wrists...','["straight and relaxed", "raised up high", "bent sharply", "pressed down hard"]'::jsonb,0,'Posture protects hands.','original'),
+('126.2.c.9.E',2,'The key you hold to make a capital letter is...','["space bar", "shift", "enter", "backspace"]'::jsonb,1,'Shift makes uppercase letters.','original'),
+('126.2.c.9.E',3,'To erase the last letter you typed, press...','["space bar", "shift", "backspace", "caps lock"]'::jsonb,2,'Backspace deletes.','original')
+) as v(code, diff, prompt, choices, ans, expl, src)
+join public.teks_items i on i.code = v.code and i.is_standard
+join public.teks_documents d on d.id = i.document_id and d.subject = 'Technology Applications' and d.language = 'en'
+on conflict (fingerprint) do nothing;

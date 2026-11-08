@@ -1,0 +1,131 @@
+{"c": "110.2.b.1.A", "d": 2, "q": "Your teacher asks a question. What is a good way to listen?", "o": ["look at the speaker and stay quiet", "talk to a friend", "look at the floor", "run around"], "a": 0, "e": "Good listeners look and listen."}
+{"c": "110.2.b.1.A", "d": 2, "q": "After a story, you do not understand a word. What can you do?", "o": ["walk away", "ask a question", "say nothing", "cover your ears"], "a": 1, "e": "Asking a question helps you understand."}
+{"c": "110.2.b.1.A", "d": 3, "q": "Which answer uses more than one word?", "o": ["Yes", "Ball", "I like the red ball.", "Red"], "a": 2, "e": "A multi-word answer says more than one word."}
+{"c": "110.2.b.1.B", "d": 2, "q": "Your teacher says, \"Put on your jacket, then line up.\" What do you do first?", "o": ["sing", "stand in line", "sit down", "wear your jacket"], "a": 3, "e": "Follow the steps in order."}
+{"c": "110.2.b.1.B", "d": 3, "q": "Your teacher says, \"Open your book and point to the picture.\" What do you do second?", "o": ["touch the picture", "close your book", "open your book", "stand up"], "a": 0, "e": "The second step is pointing."}
+{"c": "110.2.b.1.C", "d": 2, "q": "When you share an idea, how should you speak?", "o": ["in a whisper", "clearly and loud enough to hear", "very fast", "with your hand over your mouth"], "a": 1, "e": "Speak so others can hear you."}
+{"c": "110.2.b.1.C", "d": 3, "q": "Which is a complete idea to share?", "o": ["dog the", "brown", "I have a brown dog.", "have a"], "a": 2, "e": "A complete idea has a who and a what."}
+{"c": "110.2.b.1.D", "d": 2, "q": "When a class is talking together, what is a good rule?", "o": ["talk at the same time", "grab things", "yell", "take turns"], "a": 3, "e": "Taking turns is a discussion rule."}
+{"c": "110.2.b.1.D", "d": 2, "q": "Two friends both want to talk. What should they do?", "o": ["one talks and then the other", "neither listens", "both talk at once", "leave"], "a": 0, "e": "Take turns."}
+{"c": "110.2.b.1.E", "d": 2, "q": "Which is a greeting?", "o": ["Goodbye", "Hello", "Thank you", "Stop"], "a": 1, "e": "Hello is a greeting."}
+{"c": "110.2.b.1.E", "d": 2, "q": "You meet a new child. What can you say?", "o": ["Give me that.", "Go away.", "Hi, my name is Sam.", "Be quiet."], "a": 2, "e": "Introduce yourself kindly."}
+{"c": "110.2.b.1.E", "d": 3, "q": "You are thirsty. What can you say to show what you need?", "o": ["Water is wet.", "Look at me.", "I like rain.", "May I have some water, please?"], "a": 3, "e": "Say what you need politely."}
+{"c": "110.2.b.2.A.i", "d": 2, "q": "Which word rhymes with cat?", "o": ["hat", "cup", "pen", "dog"], "a": 0, "e": "Cat and hat end with -at."}
+{"c": "110.2.b.2.A.i", "d": 2, "q": "Which word rhymes with sun?", "o": ["star", "run", "moon", "pig"], "a": 1, "e": "Sun and run end with -un."}
+{"c": "110.2.b.2.A.i", "d": 3, "q": "Which pair of words rhyme?", "o": ["top, cup", "bed, bat", "bed, red", "red, rug"], "a": 2, "e": "Bed and red end the same."}
+{"c": "110.2.b.2.A.ii", "d": 2, "q": "Which word starts with the same sound as ball?", "o": ["cat", "fish", "dog", "bat"], "a": 3, "e": "Ball and bat both start with /b/."}
+{"c": "110.2.b.2.A.ii", "d": 3, "q": "Which two words begin with the same sound?", "o": ["sun, sock", "sun, hat", "sock, pig", "hat, pig"], "a": 0, "e": "Sun and sock both start with /s/."}
+{"c": "110.2.b.2.A.iii", "d": 2, "q": "Listen: \"I like pie.\" How many words do you hear?", "o": ["1", "3", "2", "4"], "a": 1, "e": "I, like, pie are three words."}
+{"c": "110.2.b.2.A.iii", "d": 3, "q": "Listen: \"The dog ran fast.\" How many words do you hear?", "o": ["2", "3", "4", "5"], "a": 2, "e": "The, dog, ran, fast."}
+{"c": "110.2.b.2.A.iv", "d": 2, "q": "How many syllables (claps) are in the word \"table\"?", "o": ["1", "4", "3", "2"], "a": 3, "e": "ta-ble has two parts."}
+{"c": "110.2.b.2.A.iv", "d": 2, "q": "How many syllables are in \"elephant\"?", "o": ["3", "1", "4", "2"], "a": 0, "e": "el-e-phant has three parts."}
+{"c": "110.2.b.2.A.iv", "d": 3, "q": "Which word has one syllable?", "o": ["puppy", "dog", "window", "banana"], "a": 1, "e": "Dog has one beat."}
+{"c": "110.2.b.2.A.v", "d": 2, "q": "Blend these two parts: pen (first part), cil (second part). What word is it?", "o": ["panel", "pickle", "pencil", "pencel"], "a": 2, "e": "Pen and cil make pencil."}
+{"c": "110.2.b.2.A.v", "d": 3, "q": "Blend these two parts: bas (first part), ket (second part). What word is it?", "o": ["ballet", "bracket", "bucket", "basket"], "a": 3, "e": "Bas-ket is basket."}
+{"c": "110.2.b.2.A.vi", "d": 2, "q": "Break the word \"sunset\" into two parts.", "o": ["sun and set", "suns and et", "su and nset", "s and unset"], "a": 0, "e": "Sunset has sun and set."}
+{"c": "110.2.b.2.A.vi", "d": 3, "q": "Break the word \"monkey\" into parts.", "o": ["m and onkey", "mon and key", "monk and ey", "mo and nkey"], "a": 1, "e": "Monkey is mon-key."}
+{"c": "110.2.b.2.A.vii", "d": 2, "q": "Blend the sounds /c/ and /at/. What word is it?", "o": ["can", "cap", "cat", "cut"], "a": 2, "e": "C plus at makes cat."}
+{"c": "110.2.b.2.A.vii", "d": 3, "q": "Blend /m/ and /op/. What word is it?", "o": ["hop", "top", "map", "mop"], "a": 3, "e": "M plus op makes mop."}
+{"c": "110.2.b.2.A.viii", "d": 3, "q": "Blend the sounds /s/ /u/ /n/. What word is it?", "o": ["sun", "sit", "nut", "sin"], "a": 0, "e": "The sounds make sun."}
+{"c": "110.2.b.2.A.viii", "d": 3, "q": "Blend /p/ /i/ /g/. What word is it?", "o": ["peg", "pig", "big", "pin"], "a": 1, "e": "The sounds make pig."}
+{"c": "110.2.b.2.A.ix", "d": 3, "q": "Say \"butterfly.\" Now take away \"butter.\" What is left?", "o": ["ter", "butt", "fly", "but"], "a": 2, "e": "Without butter you have fly."}
+{"c": "110.2.b.2.A.ix", "d": 3, "q": "Say \"cupcake.\" Take away \"cup.\" How many parts are left?", "o": ["three", "two", "none", "one"], "a": 3, "e": "Without cup you have cake."}
+{"c": "110.2.b.2.A.x", "d": 3, "q": "How many sounds are in the word \"cat\"?", "o": ["3", "1", "4", "2"], "a": 0, "e": "The sounds are /c/ /a/ /t/."}
+{"c": "110.2.b.2.A.x", "d": 3, "q": "How many sounds are in the word \"sit\"?", "o": ["2", "3", "5", "4"], "a": 1, "e": "The sounds are /s/ /i/ /t/."}
+{"c": "110.2.b.2.B.i", "d": 2, "q": "Which letter makes the /m/ sound?", "o": ["n", "w", "m", "r"], "a": 2, "e": "The letter m says /m/."}
+{"c": "110.2.b.2.B.i", "d": 2, "q": "Which letter makes the first sound in \"sun\"?", "o": ["u", "t", "n", "s"], "a": 3, "e": "Sun starts with the letter s."}
+{"c": "110.2.b.2.B.i", "d": 3, "q": "Which letter makes the sound at the end of \"dog\"?", "o": ["g", "b", "o", "d"], "a": 0, "e": "Dog ends with /g/."}
+{"c": "110.2.b.2.B.ii", "d": 2, "q": "Read the word: c-a-t. What does it say?", "o": ["cut", "cat", "can", "cot"], "a": 1, "e": "The letters spell cat."}
+{"c": "110.2.b.2.B.ii", "d": 3, "q": "Which word can you read with the sounds /h/ /a/ /t/?", "o": ["hit", "hot", "hat", "hut"], "a": 2, "e": "The word is hat."}
+{"c": "110.2.b.2.B.ii", "d": 3, "q": "Which word has the sounds /b/ /e/ /d/?", "o": ["bad", "bid", "bud", "bed"], "a": 3, "e": "The word is bed."}
+{"c": "110.2.b.2.B.iii", "d": 3, "q": "Change the first letter of \"cat\" to \"b.\" What new word do you make?", "o": ["bat", "cot", "bit", "but"], "a": 0, "e": "Bat is cat with a b."}
+{"c": "110.2.b.2.B.iii", "d": 3, "q": "Change the last letter of \"pin\" to \"g.\" What new word do you make?", "o": ["pit", "pig", "pen", "pan"], "a": 1, "e": "Pin becomes pig."}
+{"c": "110.2.b.2.B.iv", "d": 2, "q": "Which is a word you read often: the, a, I?", "o": ["xqz", "tuk", "the", "plim"], "a": 2, "e": "The is a common word."}
+{"c": "110.2.b.2.B.iv", "d": 2, "q": "Which word says \"and\"?", "o": ["any", "out", "add", "and"], "a": 3, "e": "The word and is spelled a-n-d."}
+{"c": "110.2.b.2.B.iv", "d": 3, "q": "Which is a high-frequency word?", "o": ["said", "giraffe", "volcano", "zebra"], "a": 0, "e": "Said is a very common word."}
+{"c": "110.2.b.2.C.i", "d": 3, "q": "Which is the correct spelling of the word for a pet that says meow?", "o": ["kat", "cat", "cet", "catt"], "a": 1, "e": "Cat is spelled c-a-t."}
+{"c": "110.2.b.2.C.i", "d": 3, "q": "Which spells the animal that barks?", "o": ["dgo", "dag", "dog", "doog"], "a": 2, "e": "Dog is spelled d-o-g."}
+{"c": "110.2.b.2.C.ii", "d": 3, "q": "Which word is spelled right?", "o": ["zun", "sunn", "son", "sun"], "a": 3, "e": "Sun uses s-u-n."}
+{"c": "110.2.b.2.C.iii", "d": 3, "q": "Which is spelled correctly?", "o": ["the", "tha", "thu", "teh"], "a": 0, "e": "The is spelled t-h-e."}
+{"c": "110.2.b.2.C.iii", "d": 3, "q": "Which spells \"see\"?", "o": ["sse", "see", "ce", "sea"], "a": 1, "e": "See is spelled s-e-e."}
+{"c": "110.2.b.2.D.i", "d": 2, "q": "Where do you find the title of a book?", "o": ["on the back of your hand", "in the table", "on the front cover", "on the last page only"], "a": 2, "e": "The title is on the front cover."}
+{"c": "110.2.b.2.D.i", "d": 3, "q": "Which part of a book is the very back?", "o": ["the title page", "the first page", "the front cover", "the back cover"], "a": 3, "e": "The back cover is the last outside part."}
+{"c": "110.2.b.2.D.ii", "d": 2, "q": "How do you hold a book to read it?", "o": ["right side up", "upside down", "behind you", "sideways"], "a": 0, "e": "A book is read right side up."}
+{"c": "110.2.b.2.D.ii", "d": 3, "q": "In which direction do we read a line of words?", "o": ["bottom to top", "left to right", "in a circle", "right to left"], "a": 1, "e": "English is read left to right."}
+{"c": "110.2.b.2.D.ii", "d": 3, "q": "When a line of words ends, where do your eyes go?", "o": ["nowhere", "up a line", "to the start of the next line", "to the cover"], "a": 2, "e": "This is called a return sweep."}
+{"c": "110.2.b.2.D.iii", "d": 2, "q": "What separates words in a sentence?", "o": ["colors", "pictures", "numbers", "spaces"], "a": 3, "e": "Words have spaces between them."}
+{"c": "110.2.b.2.D.iii", "d": 3, "q": "How many words are in \"I see a bird\"?", "o": ["4", "5", "3", "1"], "a": 0, "e": "I, see, a, bird."}
+{"c": "110.2.b.2.D.iv", "d": 2, "q": "Which is a letter?", "o": ["bat", "b", "bat sat", "big cat"], "a": 1, "e": "A letter is one symbol."}
+{"c": "110.2.b.2.D.iv", "d": 3, "q": "Which is a printed word?", "o": ["u", "n", "run", "r"], "a": 2, "e": "Run is a word; r, u, n are letters."}
+{"c": "110.2.b.2.D.v", "d": 2, "q": "Which is the uppercase form of \"d\"?", "o": ["P", "b", "q", "D"], "a": 3, "e": "D is uppercase d."}
+{"c": "110.2.b.2.D.v", "d": 2, "q": "Which is the lowercase form of \"A\"?", "o": ["a", "e", "o", "u"], "a": 0, "e": "a is lowercase A."}
+{"c": "110.2.b.2.D.v", "d": 3, "q": "Which two letters are the same letter, big and small?", "o": ["M and n", "G and g", "G and j", "B and d"], "a": 1, "e": "G and g are the same letter."}
+{"c": "110.2.b.3.A", "d": 2, "q": "You do not know how to spell a word. What can help?", "o": ["a spoon", "a coat", "a picture dictionary", "a rock"], "a": 2, "e": "A picture dictionary shows words."}
+{"c": "110.2.b.3.A", "d": 3, "q": "Which tool can help find a new word?", "o": ["a ruler", "a clock", "a pencil box", "a picture dictionary"], "a": 3, "e": "Dictionaries list words."}
+{"c": "110.2.b.3.B", "d": 2, "q": "A page says \"The kitten is tiny\" and shows a kitten that fits in a hand. What does tiny mean?", "o": ["very small", "very fast", "very big", "very loud"], "a": 0, "e": "The picture shows small."}
+{"c": "110.2.b.3.B", "d": 3, "q": "The page shows a boy with a big smile. The text says he is \"happy.\" What does happy mean?", "o": ["cold", "glad", "hungry", "sleepy"], "a": 1, "e": "The smile shows glad."}
+{"c": "110.2.b.3.C", "d": 2, "q": "Which word names an action?", "o": ["table", "red", "jump", "happy"], "a": 2, "e": "Jump is something you do."}
+{"c": "110.2.b.3.C", "d": 2, "q": "Which word tells where something is?", "o": ["laugh", "green", "apple", "under"], "a": 3, "e": "Under tells a position."}
+{"c": "110.2.b.3.C", "d": 3, "q": "Which word is a color?", "o": ["blue", "ball", "run", "round"], "a": 0, "e": "Blue is a color."}
+{"c": "110.2.b.3.C", "d": 3, "q": "Which word names a shape?", "o": ["soft", "circle", "purple", "swim"], "a": 1, "e": "Circle is a shape."}
+{"c": "110.2.b.5.A", "d": 2, "q": "Why might you read a book about frogs?", "o": ["to cook dinner", "to wash your hands", "to learn about frogs", "to play ball"], "a": 2, "e": "A purpose is to learn."}
+{"c": "110.2.b.5.A", "d": 3, "q": "You pick a funny story. What is your purpose?", "o": ["to sleep", "to learn to drive", "to count money", "to enjoy it"], "a": 3, "e": "You read to enjoy."}
+{"c": "110.2.b.5.B", "d": 3, "q": "Before reading a book about bees, which question could you ask?", "o": ["What do bees eat?", "When is lunch?", "How tall is the moon?", "What color is my shoe?"], "a": 0, "e": "It fits the topic."}
+{"c": "110.2.b.5.C", "d": 3, "q": "The cover shows a dog with a leash. What might the book be about?", "o": ["baking a cake", "a walk with a dog", "a big storm", "a rocket"], "a": 1, "e": "The cover gives a clue."}
+{"c": "110.2.b.5.C", "d": 3, "q": "You read \"Ana packs her bag for the beach.\" What might happen next?", "o": ["she bakes bread", "she sleeps all day", "she goes to the beach", "she goes to the moon"], "a": 2, "e": "It fits the story."}
+{"c": "110.2.b.5.D", "d": 3, "q": "\"The sun was a big, warm ball.\" What picture do you make in your mind?", "o": ["a square box", "a cold ice cube", "a tiny seed", "a round yellow sun"], "a": 3, "e": "The words describe the sun."}
+{"c": "110.2.b.5.E", "d": 2, "q": "A story is about a girl who loses her toy. What can you think about?", "o": ["a time you lost something", "what to eat for lunch", "the color red", "how to spell dog"], "a": 0, "e": "That connects to your life."}
+{"c": "110.2.b.5.F", "d": 3, "q": "Tom has a wet coat and an umbrella. What can you tell?", "o": ["it was hot", "it was raining", "it was night", "it was snowy"], "a": 1, "e": "The clues show rain."}
+{"c": "110.2.b.5.F", "d": 3, "q": "Sam is yawning and rubbing his eyes. How does Sam feel?", "o": ["hungry", "angry", "sleepy", "loud"], "a": 2, "e": "Yawning shows sleepy."}
+{"c": "110.2.b.5.G", "d": 3, "q": "A story says a boy is lost, then finds his mom. What is most important?", "o": ["it was Monday", "he wore a hat", "there was a tree", "he found his mom"], "a": 3, "e": "Finding mom is the key part."}
+{"c": "110.2.b.5.H", "d": 3, "q": "You read that bees make honey and honey is sweet. What do you learn?", "o": ["bees make something sweet", "bees are red", "honey is cold", "bees have wheels"], "a": 0, "e": "Combine the facts."}
+{"c": "110.2.b.5.I", "d": 2, "q": "You are reading and it stops making sense. What can you do?", "o": ["throw the book", "read it again", "close your eyes", "stop forever"], "a": 1, "e": "Rereading helps."}
+{"c": "110.2.b.5.I", "d": 3, "q": "You do not know a word. What can help you?", "o": ["guess a color", "turn the book over", "look at the picture", "skip every page"], "a": 2, "e": "Pictures give clues."}
+{"c": "110.2.b.6.A", "d": 2, "q": "A story is about a family dinner. What can you share?", "o": ["the date of the moon", "how to fix a car", "nothing", "a time you ate with family"], "a": 3, "e": "You can connect."}
+{"c": "110.2.b.6.C", "d": 3, "q": "The story says Max is sad because his toy broke. How do you know Max is sad?", "o": ["the story says so", "the book is big", "the title is long", "the page is white"], "a": 0, "e": "Text evidence shows it."}
+{"c": "110.2.b.6.C", "d": 3, "q": "Why did Lily wear boots? \"It was raining, so Lily wore boots.\" The answer is...", "o": ["because it was night", "because it was raining", "because it was hot", "because she was happy"], "a": 1, "e": "The text gives the reason."}
+{"c": "110.2.b.6.D", "d": 2, "q": "Which tells the story of \"The Three Pigs\" in order?", "o": ["wolf wins, pigs build, pigs sing", "pigs sleep, wolf sleeps, end", "pigs build houses, wolf comes, pigs are safe", "houses fall, pigs build, wolf builds"], "a": 2, "e": "Retell in order."}
+{"c": "110.2.b.6.D", "d": 3, "q": "Retelling a story means...", "o": ["reading the title", "drawing a house", "changing the whole story", "telling it again in your own words"], "a": 3, "e": "Retell keeps the meaning."}
+{"c": "110.2.b.7.A", "d": 3, "q": "In a story, a girl shares her snack and makes a friend. What is the lesson?", "o": ["sharing is kind", "snacks are red", "friends are bad", "never eat"], "a": 0, "e": "The theme is sharing."}
+{"c": "110.2.b.7.B", "d": 2, "q": "Who is the main character in \"Ben went to the park. Ben played on the swings.\"?", "o": ["the swings", "Ben", "the park", "the day"], "a": 1, "e": "Ben is the one the story is about."}
+{"c": "110.2.b.7.B", "d": 2, "q": "Which tells about a character?", "o": ["A red barn", "The rainy sky", "A brave girl named Rosa", "The tall green tree"], "a": 2, "e": "Rosa is a character."}
+{"c": "110.2.b.7.C", "d": 2, "q": "In a story, what is the problem?", "o": ["the last word", "the title", "the cover", "what goes wrong"], "a": 3, "e": "The problem is what needs fixing."}
+{"c": "110.2.b.7.C", "d": 3, "q": "A kitten is stuck in a tree. A boy gets it down. What is the resolution?", "o": ["the boy gets the kitten down", "the kitten meows", "the tree is tall", "the kitten is stuck"], "a": 0, "e": "The resolution fixes the problem."}
+{"c": "110.2.b.7.C", "d": 3, "q": "Read: \"Jack lost his hat. He looked everywhere. He found it under his bed.\" What happens FIRST?", "o": ["a search begins", "a hat goes missing", "the hat is found", "a bed is checked"], "a": 1, "e": "The story begins with the hat lost."}
+{"c": "110.2.b.7.D", "d": 2, "q": "\"The story happens in a forest at night.\" What is the setting?", "o": ["a dog", "a bear", "the woods in the dark", "a boy"], "a": 2, "e": "Setting is where and when."}
+{"c": "110.2.b.7.D", "d": 3, "q": "The setting of a story tells...", "o": ["who is the hero", "the title", "the author", "where and when it happens"], "a": 3, "e": "Setting is place and time."}
+{"c": "110.2.b.8.A", "d": 2, "q": "Which is a nursery rhyme?", "o": ["Twinkle, Twinkle, Little Star", "a recipe", "a phone book", "a weather report"], "a": 0, "e": "It is a short rhyme for children."}
+{"c": "110.2.b.8.A", "d": 3, "q": "A story where animals talk and teach a lesson is called a...", "o": ["sign", "fable", "map", "menu"], "a": 1, "e": "A fable has a lesson."}
+{"c": "110.2.b.8.A", "d": 3, "q": "\"Once upon a time, a princess...\" begins what kind of story?", "o": ["a map", "a science book", "a fairy tale", "a news report"], "a": 2, "e": "Fairy tales often start that way."}
+{"c": "110.2.b.8.B", "d": 2, "q": "Which words rhyme in a poem?", "o": ["dog and bird", "hat and sun", "cat and dog", "cat and hat"], "a": 3, "e": "Rhyming words sound alike at the end."}
+{"c": "110.2.b.8.B", "d": 3, "q": "A poem has a beat you can clap. What is that called?", "o": ["rhythm", "spelling", "cover", "title"], "a": 0, "e": "Rhythm is the beat."}
+{"c": "110.2.b.8.C", "d": 3, "q": "In a play, who talks and acts?", "o": ["the cover", "the characters", "the page numbers", "the glue"], "a": 1, "e": "Characters speak in drama."}
+{"c": "110.2.b.8.D.i", "d": 3, "q": "A book about dogs says, \"Dogs need food, water, and love.\" What is it mostly about?", "o": ["space travel", "how to bake", "what dogs need", "football"], "a": 2, "e": "The central idea is dogs' needs."}
+{"c": "110.2.b.8.D.ii", "d": 2, "q": "Where can you find what a nonfiction book is called?", "o": ["a picture of a bee", "the page number", "the last word", "the title"], "a": 3, "e": "The title names the book."}
+{"c": "110.2.b.8.D.iii", "d": 3, "q": "To brush teeth: first wet the brush, then add paste, then scrub. What comes first?", "o": ["get the brush wet", "add paste", "rinse", "scrub"], "a": 0, "e": "Wetting the brush is the first step."}
+{"c": "110.2.b.8.E", "d": 3, "q": "A sign says, \"Wash your hands!\" What does it want you to do?", "o": ["clap", "clean your hands", "eat lunch", "run fast"], "a": 1, "e": "It is trying to persuade you."}
+{"c": "110.2.b.8.F", "d": 3, "q": "Which is a digital text?", "o": ["a rock", "a shoe", "a story on a tablet", "a spoon"], "a": 2, "e": "Digital texts are on screens."}
+{"c": "110.2.b.9.A", "d": 2, "q": "Why do authors write books about animals?", "o": ["to fix cars", "to sell shoes", "to cook", "to teach or tell about animals"], "a": 3, "e": "Authors write to inform."}
+{"c": "110.2.b.9.A", "d": 3, "q": "A funny story is written mostly to...", "o": ["entertain", "sell food", "warn about storms", "measure"], "a": 0, "e": "Funny stories entertain."}
+{"c": "110.2.b.9.B", "d": 3, "q": "A book tells steps in order, first, next, last. What is it teaching?", "o": ["a scary tale", "how to do something", "a silly rhyme", "a joke"], "a": 1, "e": "Steps teach a process."}
+{"c": "110.2.b.9.C", "d": 2, "q": "Bold words in a book help you...", "o": ["forget words", "skip pages", "see important words", "lose the story"], "a": 2, "e": "Bold stands out."}
+{"c": "110.2.b.9.C", "d": 3, "q": "A picture with a label helps you...", "o": ["hide the picture", "spell your name", "turn the page", "know what the picture shows"], "a": 3, "e": "Labels name things."}
+{"c": "110.2.b.9.D", "d": 3, "q": "Which sentence helps you see a picture in your mind?", "o": ["The shiny red apple rolled down the hill.", "Yes.", "Go.", "It was a thing."], "a": 0, "e": "Descriptive words help you visualize."}
+{"c": "110.2.b.9.E", "d": 3, "q": "\"I went to the store.\" Who is telling the story?", "o": ["they", "I (first person)", "she", "he"], "a": 1, "e": "I tells it in first person."}
+{"c": "110.2.b.9.E", "d": 3, "q": "\"She went to the store.\" Who is the story about?", "o": ["nobody", "the reader", "another person (third person)", "the speaker"], "a": 2, "e": "She is third person."}
+{"c": "110.2.b.10.C", "d": 3, "q": "Ana writes, \"I have a dog.\" How can she add a detail?", "o": ["Have dog a.", "A dog.", "I dog.", "I have a big brown dog."], "a": 3, "e": "Details add describing words."}
+{"c": "110.2.b.10.D.i", "d": 2, "q": "Which is a complete sentence?", "o": ["The dog runs.", "The dog", "runs fast", "big red"], "a": 0, "e": "A complete sentence has a who and a what."}
+{"c": "110.2.b.10.D.i", "d": 3, "q": "Which is NOT a complete sentence?", "o": ["I see a bird.", "a big cat", "We play.", "The cat sleeps."], "a": 1, "e": "It is missing an action."}
+{"c": "110.2.b.10.D.ii", "d": 2, "q": "Which word is a verb?", "o": ["tree", "pink", "jump", "cup"], "a": 2, "e": "Verbs are actions."}
+{"c": "110.2.b.10.D.iii", "d": 2, "q": "Which word means more than one?", "o": ["dog", "cat", "bird", "dogs"], "a": 3, "e": "Add s for many."}
+{"c": "110.2.b.10.D.iii", "d": 3, "q": "Which is plural?", "o": ["boxes", "one", "box", "cat"], "a": 0, "e": "Boxes means more than one."}
+{"c": "110.2.b.10.D.iv", "d": 2, "q": "Which is an adjective, a word that describes?", "o": ["run", "big", "go", "and"], "a": 1, "e": "Big describes a noun."}
+{"c": "110.2.b.10.D.iv", "d": 3, "q": "Which word is an article?", "o": ["fast", "run", "the", "red"], "a": 2, "e": "The is an article."}
+{"c": "110.2.b.10.D.v", "d": 3, "q": "Which word is a preposition?", "o": ["run", "dog", "big", "on"], "a": 3, "e": "On shows where."}
+{"c": "110.2.b.10.D.v", "d": 3, "q": "Which sentence has a word that tells where?", "o": ["The cat is under the table.", "The cat is big.", "The cat is happy.", "The cat is sleepy."], "a": 0, "e": "Under is a preposition."}
+{"c": "110.2.b.10.D.vi", "d": 2, "q": "Which word can take the place of \"Sam\"?", "o": ["we", "he", "they", "it"], "a": 1, "e": "He replaces Sam."}
+{"c": "110.2.b.10.D.vi", "d": 3, "q": "Which is a pronoun?", "o": ["blue", "jump", "she", "mat"], "a": 2, "e": "She replaces a girl's name."}
+{"c": "110.2.b.10.D.vii", "d": 2, "q": "Which sentence starts with a capital letter?", "o": ["sun hot is the", "my cat", "a dog barks", "The sun is hot."], "a": 3, "e": "The first word needs a capital."}
+{"c": "110.2.b.10.D.vii", "d": 3, "q": "Look at these words: dog, max, run, big. Which one should start with a capital letter?", "o": ["max", "run", "big", "dog"], "a": 0, "e": "Names start with a capital."}
+{"c": "110.2.b.10.D.viii", "d": 2, "q": "What goes at the end of a telling sentence?", "o": ["a question mark", "a period", "a comma", "a star"], "a": 1, "e": "A period ends a statement."}
+{"c": "110.2.b.10.D.viii", "d": 3, "q": "Which sentence ends correctly?", "o": ["I like pizza?", "I like pizza", "I like pizza.", "I like pizza,"], "a": 2, "e": "A telling sentence ends with a period."}

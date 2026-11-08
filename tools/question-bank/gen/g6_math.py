@@ -312,3 +312,319 @@ def area_story():
     nm = who(); l = F(R.randint(3, 20), 2); w = F(R.randint(3, 12), 2); r = l * w
     return mk('3.E', 4, f"{nm}'s garden is {ms(l)} meters long and {ms(w)} meters wide. What is its area in square meters?", f"{ms(r)} square meters", [f"{ms(l + w)} square meters", f"{ms(2 * (l + w))} square meters", f"{ms(l / w)} square meters"], f"{ms(l)} × {ms(w)} = {ms(r)}.", f"{MSC(f'F({l.numerator},{l.denominator})*F({w.numerator},{w.denominator})')}+' square meters'")
 rep(6, fmul); rep(4, mixed_mul); rep(4, mixed_div); rep(5, dec_mul); rep(4, dec_div); rep(3, frac_story); rep(3, frac_story_div); rep(3, area_story)
+
+# ================================================================ 4.A compare two rules
+H('4.A', 3, "Rule 1 is y = 3x and Rule 2 is y = x + 3. When x = 5, how do the two outputs compare?", "Rule 1 gives 15 and Rule 2 gives 8, so Rule 1 is greater", ["Rule 1 gives 8 and Rule 2 gives 15, so Rule 2 is greater", "Both rules give 8", "Both rules give 15"], "Rule 1: 3 × 5 = 15. Rule 2: 5 + 3 = 8.")
+H('4.A', 3, "Rule A is y = 2x and Rule B is y = x + 2. For which value of x do both rules give the same output?", "x = 2", ["x = 1", "x = 3", "x = 4"], "At x = 2, 2 × 2 = 4 and 2 + 2 = 4.")
+H('4.A', 4, "A table shows x = 1, 2, 3, 4 and y = 4, 8, 12, 16. Which rule matches the table?", "y = 4x", ["y = x + 3", "y = x + 4", "y = 4 + 2x"], "Each y is 4 times x, so the rule is multiplication by 4.")
+H('4.A', 4, "A table shows x = 1, 2, 3, 4 and y = 6, 7, 8, 9. Which rule matches the table?", "y = x + 5", ["y = 6x", "y = x + 6", "y = 5x"], "Each y is x plus 5.")
+H('4.A', 3, "As x increases by 1, how does y change for the rule y = 5x?", "y increases by 5", ["y increases by 1", "y increases by 6", "y is multiplied by 5 each time"], "Multiplying by 5, so each step in x adds 5 to y.")
+H('4.A', 3, "Which statement describes the graph of y = x + 4 compared with y = 4x?", "y = 4x grows faster as x gets larger", ["y = x + 4 grows faster as x gets larger", "They grow at the same rate", "Neither one grows"], "y = 4x rises 4 for each 1 in x, while y = x + 4 rises only 1.")
+# ================================================================ 4.B prediction and comparison with ratios
+H('4.B', 3, "A recipe uses 2 cups of rice for every 3 cups of water. If you use more rice but the same amount of water, the rice-to-water ratio will...", "increase", ["decrease", "stay the same", "become zero"], "More rice with the same water makes the first quantity larger relative to the second.")
+H('4.B', 4, "The Hawks have 3 wins for every 2 losses. The Owls have 4 wins for every 4 losses. Which statement is true?", "The Hawks have the better win-to-loss ratio", ["The Owls have the better win-to-loss ratio", "The teams have equal ratios", "Neither ratio can be compared"], "The Hawks' ratio is 3/2 = 1.5 and the Owls' ratio is 4/4 = 1.")
+H('4.B', 4, "A car travels 120 miles on 4 gallons. About how far should it travel on 10 gallons at the same rate?", "300 miles", ["240 miles", "480 miles", "30 miles"], "120 ÷ 4 = 30 miles per gallon, and 30 × 10 = 300.")
+H('4.B', 3, "Which store has the better deal: 5 notebooks for $10 or 3 notebooks for $9?", "5 for $10", ["3 for $9", "They cost the same per notebook", "Not enough information"], "$10 ÷ 5 = $2 each; $9 ÷ 3 = $3 each.")
+H('4.B', 3, "If the ratio of boys to girls is 2:3 and there are 12 boys, how many girls are there?", "18", ["8", "12", "30"], "12 ÷ 2 = 6 per part, and 3 × 6 = 18.")
+# ================================================================ 4.C ratios
+def ratio_q():
+    a = R.randint(2, 9); b = R.randint(2, 9)
+    if a == b: return False
+    nm = R.choice(["red marbles", "cats", "apples", "pencils", "tickets"]); nm2 = R.choice(["blue marbles", "dogs", "oranges", "pens", "coupons"])
+    return mk('4.C', 2, f"A bag has {a} {nm} and {b} {nm2}. What is the ratio of {nm} to {nm2}?", f"{a}:{b}", [f"{b}:{a}", f"{a}:{a + b}", f"{a + b}:{b}"], f"Put {nm} first, {nm2} second: {a}:{b}.")
+rep(5, ratio_q)
+H('4.C', 3, "Which situation is a multiplicative comparison of two quantities with the same attribute?", "There are 3 times as many fiction books as poetry books", ["A runner goes 6 miles in 1 hour", "A shirt costs $12", "A class has 25 students"], "A ratio of two amounts of the same kind (books to books) is a multiplicative comparison.")
+H('4.C', 3, "A class has 12 girls and 16 boys. Which ratio is equivalent to girls to boys?", "3:4", ["4:3", "12:28", "16:12"], "12:16 simplifies to 3:4.")
+H('4.C', 4, "A ratio of cats to dogs is 5:2. What does this tell you?", "For every 5 cats there are 2 dogs", ["There are 5 pets in all", "There are 2 more cats than dogs", "Every dog has 5 cats"], "The ratio compares the amount of cats to the amount of dogs.")
+# ================================================================ 4.D rates
+H('4.D', 2, "A rate is a comparison by division of two quantities that have...", "different attributes", ["the same attribute", "no units", "the same units"], "Rates compare unlike quantities, such as miles and hours.")
+H('4.D', 3, "Which is a unit rate?", "60 miles per 1 hour", ["60 miles per 2 hours", "120 miles per 3 hours", "60 miles"], "A unit rate has 1 as the second quantity.")
+def unit_rate():
+    r = R.randint(3, 15); n = R.randint(3, 9); nm = who()
+    return mk('4.D', 3, f"{nm} paid ${r * n} for {n} identical books. What is the price per book?", f"${r}", [f"${r * n + n}", f"${r + n}", f"${r * n * n}"], f"${r * n} ÷ {n} = ${r}.", f"'${r}'")
+rep(5, unit_rate)
+H('4.D', 4, "A snail moves 24 inches in 8 minutes. What is the unit rate in inches per minute?", "3", ["32", "192", "1/3"], "24 ÷ 8 = 3 inches per minute.")
+H('4.D', 4, "A faucet fills 45 gallons in 9 minutes. How many gallons per minute is that?", "5", ["36", "405", "1/5"], "45 ÷ 9 = 5.")
+# ================================================================ 4.E ratios and percents with models
+H('4.E', 3, "A 10 × 10 grid has 35 squares shaded. What percent is shaded?", "35%", ["3.5%", "65%", "10%"], "35 out of 100 is 35%.")
+H('4.E', 3, "A 10 × 10 grid has 35 squares shaded. Which decimal represents the shaded part?", "0.35", ["3.5", "0.035", "35"], "35/100 = 0.35.")
+H('4.E', 3, "A bar is split into 5 equal parts and 2 are shaded. What percent is shaded?", "40%", ["25%", "20%", "2%"], "2/5 = 40/100 = 40%.")
+H('4.E', 3, "Which fraction is equal to 60%?", "3/5", ["6/5", "1/6", "3/10"], "60/100 simplifies to 3/5.")
+H('4.E', 3, "Which decimal is equal to 7%?", "0.07", ["0.7", "7.0", "0.007"], "7% = 7/100 = 0.07.")
+H('4.E', 4, "A ratio table shows 2 red : 3 blue. Which ratio represents the same relationship?", "6:9", ["4:5", "5:6", "3:2"], "Multiply both parts by 3.")
+# ================================================================ 4.F benchmark fractions and percents
+H('4.F', 3, "Which percent is equal to 1/4?", "25%", ["14%", "40%", "4%"], "1/4 = 25/100.")
+H('4.F', 3, "Which percent is equal to 1/10?", "10%", ["1%", "100%", "0.1%"], "1/10 = 10/100.")
+H('4.F', 4, "On a number line from 0 to 1, where is 33 1/3% located?", "at 1/3 of the way from 0", ["at the halfway mark", "at 3/4 of the way from 0", "at 0.033"], "33 1/3% = 1/3.")
+H('4.F', 4, "What is 50% of the way from 0 to 80 on a number line?", "40", ["50", "20", "30"], "50% is half of 80.")
+H('4.F', 4, "Which percent is equal to 3/4?", "75%", ["34%", "60%", "43%"], "3 × 25% = 75%.")
+H('4.F', 4, "20% of a double number line from 0 to 50 is at which value?", "10", ["20", "5", "25"], "20% is 1/5 of 50, which is 10.")
+# ================================================================ 4.G equivalent forms
+H('4.G', 3, "A store takes 25% off a $40 shirt. Which fraction of the price is taken off?", "1/4", ["1/25", "2/5", "25/4"], "25% = 1/4.")
+H('4.G', 3, "A quiz score is 18 out of 20. What percent is that?", "90%", ["18%", "80%", "20%"], "18/20 = 90/100.")
+H('4.G', 3, "Which is equivalent to 0.8?", "80%", ["8%", "0.8%", "800%"], "0.8 = 80/100.")
+H('4.G', 4, "Which list is in order from least to greatest?", "0.4, 45%, 1/2", ["1/2, 45%, 0.4", "45%, 0.4, 1/2", "0.4, 1/2, 45%"], "0.4 = 40%, 45%, 1/2 = 50%.")
+H('4.G', 4, "A tip is 15% of a bill. Which decimal would you multiply by the bill amount?", "0.15", ["1.5", "15", "0.015"], "15% = 0.15.")
+H('4.G', 4, "7 out of 8 students passed. Which is closest to the percent who passed?", "87.5%", ["78%", "70%", "8.7%"], "7 ÷ 8 = 0.875.")
+# ================================================================ 4.H convert units
+H('4.H', 2, "How many inches are in 3 feet?", "36", ["12", "30", "9"], "3 × 12 = 36.")
+H('4.H', 2, "How many centimeters are in 5 meters?", "500", ["50", "5,000", "0.05"], "1 m = 100 cm.")
+H('4.H', 3, "How many quarts are in 4 gallons?", "16", ["8", "12", "32"], "1 gallon = 4 quarts.")
+H('4.H', 3, "How many ounces are in 3 pounds?", "48", ["36", "30", "12"], "1 pound = 16 ounces.")
+H('4.H', 3, "How many grams are in 2.5 kilograms?", "2,500", ["250", "25", "25,000"], "1 kg = 1,000 g.")
+H('4.H', 4, "Which proportion can be used to find how many feet are in 84 inches?", "12/1 = 84/x", ["12/84 = x/1", "1/12 = x/84 with x inches", "84/12 = 1/x with x gallons"], "12 inches for each 1 foot, so 12/1 = 84/x gives 7 feet.")
+H('4.H', 4, "A rope is 9 yards long. How many feet is that?", "27", ["3", "81", "18"], "1 yard = 3 feet.")
+H('4.H', 4, "How many minutes are in 2.5 hours?", "150", ["25", "250", "125"], "2.5 × 60 = 150.")
+
+# ================================================================ 5.A ratios and rates with tables, graphs, scale
+H('5.A', 3, "A table shows 2 cups flour for 1 batch, 4 cups for 2 batches, 6 cups for 3 batches. How many cups of flour are needed for 5 batches?", "10", ["8", "12", "7"], "Each batch needs 2 cups: 5 × 2 = 10.")
+H('5.A', 3, "On a map, 1 inch represents 20 miles. Two towns are 3.5 inches apart on the map. What is the real distance?", "70 miles", ["23.5 miles", "7 miles", "35 miles"], "3.5 × 20 = 70.")
+H('5.A', 4, "A graph of a proportional relationship is a straight line that passes through which point?", "(0, 0)", ["(1, 1)", "(0, 1)", "(1, 0)"], "In a proportional relationship, 0 of one quantity goes with 0 of the other.")
+H('5.A', 3, "A scale drawing uses a scale of 1 cm = 4 m. A wall is 5 cm long in the drawing. How long is the real wall?", "20 m", ["9 m", "1.25 m", "5 m"], "5 × 4 = 20.")
+H('5.A', 4, "A double number line has 3 miles aligned with 45 minutes. Which time aligns with 6 miles at the same rate?", "90 minutes", ["48 minutes", "135 minutes", "60 minutes"], "6 miles is double 3 miles, so double 45 minutes.")
+H('5.A', 4, "Which equation matches a rate of $6 for every 2 pounds of apples, where c is the cost and p is the pounds?", "c = 3p", ["c = 6p", "c = 2p", "c = p + 4"], "$6 ÷ 2 = $3 per pound, so c = 3p.")
+# ================================================================ 5.B percent problems
+def pct_of():
+    p = R.choice([10, 20, 25, 30, 40, 50, 60, 75]); w = R.choice([40, 60, 80, 120, 200, 240, 400])
+    r = p * w // 100
+    if p * w % 100: return False
+    return mk('5.B', 3, f"What is {p}% of {w}?", str(r), [str(w - r), str(p + w), str(r * 2)], f"{p}/100 × {w} = {r}.", f"str({p}*{w}//100)")
+rep(6, pct_of)
+def pct_whole():
+    p = R.choice([10, 20, 25, 40, 50]); w = R.choice([40, 60, 80, 120, 200]); r = p * w // 100
+    nm = who()
+    return mk('5.B', 4, f"{nm} saved ${r}, which is {p}% of the goal. What is the goal?", f"${w}", [f"${r * p}", f"${w - r}", f"${w + r}"], f"{p}% of the goal is ${r}, so the goal is ${r} ÷ {p / 100:g} = ${w}.", f"'${w}'")
+rep(4, pct_whole)
+def pct_found():
+    t = R.choice([20, 25, 40, 50, 80]); p = R.choice([10, 20, 25, 50, 75, 40, 60]); a = t * p // 100
+    if t * p % 100: return False
+    nm = who()
+    return mk('5.B', 4, f"{nm} answered {a} of {t} questions correctly. What percent is correct?", f"{p}%", [f"{a}%", f"{100 - p}%", f"{t - a}%"], f"{a} ÷ {t} = {p / 100:g} = {p}%.", f"'{p}%'")
+rep(4, pct_found)
+H('5.B', 3, "A jacket costs $60 and is 25% off. What is the discount in dollars?", "$15", ["$25", "$45", "$35"], "25% of 60 = 15.")
+H('5.B', 4, "A $40 meal has a 20% tip. How much is the tip?", "$8", ["$20", "$4", "$80"], "0.20 × 40 = 8.")
+# ================================================================ 5.C equal parts of the same whole
+H('5.C', 3, "Which three values show the same part of a whole?", "1/2, 0.5, 50%", ["1/2, 0.2, 20%", "1/4, 0.4, 40%", "1/10, 1.0, 10%"], "1/2 = 0.5 = 50%.")
+H('5.C', 3, "Which values are equal?", "3/4, 0.75, 75%", ["3/4, 0.34, 34%", "3/5, 0.35, 35%", "4/3, 0.43, 43%"], "3 ÷ 4 = 0.75 = 75%.")
+H('5.C', 3, "A pizza is cut in 8 equal slices and Eli eats 2. Which is NOT equal to the part he ate?", "0.5", ["1/4", "0.25", "25%"], "2/8 = 1/4 = 0.25 = 25%.")
+H('5.C', 4, "A garden is 40% flowers. What fraction of the garden is flowers?", "2/5", ["4/5", "1/4", "4/10 of 40"], "40/100 simplifies to 2/5.")
+H('5.C', 4, "Which statement is true about 1/5, 0.2 and 20%?", "They name the same part of a whole", ["They name three different amounts", "1/5 is greatest", "20% is least"], "1/5 = 0.2 = 20%.")
+# ================================================================ 6.A independent and dependent quantities
+H('6.A', 3, "A table shows hours worked (h) and money earned (m). Which quantity is the independent quantity?", "the time spent working", ["money earned", "the hourly rate only", "neither"], "Money depends on how many hours are worked.")
+H('6.A', 3, "In the relationship between the number of tickets bought and the total cost, which is the dependent quantity?", "the amount of money owed", ["number of tickets", "ticket color", "the day of the week"], "The cost depends on the number of tickets.")
+H('6.A', 3, "On a graph, which axis usually shows the independent quantity?", "the horizontal (x) axis", ["the vertical (y) axis", "neither axis", "both axes"], "The independent quantity goes on x.")
+H('6.A', 4, "A graph shows the distance a bike travels over time. What is the dependent quantity?", "how far the bike has gone", ["time", "speed limit", "rider's name"], "Distance depends on how long the bike is ridden.")
+H('6.A', 4, "A taxi charges by the mile. Which sentence is correct?", "The fare depends on the miles driven", ["The miles driven depend on the fare", "Neither depends on the other", "The fare is the independent quantity"], "Miles driven is independent; fare is dependent.")
+# ================================================================ 6.B write an equation from a table
+H('6.B', 4, "A table shows x = 1, 2, 3 and y = 5, 10, 15. Which equation represents the relationship?", "y = 5x", ["y = x + 4", "y = x + 5", "y = 15x"], "Each y is 5 times x.")
+H('6.B', 4, "A table shows x = 2, 4, 6 and y = 5, 7, 9. Which equation represents the relationship?", "y = x + 3", ["y = 2.5x", "y = x + 5", "y = 3x"], "y is 3 more than x each time.")
+H('6.B', 4, "A table shows n = 3, 6, 9 and c = 12, 24, 36. Which equation fits?", "c = 4n", ["c = n + 9", "c = 3n", "c = n + 4"], "12 ÷ 3 = 4.")
+H('6.B', 4, "A table shows x = 5, 6, 7 and y = 2, 3, 4. Which equation fits?", "y = x − 3", ["y = x + 3", "y = 3x", "y = x − 2"], "Each y is 3 less than x.")
+H('6.B', 4, "A table shows x = 1, 2, 3 and y = 7, 8, 9. Which statement is true?", "y = x + 6", ["y = 7x", "y = x + 7", "y = 6x"], "Each y is x plus 6.")
+# ================================================================ 6.C representations y=kx, y=x+b
+H('6.C', 3, "A gym charges $15 a month. Which equation gives the cost c for m months?", "c = 15m", ["c = m + 15", "c = 15 − m", "c = m ÷ 15"], "Cost is 15 times the number of months.")
+H('6.C', 3, "A student has $20 and earns $4 each week. Which equation gives the total t after w weeks?", "t = 4w + 20", ["t = 24w", "t = 20w + 4", "t = 4w − 20"], "Starts at 20 and adds 4 per week.")
+H('6.C', 4, "Ava is 5 years older than her cousin. If her cousin is c years old, which equation gives Ava's age a?", "a = c + 5", ["a = 5c", "a = c − 5", "a = c ÷ 5"], "Ava is 5 more than c.")
+H('6.C', 4, "A table shows time (h) and miles (m): h = 1, 2, 3; m = 45, 90, 135. Which representation matches?", "m = 45h", ["m = h + 44", "m = 90h", "h = 45m"], "Each hour adds 45 miles from 0.")
+H('6.C', 4, "A recipe uses 3 eggs per cake. Which graph description matches e = 3c?", "a straight line through (0, 0) and (1, 3)", ["a straight line through (0, 3) and (1, 4)", "a line through (3, 0)", "a curve that goes down"], "e = 3c passes through (0, 0), (1, 3), (2, 6).")
+# ================================================================ 7.A order of operations and exponents
+def order_ops():
+    a = R.randint(2, 9); b = R.randint(2, 6); c = R.randint(2, 6); r = a + b * c
+    return mk('7.A', 2, f"What is the value of {a} + {b} × {c}?", str(r), [str((a + b) * c), str(a + b + c), str(a * b + c)], f"Multiply first: {b} × {c} = {b * c}, then add {a} to get {r}.", f"str({a}+{b}*{c})")
+rep(4, order_ops)
+def exp_val():
+    b = R.randint(2, 6); e = R.randint(2, 4); r = b ** e
+    return mk('7.A', 2, f"What is {b}{'²³⁴'[e - 2]}?", str(r), [str(b * e), str(b + e), str(e ** b)], f"{b} is used as a factor {e} times: {r}.", f"str({b}**{e})")
+rep(4, exp_val)
+def paren_ops():
+    a = R.randint(10, 40); b = R.randint(2, 8); c = R.randint(2, 5); r = (a - b) * c
+    return mk('7.A', 3, f"What is the value of ({a} − {b}) × {c}?", str(r), [str(a - b * c), str(a - b + c), str((a + b) * c)], f"Parentheses first: {a - b} × {c} = {r}.", f"str(({a}-{b})*{c})")
+rep(4, paren_ops)
+H('7.A', 3, "Which is the prime factorization of 36?", "2 × 2 × 3 × 3", ["2 × 18", "6 × 6", "4 × 9"], "Prime factors are only primes: 2, 2, 3, 3.")
+H('7.A', 3, "Which is the prime factorization of 20?", "2 × 2 × 5", ["4 × 5", "2 × 10", "2 × 5"], "20 = 2 × 2 × 5.")
+H('7.A', 4, "Which expression is equivalent to 2³ + 4?", "12", ["10", "14", "16"], "2³ = 8, and 8 + 4 = 12.")
+H('7.A', 4, "What is the value of 3 + 2² × 5?", "23", ["125", "35", "28"], "Exponent first: 4. Then multiply: 20. Then add 3.")
+# ================================================================ 7.B expressions vs equations
+H('7.B', 2, "Which is an equation?", "3x + 2 = 11", ["3x + 2", "5y", "4 × 7"], "An equation has an equal sign.")
+H('7.B', 2, "Which is an expression?", "5n − 3", ["5n − 3 = 12", "n = 8", "2 + 2 = 4"], "An expression has no equal sign.")
+H('7.B', 3, "The phrase “7 more than a number” can be written as which expression?", "n + 7", ["7n", "n − 7", "n = 7"], "More than means add.")
+H('7.B', 3, "The phrase “the product of 6 and a number” is written as...", "6n", ["6 + n", "n − 6", "6 ÷ n"], "Product means multiply.")
+H('7.B', 4, "Which statement is an equation?", "A number plus 5 is 12", ["A number plus 5", "Twice a number", "The sum of 4 and 9"], "“Is” signals equality.")
+# ================================================================ 7.C equivalent expressions
+H('7.C', 3, "Which expression is equivalent to x + x + x?", "3x", ["x³", "x + 3", "3 + x"], "Three x's add to 3x.")
+H('7.C', 3, "Which expression is equivalent to 2(x + 4)?", "2x + 8", ["2x + 4", "x + 8", "2x + 6"], "Distribute the 2.")
+H('7.C', 4, "Are 4(y + 1) and 4y + 1 equivalent?", "No, because 4(y + 1) = 4y + 4", ["Yes, they are the same", "Yes, if y = 0", "No, because 4(y + 1) = 5y"], "The 4 multiplies both terms.")
+H('7.C', 4, "Which expression is NOT equivalent to 6a?", "a + 6", ["a × 6", "3a + 3a", "2a + 4a"], "a + 6 is not 6a (except at a = 1.2).")
+H('7.C', 4, "Which expression is equivalent to 5n + 2n?", "7n", ["7n²", "10n", "n⁷"], "5n + 2n = 7n.")
+# ================================================================ 7.D properties
+H('7.D', 3, "Which property is shown: 8 + 3 = 3 + 8?", "commutative", ["associative", "distributive", "identity"], "Order changes but the sum is the same.")
+H('7.D', 3, "Which property is shown: (2 + 3) + 4 = 2 + (3 + 4)?", "associative", ["commutative", "distributive", "inverse"], "Grouping changes but the sum is the same.")
+H('7.D', 3, "Which property is shown: 7 × 1 = 7?", "identity", ["inverse", "commutative", "associative"], "Multiplying by 1 keeps the value.")
+H('7.D', 3, "Which property is shown: 9 + (−9) = 0?", "inverse", ["identity", "distributive", "commutative"], "A number plus its opposite is 0.")
+H('7.D', 4, "Which property is shown: 3(x + 5) = 3x + 15?", "distributive", ["commutative", "associative", "identity"], "3 is multiplied by each term inside the parentheses.")
+# ================================================================ 8.A triangles
+H('8.A', 2, "What is the sum of the angle measures in any triangle?", "180°", ["90°", "360°", "100°"], "Triangle angles add to 180°.")
+def tri_angle():
+    a = R.randint(30, 80); b = R.randint(30, 80); c = 180 - a - b
+    if c < 20: return False
+    return mk('8.A', 3, f"Two angles of a triangle measure {a}° and {b}°. What is the third angle?", f"{c}°", [f"{a + b}°", f"{360 - a - b}°", f"{c + 10}°"], f"180 − {a} − {b} = {c}.", f"'{c}°'")
+rep(5, tri_angle)
+H('8.A', 3, "Which sides can form a triangle?", "4, 5, 8", ["2, 3, 7", "1, 2, 5", "3, 3, 9"], "The two shorter sides must sum to more than the longest side: 4 + 5 > 8.")
+H('8.A', 3, "Which sides CANNOT form a triangle?", "3, 4, 8", ["5, 6, 7", "4, 5, 8", "6, 6, 6"], "3 + 4 = 7 is less than 8.")
+H('8.A', 3, "A triangle with three equal sides is called...", "equilateral", ["scalene", "right", "isosceles"], "Equilateral means all sides equal.")
+H('8.A', 3, "A triangle with one 90° angle is called...", "a right triangle", ["an equilateral triangle", "an obtuse triangle", "a scalene triangle"], "A right triangle has one right angle.")
+# ================================================================ 8.B model area formulas
+H('8.B', 3, "A parallelogram can be cut and rearranged into a...", "rectangle", ["circle", "triangle", "hexagon"], "Cut off a right triangle and slide it to the other side.")
+H('8.B', 4, "Two identical triangles can be joined to form a parallelogram. How does a triangle's area compare?", "It is half the area of the parallelogram", ["It is double", "It is the same", "It is a quarter"], "Two triangles make one parallelogram.")
+H('8.B', 4, "Which formula gives the area of a triangle?", "A = ½bh", ["A = bh", "A = ½b + h", "A = 2bh"], "Half of base times height.")
+H('8.B', 4, "A trapezoid can be decomposed into two triangles. Which formula follows?", "A = ½(b₁ + b₂)h", ["A = b₁b₂h", "A = (b₁ + b₂ + h)", "A = ½b₁h"], "The two triangles have bases b₁ and b₂, both with height h.")
+H('8.B', 3, "Which formula gives the area of a parallelogram?", "A = bh", ["A = ½bh", "A = b + h", "A = 2b + 2h"], "Base times height.")
+# ================================================================ 8.C equations for area
+H('8.C', 4, "A rectangular garden is 12 ft long and w ft wide with area 84 ft². Which equation represents this?", "12w = 84", ["12 + w = 84", "w ÷ 12 = 84", "12 − w = 84"], "A = lw.")
+H('8.C', 4, "A triangle has base 10 cm and height h cm. Its area is 35 cm². Which equation represents this?", "½ × 10 × h = 35", ["10h = 35", "10 + h = 35", "½ + 10h = 35"], "A = ½bh.")
+H('8.C', 4, "A parallelogram has area 48 in² and height 6 in. If b is the base, which equation fits?", "6b = 48", ["6 + b = 48", "b ÷ 6 = 48", "48b = 6"], "A = bh.")
+H('8.C', 4, "A trapezoid has bases 6 and 10 and area 40. Which equation finds the height h?", "½(6 + 10)h = 40", ["6 + 10 + h = 40", "(6)(10)h = 40", "½(6)(10) = h"], "A = ½(b₁ + b₂)h.")
+# ================================================================ 8.D solve area problems
+def tri_area():
+    b = R.randint(4, 20); h = R.randint(3, 12)
+    if (b * h) % 2: return False
+    return mk('8.D', 3, f"What is the area of a triangle with base {b} cm and height {h} cm?", f"{b * h // 2} cm²", [f"{b * h} cm²", f"{b + h} cm²", f"{b * h // 2 + b} cm²"], f"½ × {b} × {h} = {b * h // 2}.", f"'{b*h//2} cm²'")
+rep(5, tri_area)
+def par_area():
+    b = R.randint(4, 15); h = R.randint(3, 12)
+    return mk('8.D', 3, f"A parallelogram has base {b} ft and height {h} ft. What is its area?", f"{b * h} ft²", [f"{b + h} ft²", f"{b * h // 2 if (b * h) % 2 == 0 else b * h + 1} ft²", f"{2 * (b + h)} ft²"], f"{b} × {h} = {b * h}.", f"'{b*h} ft²'")
+rep(4, par_area)
+def trap_area():
+    b1 = R.randint(3, 10); b2 = b1 + R.randint(2, 8); h = R.randint(2, 8)
+    if ((b1 + b2) * h) % 2: return False
+    r = (b1 + b2) * h // 2
+    return mk('8.D', 4, f"A trapezoid has bases {b1} m and {b2} m and height {h} m. What is its area?", f"{r} m²", [f"{b1 * b2 * h // 2 if (b1 * b2 * h) % 2 == 0 else b1 * b2 * h} m²", f"{(b1 + b2) * h} m²", f"{b1 + b2 + h} m²"], f"½({b1} + {b2}) × {h} = {r}.", f"'{r} m²'")
+rep(4, trap_area)
+H('8.D', 4, "A rectangle has area 96 cm² and width 8 cm. What is its length?", "12 cm", ["88 cm", "104 cm", "768 cm"], "96 ÷ 8 = 12.")
+H('8.D', 4, "A triangular sail has area 30 ft² and base 10 ft. What is its height?", "6 ft", ["3 ft", "12 ft", "20 ft"], "½ × 10 × h = 30 gives h = 6.")
+# ================================================================ 9.A write equations and inequalities
+H('9.A', 3, "Ben has 14 stickers. After giving some away he has 9. Which equation shows this, with s the stickers given away?", "14 − s = 9", ["14 + s = 9", "s − 14 = 9", "14s = 9"], "14 minus given away equals 9.")
+H('9.A', 3, "A bus holds at most 40 people. Which inequality shows the number of people p?", "p ≤ 40", ["p ≥ 40", "p < 40 only", "p > 40"], "At most means less than or equal to.")
+H('9.A', 4, "You need at least 25 points to pass. Which inequality represents the points p?", "p ≥ 25", ["p ≤ 25", "p < 25", "p = 25"], "At least means greater than or equal to.")
+H('9.A', 3, "Four friends share the cost equally, and each pays $9. Which equation shows the total cost t?", "t ÷ 4 = 9", ["t + 4 = 9", "4t = 9", "t − 4 = 9"], "Cost divided by 4 equals 9.")
+H('9.A', 4, "A phone plan costs $5 plus $0.10 per text and must stay under $12. Which inequality fits, with t texts?", "5 + 0.10t < 12", ["5 − 0.10t < 12", "0.10t + 12 < 5", "5 × 0.10t < 12"], "Fixed fee plus per-text cost is less than 12.")
+# ================================================================ 9.B number line solutions
+H('9.B', 3, "How do you graph x > 4 on a number line?", "an open circle at 4 with an arrow to the right", ["a closed circle at 4 with an arrow to the right", "an open circle at 4 with an arrow to the left", "a closed circle at 4 with an arrow to the left"], "Greater than excludes 4 and goes right.")
+H('9.B', 3, "How do you graph x ≤ 2 on a number line?", "a closed circle at 2 with an arrow to the left", ["an open circle at 2 with an arrow to the left", "a closed circle at 2 with an arrow to the right", "an open circle at 2 with an arrow to the right"], "Less than or equal includes 2 and goes left.")
+H('9.B', 3, "The solution of x + 3 = 8 is graphed as a point at...", "5", ["3", "8", "11"], "x = 5.")
+H('9.B', 4, "A number line shows a closed circle at 6 with an arrow to the right. Which inequality is graphed?", "x ≥ 6", ["x > 6", "x ≤ 6", "x < 6"], "Closed circle includes 6, arrow right means greater.")
+H('9.B', 4, "A number line shows an open circle at −1 with an arrow to the left. Which inequality is graphed?", "x < −1", ["x ≤ −1", "x > −1", "x ≥ −1"], "Open circle excludes −1, arrow left means less.")
+# ================================================================ 9.C write real-world problems
+H('9.C', 4, "Which situation matches x + 6 = 15?", "A box holds some books; after adding 6 more there are 15", ["A box has 15 books and 6 are removed", "A box holds 6 groups of 15 books", "A box has 6 books and 15 are removed"], "Adding 6 more to x gives 15.")
+H('9.C', 4, "Which situation matches 4n = 36?", "Four friends each collect n cards and have 36 in all", ["Four friends share 36 cards and have 4 left", "Someone has 36 cards and gets 4 more", "Four cards cost n dollars less than 36"], "4 groups of n make 36.")
+H('9.C', 4, "Which situation matches x − 5 < 20?", "After spending $5, a student has less than $20", ["A student spends exactly $20", "A student has $5 more than $20", "A student saves at least $5"], "x − 5 is less than 20.")
+H('9.C', 4, "Which situation matches y ÷ 3 = 8?", "A total is shared equally by 3 people and each gets 8", ["Three people each get 24", "A total is tripled to make 8", "Three more than a total is 8"], "Total divided by 3 is 8.")
+# ================================================================ 10.A model and solve
+def solve_add():
+    x = R.randint(3, 30); a = R.randint(2, 25)
+    return mk('10.A', 2, f"What is the solution of x + {a} = {x + a}?", f"x = {x}", [f"x = {x + 2 * a}", f"x = {x + a}", f"x = {a}"], f"Subtract {a} from both sides: {x + a} − {a} = {x}.", f"'x = {x}'")
+rep(4, solve_add)
+def solve_mul():
+    x = R.randint(3, 15); a = R.randint(2, 9)
+    return mk('10.A', 3, f"What is the solution of {a}x = {a * x}?", f"x = {x}", [f"x = {a * x - a}", f"x = {a * x * a}", f"x = {a}"], f"Divide both sides by {a}: {a * x} ÷ {a} = {x}.", f"'x = {x}'")
+rep(4, solve_mul)
+def solve_sub():
+    x = R.randint(10, 40); a = R.randint(2, 9)
+    return mk('10.A', 3, f"What is the solution of y − {a} = {x}?", f"y = {x + a}", [f"y = {x - a}", f"y = {a}", f"y = {x * a}"], f"Add {a} to both sides: {x} + {a} = {x + a}.", f"'y = {x + a}'")
+rep(3, solve_sub)
+H('10.A', 4, "What is the solution of n ÷ 4 = 7?", "n = 28", ["n = 3", "n = 11", "n = 1.75"], "Multiply both sides by 4.")
+H('10.A', 4, "Which values of x make x + 5 > 12 true?", "x > 7", ["x < 7", "x > 17", "x < 17"], "Subtract 5 from both sides: x > 7.")
+H('10.A', 4, "A rectangle has perimeter 30 and length 10. If w is the width, what is w?", "5", ["20", "10", "3"], "2(10 + w) = 30, so 10 + w = 15 and w = 5.")
+# ================================================================ 10.B check solutions
+H('10.B', 3, "Is x = 6 a solution of x + 4 = 10?", "Yes, because 6 + 4 = 10", ["No, because 6 + 4 = 12", "No, because 6 + 4 = 24", "Yes, because 6 − 4 = 10"], "Substitute 6 for x.")
+H('10.B', 3, "Which value of n makes 3n = 21 true?", "7", ["6", "8", "18"], "3 × 7 = 21.")
+H('10.B', 3, "Which value of x makes x − 4 < 3 true?", "x = 5", ["x = 7", "x = 8", "x = 10"], "5 − 4 = 1 < 3.")
+H('10.B', 4, "Which values make y ≥ 9 true?", "9 and 12", ["8 and 9", "7 and 8", "6 and 10"], "9 and 12 are at least 9.")
+H('10.B', 4, "Which value is NOT a solution of 2x + 1 = 11?", "x = 4", ["x = 5", "x = 5.0", "x = 10 ÷ 2"], "2(4) + 1 = 9, not 11.")
+
+# ================================================================ 11 coordinate geometry
+H('11', 2, "In the ordered pair (4, 7), which number is the x-coordinate?", "4", ["7", "11", "3"], "The x-coordinate comes first.")
+H('11', 3, "Which point is in Quadrant II?", "(−3, 5)", ["(3, 5)", "(−3, −5)", "(3, −5)"], "Quadrant II has a negative x and a positive y.")
+H('11', 3, "Which point is in Quadrant III?", "(−2, −6)", ["(2, 6)", "(−2, 6)", "(2, −6)"], "Both coordinates are negative.")
+H('11', 3, "Point A is at (2, 3) and point B is at (2, 8). How far apart are they?", "5 units", ["6 units", "10 units", "11 units"], "They share an x-coordinate, so subtract the y-values: 8 − 3 = 5.")
+H('11', 4, "A rectangle has vertices at (1, 1), (6, 1), (6, 4) and (1, 4). What is its perimeter?", "16 units", ["15 units", "8 units", "30 units"], "Length 5 and width 3: 2(5 + 3) = 16.")
+H('11', 4, "A rectangle has vertices at (0, 0), (4, 0), (4, 3) and (0, 3). What is its area?", "12 square units", ["7 square units", "14 square units", "24 square units"], "4 × 3 = 12.")
+H('11', 3, "Which point lies on the x-axis?", "(5, 0)", ["(0, 5)", "(5, 5)", "(−5, 5)"], "On the x-axis, y = 0.")
+H('11', 3, "Which point lies on the y-axis?", "(0, −4)", ["(−4, 0)", "(4, 4)", "(4, −4)"], "On the y-axis, x = 0.")
+# ================================================================ 12.A graphs of numeric data
+H('12.A', 2, "Which graph shows each data value as a dot above a number line?", "dot plot", ["histogram", "box plot", "stem-and-leaf plot"], "A dot plot uses dots over a number line.")
+H('12.A', 3, "A stem-and-leaf plot shows stem 3 with leaves 2, 5, 5. What data values does this represent?", "32, 35, 35", ["3, 2, 5, 5", "325", "8, 5, 5"], "The stem is the tens digit and each leaf is a ones digit.")
+H('12.A', 3, "Which graph uses bars with no gaps to show how many values fall within intervals?", "histogram", ["dot plot", "stem-and-leaf plot", "bar graph with gaps"], "Histograms group numeric data into intervals.")
+H('12.A', 4, "Which five numbers are needed to draw a box plot?", "minimum, Q1, median, Q3, maximum", ["mean, mode, range, minimum, maximum", "sum, count, mean, mode, range", "minimum, mean, median, mode, maximum"], "A box plot uses the five-number summary.")
+H('12.A', 3, "A dot plot has 4 dots above 7. What does this tell you?", "The value 7 appears 4 times", ["The value 4 appears 7 times", "The mean is 7", "There are 7 data values"], "Each dot is one data value.")
+# ================================================================ 12.B center, spread, shape
+H('12.B', 3, "A dot plot has most dots at the right and a long tail on the left. How is the shape described?", "skewed left", ["skewed right", "symmetric", "uniform"], "The tail points to the left.")
+H('12.B', 3, "A histogram is mirror-image on both sides of its center. The shape is...", "symmetric", ["skewed left", "skewed right", "bimodal only"], "Symmetric means the sides match.")
+H('12.B', 4, "Data: 2, 2, 3, 3, 3, 4, 4. Which describes the center?", "around 3", ["around 7", "around 1", "around 10"], "Most values cluster at 3.")
+H('12.B', 4, "Which data set has the greatest spread?", "10, 30, 50, 70", ["50, 51, 52, 53", "20, 21, 22, 23", "9, 9, 10, 10"], "Its values are the farthest apart.")
+# ================================================================ 12.C mean, median, range, IQR
+def mean_q():
+    n = R.randint(4, 6); m = R.randint(5, 20); d = [R.randint(-4, 4) for _ in range(n - 1)]; d.append(-sum(d))
+    vals = [m + x for x in d]
+    if len(set(vals)) < 3 or min(vals) < 1: return False
+    R.shuffle(vals)
+    return mk('12.C', 3, f"What is the mean of {', '.join(map(str, vals))}?", str(m), [str(m + 1), str(m - 1), str(max(vals))], f"The sum is {sum(vals)}; {sum(vals)} ÷ {n} = {m}.", f"str({m})")
+rep(5, mean_q)
+def median_q():
+    n = R.choice([5, 7]); vals = sorted(R.sample(range(2, 40), n)); med = vals[n // 2]
+    shown = vals[:]; R.shuffle(shown)
+    return mk('12.C', 3, f"What is the median of {', '.join(map(str, shown))}?", str(med), [str(vals[0]), str(vals[-1]), str(sum(vals) // n)], f"Order the values; the middle one is {med}.", f"str({med})")
+rep(5, median_q)
+def range_q():
+    n = R.randint(5, 7); vals = R.sample(range(1, 60), n); r = max(vals) - min(vals)
+    return mk('12.C', 2, f"What is the range of {', '.join(map(str, vals))}?", str(r), [str(max(vals)), str(r + 2), str(max(vals) + min(vals))], f"{max(vals)} − {min(vals)} = {r}.", f"str({r})")
+rep(4, range_q)
+H('12.C', 3, "Data: 4, 6, 8, 10, 12, 14, 16. What is the median?", "10", ["12", "8", "9"], "The middle value is 10.")
+H('12.C', 4, "Q1 = 12 and Q3 = 20. What is the interquartile range (IQR)?", "8", ["32", "16", "4"], "20 − 12 = 8.")
+H('12.C', 4, "What does the mean absolute deviation (MAD) measure?", "the average distance of values from the mean", ["the middle value", "the most common value", "the difference of largest and smallest"], "MAD is a measure of spread.")
+H('12.C', 4, "Data: 3, 5, 5, 7, 20. Which measure of center is least affected by the 20?", "median", ["mean", "range", "sum"], "Extreme values pull the mean but not the median.")
+# ================================================================ 12.D categorical data
+H('12.D', 2, "In a lunch survey, 10 students chose pizza, 6 chose tacos, and 4 chose salad. The mode is the category with the...", "greatest number of votes", ["least number of votes", "average number of votes", "total of all votes"], "The mode is the most frequent category, pizza.")
+H('12.D', 3, "In a survey of 20 students, 5 chose cats. What percent chose cats?", "25%", ["5%", "15%", "20%"], "5/20 = 25%.")
+H('12.D', 3, "Which graph is best for showing the percent of values in each category?", "a pie or bar graph", ["a box plot", "a stem-and-leaf plot", "a dot plot only"], "Categorical data can be shown in bar or pie graphs.")
+H('12.D', 3, "A bar graph shows colors of cars: red 8, blue 12, white 20. How many cars are in the sample?", "40", ["20", "12", "24"], "8 + 12 + 20 = 40.")
+H('12.D', 4, "A class has 10 cat owners out of 25 students. What percent of the class owns cats?", "40%", ["10%", "25%", "35%"], "10/25 = 40%.")
+# ================================================================ 13.A interpret numeric data
+H('13.A', 3, "A box plot has median 40, Q1 = 30, Q3 = 55. What does the box show?", "the middle half of the data, from 30 to 55", ["all the data", "the top quarter only", "the mean"], "The box spans Q1 to Q3.")
+H('13.A', 3, "A histogram shows the tallest bar for the interval 10–19. What does that mean?", "More values fall in 10–19 than in any other interval", ["The mean is 15", "Exactly 19 values were collected", "Nothing is in the other intervals"], "The tallest bar has the most data.")
+H('13.A', 4, "A stem-and-leaf plot has stems 1, 2, 3 and most leaves on stem 2. What does this suggest?", "most values are in the 20s", ["most values are 2", "most values are 20", "there are no values in the 30s"], "Stem 2 means the twenties.")
+H('13.A', 4, "A dot plot of quiz scores has a gap between 6 and 9. What does the gap tell you?", "no student scored 7 or 8", ["all students scored 7", "the mean is 7.5", "one student scored 6 and 9"], "A gap shows no values.")
+H('13.A', 4, "A box plot shows a median much closer to Q1 than Q3. What can you say about the data?", "the upper half is more spread out than the lower half", ["the data are symmetric", "the mean is exactly the median", "there is no spread"], "The longer part of the box shows more spread.")
+# ================================================================ 13.B variability
+H('13.B', 3, "Which situation yields data with variability?", "the heights of students in a class", ["the number of days in a week", "the number of sides on a square", "the number of minutes in an hour"], "Heights vary from student to student.")
+H('13.B', 3, "Which situation yields data WITHOUT variability?", "the number of legs on each chair in a classroom of 4-legged chairs", ["the shoe sizes in a classroom", "the ages of students", "the amount of rainfall each day"], "Every chair has the same number of legs.")
+H('13.B', 3, "Which question is statistical, with answers that vary?", "How many pets does each student own?", ["How many days are in a week?", "What is 5 + 3?", "How many inches are in a foot?"], "Answers differ from student to student.")
+H('13.B', 4, "Which question is NOT a statistical question?", "How many students are in room 12 today?", ["How many hours do students sleep?", "How tall are sixth graders?", "What are the students' favorite sports?"], "It has one fixed answer.")
+# ================================================================ 14 personal financial literacy
+H('14.A', 3, "Which feature is typical of a checking account?", "you can write checks and use a debit card", ["it earns a high interest rate for long-term savings", "you borrow money and pay interest", "it has a credit limit"], "Checking accounts are for everyday spending.")
+H('14.A', 3, "When comparing checking accounts, which cost should you check?", "monthly fees", ["the bank's color", "the number of tellers", "the name of the president"], "Fees change the cost of an account.")
+H('14.B', 3, "A debit card takes money from...", "your own bank account", ["a loan from the bank", "a credit limit", "the store's account"], "Debit spends money you already have.")
+H('14.B', 3, "A credit card lets you...", "borrow money that must be repaid", ["spend only money in your account", "never pay interest", "get free money"], "Credit is a loan.")
+H('14.B', 4, "Which is a key difference between debit and credit cards?", "Credit cards can create debt; debit cards use your own funds", ["Debit cards charge interest each month", "Credit cards are always free", "Debit cards have a credit limit"], "Credit means borrowing.")
+def check_reg():
+    s = R.randint(100, 400); d = R.randint(20, 150); w = R.randint(10, 80)
+    return mk('14.C', 3, f"A check register starts with ${s}. A deposit of ${d} is made and a withdrawal of ${w} is made. What is the new balance?", f"${s + d - w}", [f"${s + d + w}", f"${s - d + w}", f"${s - d - w}"], f"{s} + {d} − {w} = {s + d - w}.", f"'${s + d - w}'")
+rep(4, check_reg)
+H('14.C', 4, "A transfer moves $50 from savings to checking. What happens to the checking balance?", "it increases by $50", ["it decreases by $50", "it stays the same", "it doubles"], "Money transferred in increases that account.")
+H('14.D', 3, "Why is a positive credit history important?", "it helps you qualify for loans with better terms", ["it gives you free money", "it removes all debt", "it guarantees a job"], "Lenders use credit history to decide.")
+H('14.D', 3, "Which habit helps build a positive credit history?", "paying bills on time", ["missing payments", "ignoring statements", "borrowing without repaying"], "On-time payments build trust.")
+H('14.E', 3, "A credit report lists...", "your accounts and your payment history", ["your favorite stores", "your grades", "your medical records"], "It records credit accounts and payments.")
+H('14.E', 4, "How long can most negative information stay on a credit report?", "about 7 years", ["1 week", "about 30 days", "forever, always"], "Many negative items remain for about 7 years.")
+H('14.F', 3, "Lenders use credit reports to decide...", "whether to lend money", ["what to wear", "how tall you are", "which school you attend"], "Credit reports show borrowing behavior.")
+H('14.F', 4, "A borrower benefits from checking their credit report because they can...", "find and correct errors", ["avoid all payments", "erase real debts", "raise their income"], "Mistakes can hurt a score.")
+H('14.G', 3, "Which payment for college does NOT have to be paid back?", "a scholarship", ["a student loan", "a credit card balance", "a car loan"], "Scholarships and grants are gifts.")
+H('14.G', 3, "Which is a way to pay for college?", "savings, grants, scholarships, student loans, or work-study", ["lottery winnings only", "skipping tuition", "borrowing from no one"], "Many sources can combine.")
+H('14.G', 4, "A student loan is different from a grant because a loan...", "must be repaid, often with interest", ["is never paid back", "has no interest", "is given only for sports"], "Loans are borrowed money.")
+H('14.H', 3, "Which usually leads to a higher annual salary?", "more education or training", ["less education", "no training", "skipping school"], "Education usually raises earning potential.")
+H('14.H', 4, "A job pays $18 per hour for 40 hours per week for 50 weeks. What is the annual pay?", "$36,000", ["$7,200", "$3,600", "$900"], "18 × 40 × 50 = 36,000.")
+H('14.H', 4, "A vocational program costs $8,000 and leads to a job paying $42,000 per year. A job with no training pays $28,000. How much more does the trained worker earn each year?", "$14,000", ["$20,000", "$70,000", "$8,000"], "42,000 − 28,000 = 14,000.")
+
+# --- END
+B.balance() if hasattr(B,"balance") and False else None
+B.save(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "batches", "g6_math.jsonl"))
+print("saved", len(B.out), "questions")

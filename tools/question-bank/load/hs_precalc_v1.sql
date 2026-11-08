@@ -1,0 +1,205 @@
+insert into public.question_bank (teks_code, teks_item_id, subject, grade_num, course, difficulty, qtype, prompt, choices, answer_idx, explanation, source, status, gen_batch)
+select distinct on (v.prompt) v.code, i.id, d.subject,
+       case when i.grade_level = 'K' then 0 when i.grade_level ~ '^[0-9]+' then substring(i.grade_level from '^[0-9]+')::smallint end,
+       case when i.grade_level is null then i.grade_course_title end,
+       v.diff, 'mc', v.prompt, v.choices, v.ans, v.expl, v.src, 'checked', 'hs_precalc_v1'
+from (values
+('111.42.c.2.A',3,'If f(x) = 2x + 1 and g(x) = x², what is f(g(3))?','["19", "49", "36", "13"]'::jsonb,0,'g(3) = 9, then f(9) = 2(9) + 1 = 19.','original'),
+('111.42.c.2.A',3,'If f(x) = x + 4 and g(x) = 3x, what is g(f(2))?','["14", "18", "12", "10"]'::jsonb,1,'f(2) = 6, then g(6) = 18.','original'),
+('111.42.c.2.A',3,'A store takes 20% off a $50 item and then a $5 coupon is applied. If d(x) = 0.8x and c(x) = x − 5, which expression gives the final price?','["d(50) · c(50)", "d(50) + c(50)", "c(d(50))", "d(c(50))"]'::jsonb,2,'The discount is applied first, then the coupon.','original'),
+('111.42.c.2.B',3,'If f(x) = x + 1 and g(x) = 2x, what is f(g(x))?','["x + 2", "2x", "2x + 2", "2x + 1"]'::jsonb,3,'f(2x) = 2x + 1.','original'),
+('111.42.c.2.B',3,'If f(x) = x + 1 and g(x) = 2x, what is g(f(x))?','["2x + 2", "2x", "x + 2", "2x + 1"]'::jsonb,0,'g(x + 1) = 2(x + 1).','original'),
+('111.42.c.2.B',3,'Since f(g(x)) = 2x + 1 and g(f(x)) = 2x + 2 for f(x) = x + 1 and g(x) = 2x, what does this show about composition?','["the functions are inverses", "it is not always commutative", "it is always commutative", "the functions are equal"]'::jsonb,1,'Changing the order changed the result.','original'),
+('111.42.c.2.C',3,'Which pair of functions f and g gives h(x) = (x + 3)² when h(x) = f(g(x))?','["g(x) = 3x and f(x) = x²", "g(x) = x² and f(x) = x + 3", "g(x) = x + 3 and f(x) = x²", "g(x) = x² + 3 and f(x) = x"]'::jsonb,2,'The inner function adds 3, then the outer function squares.','original'),
+('111.42.c.2.C',4,'Which pair gives h(x) = √(5x − 1) as f(g(x))?','["g(x) = x − 1 and f(x) = √5x", "g(x) = 5x and f(x) = √(x − 1)", "g(x) = √x and f(x) = 5x − 1", "g(x) = 5x − 1 and f(x) = √x"]'::jsonb,3,'Do the inside first, then take the square root.','original'),
+('111.42.c.2.C',3,'If h(x) = 1/(x − 2), which choice writes h as a composition f(g(x))?','["g(x) = x − 2 and f(x) = 1/x", "g(x) = 2x and f(x) = 1/x", "g(x) = x and f(x) = 1/2", "g(x) = 1/x and f(x) = x − 2"]'::jsonb,0,'Subtract 2 first, then take the reciprocal.','original'),
+('111.42.c.2.D',2,'The graph of an even function has what kind of symmetry?','["no symmetry", "symmetry about the y-axis", "symmetry about the origin", "symmetry about the x-axis"]'::jsonb,1,'f(−x) = f(x).','original'),
+('111.42.c.2.D',2,'The graph of an odd function has what kind of symmetry?','["symmetry about the x-axis", "symmetry about y = x", "symmetry about the origin", "symmetry about the y-axis"]'::jsonb,2,'f(−x) = −f(x).','original'),
+('111.42.c.2.D',3,'Which function is odd?','["f(x) = x²", "f(x) = x⁴ + 1", "f(x) = |x|", "f(x) = x³"]'::jsonb,3,'(−x)³ = −x³.','original'),
+('111.42.c.2.D',3,'Which function is even?','["f(x) = cos x", "f(x) = x³", "f(x) = sin x", "f(x) = tan x"]'::jsonb,0,'cos(−x) = cos x.','original'),
+('111.42.c.2.E',3,'What is the inverse of f(x) = 3x − 6?','["f⁻¹(x) = x/3 − 6", "f⁻¹(x) = (x + 6)/3", "f⁻¹(x) = 3x + 6", "f⁻¹(x) = (x − 6)/3"]'::jsonb,1,'Swap x and y, then solve for y.','original'),
+('111.42.c.2.E',3,'A function f has an inverse if and only if it is what?','["constant", "periodic", "one-to-one", "even"]'::jsonb,2,'Each output must come from exactly one input.','original'),
+('111.42.c.2.E',4,'To get an inverse for f(x) = x², what restriction on the domain works?','["x ≤ 5 and x ≥ −5", "all real numbers", "x ≠ 0", "x ≥ 0"]'::jsonb,3,'A one-to-one piece is needed.','original'),
+('111.42.c.2.E',3,'If f(2) = 7, what is f⁻¹(7)?','["2", "1/7", "7", "5"]'::jsonb,0,'Inverses swap inputs and outputs.','original'),
+('111.42.c.2.F',3,'What is the end behavior of y = 2ˣ as x → −∞?','["y approaches 2", "y approaches 0", "y approaches ∞", "y approaches −∞"]'::jsonb,1,'The graph has a horizontal asymptote at y = 0.','original'),
+('111.42.c.2.F',3,'What is the domain of y = log₂(x)?','["x ≥ 0", "all real numbers", "x > 0", "x < 0"]'::jsonb,2,'Only positive inputs have logarithms.','original'),
+('111.42.c.2.F',3,'Which function has a graph with a vertical asymptote at x = 3?','["y = 3x", "y = (x − 3)²", "y = x − 3", "y = 1/(x − 3)"]'::jsonb,3,'The denominator is zero at x = 3.','original'),
+('111.42.c.2.F',3,'What is the y-intercept of y = 4ˣ?','["(0, 1)", "(0, 4)", "(0, 0)", "(1, 0)"]'::jsonb,0,'4⁰ = 1.','original'),
+('111.42.c.2.G',3,'How does the graph of y = (x − 2)² + 3 compare with the graph of y = x²?','["shifted left 2 and up 3", "shifted right 2 and up 3", "shifted left 2 and down 3", "shifted right 3 and up 2"]'::jsonb,1,'x − 2 shifts right; +3 shifts up.','original'),
+('111.42.c.2.G',3,'What transformation changes y = f(x) into y = −f(x)?','["a reflection across the y-axis", "a shift down", "a reflection across the x-axis", "a vertical stretch"]'::jsonb,2,'All outputs change sign.','original'),
+('111.42.c.2.G',3,'What transformation changes y = f(x) into y = f(2x)?','["a horizontal stretch by a factor of 2", "a vertical stretch by a factor of 2", "a shift left 2", "a horizontal compression by a factor of 1/2"]'::jsonb,3,'Inputs are doubled, so the graph squeezes horizontally.','original'),
+('111.42.c.2.G',4,'The graph of y = 3 sin x is the graph of y = sin x after what?','["a vertical stretch by a factor of 3", "a horizontal stretch by a factor of 3", "a shift right 3", "a shift up 3"]'::jsonb,0,'The amplitude becomes 3.','original'),
+('111.42.c.2.H',3,'What is the range of y = arcsin x?','["[0, π]", "[−π/2, π/2]", "(−∞, ∞)", "[−1, 1]"]'::jsonb,1,'It is restricted to make sine one-to-one.','original'),
+('111.42.c.2.H',3,'What is the domain of y = arccos x?','["[0, π]", "(−∞, ∞)", "[−1, 1]", "[−π/2, π/2]"]'::jsonb,2,'Cosine only outputs values from −1 to 1.','original'),
+('111.42.c.2.H',3,'What is the range of y = arccos x?','["[−π/2, π/2]", "(0, ∞)", "[−1, 1]", "[0, π]"]'::jsonb,3,'It is restricted to make cosine one-to-one.','original'),
+('111.42.c.2.I',3,'How many x-intercepts can a quadratic function have at most?','["2", "1", "3", "4"]'::jsonb,0,'A degree-2 polynomial has at most 2 real zeros.','original'),
+('111.42.c.2.I',3,'What is the period of y = sin x?','["π", "2π", "π/2", "1"]'::jsonb,1,'The sine graph repeats every 2π.','original'),
+('111.42.c.2.I',3,'What is the amplitude of y = −4 cos x?','["1", "8", "4", "−4"]'::jsonb,2,'Amplitude is the absolute value of the coefficient.','original'),
+('111.42.c.2.I',4,'For y = 2ˣ − 5, what is the horizontal asymptote?','["y = 2", "y = 0", "y = 5", "y = −5"]'::jsonb,3,'The −5 shifts the asymptote down 5.','original'),
+('111.42.c.2.J',3,'What is the end behavior of f(x) = −x³ as x → ∞?','["f(x) → −∞", "f(x) → 0", "f(x) → ∞", "f(x) → −1"]'::jsonb,0,'The leading term dominates and has a negative coefficient.','original')
+) as v(code, diff, prompt, choices, ans, expl, src)
+join public.teks_items i on i.code = v.code and i.is_standard
+join public.teks_documents d on d.id = i.document_id and d.subject = 'Mathematics' and d.language = 'en'
+on conflict (fingerprint) do nothing;
+insert into public.question_bank (teks_code, teks_item_id, subject, grade_num, course, difficulty, qtype, prompt, choices, answer_idx, explanation, source, status, gen_batch)
+select distinct on (v.prompt) v.code, i.id, d.subject,
+       case when i.grade_level = 'K' then 0 when i.grade_level ~ '^[0-9]+' then substring(i.grade_level from '^[0-9]+')::smallint end,
+       case when i.grade_level is null then i.grade_course_title end,
+       v.diff, 'mc', v.prompt, v.choices, v.ans, v.expl, v.src, 'checked', 'hs_precalc_v1'
+from (values
+('111.42.c.2.J',4,'As x → ∞, what does f(x) = (3x + 1)/(x − 4) approach?','["0", "3", "−4", "∞"]'::jsonb,1,'Degrees are equal, so divide the leading coefficients.','original'),
+('111.42.c.2.K',3,'What is the vertical asymptote of f(x) = 5/(x + 2)?','["y = 0", "x = 5", "x = −2", "x = 2"]'::jsonb,2,'The denominator is zero at x = −2.','original'),
+('111.42.c.2.K',3,'What is the horizontal asymptote of f(x) = 4x/(x² + 1)?','["y = 4", "y = 1", "x = 0", "y = 0"]'::jsonb,3,'The denominator has a higher degree.','original'),
+('111.42.c.2.K',4,'As x approaches 1 from the right, what does f(x) = 1/(x − 1) do?','["it approaches ∞", "it approaches 0", "it approaches 1", "it approaches −∞"]'::jsonb,0,'The denominator is a small positive number.','original'),
+('111.42.c.2.L',3,'What kind of discontinuity does f(x) = (x² − 4)/(x − 2) have at x = 2?','["none", "removable (a hole)", "a vertical asymptote", "a jump"]'::jsonb,1,'The factor x − 2 cancels.','original'),
+('111.42.c.2.L',3,'What kind of discontinuity does f(x) = 1/x have at x = 0?','["removable", "none", "infinite (a vertical asymptote)", "a jump"]'::jsonb,2,'The function grows without bound.','original'),
+('111.42.c.2.L',3,'A piecewise function jumps from y = 1 to y = 3 at x = 2. What is this discontinuity called?','["an infinite discontinuity", "a removable discontinuity", "a continuous point", "a jump discontinuity"]'::jsonb,3,'The one-sided limits are different finite numbers.','original'),
+('111.42.c.2.M',4,'For f(x) = 1/x, what happens as x approaches 0 from the left?','["f(x) → −∞", "f(x) → ∞", "f(x) → 0", "f(x) → 1"]'::jsonb,0,'Negative inputs give large negative outputs.','original'),
+('111.42.c.2.M',4,'For a function with a jump from 1 to 3 at x = 2, what is the right-sided value as x approaches 2?','["2", "3", "does not exist", "1"]'::jsonb,1,'The right-hand limit is the value approached from larger x.','original'),
+('111.42.c.2.M',3,'If the left-sided and right-sided behavior at x = a are both approaching the same finite value, the function has what at x = a?','["a jump", "a corner only", "a limit", "a vertical asymptote"]'::jsonb,2,'The one-sided limits agree.','original'),
+('111.42.c.2.N',3,'A population doubles every 5 years. Which type of function best models it?','["logarithmic", "linear", "quadratic", "exponential"]'::jsonb,3,'Constant percent growth means exponential.','original'),
+('111.42.c.2.N',3,'Sound intensity levels in decibels are measured on a scale based on which function?','["logarithmic", "quadratic", "linear", "exponential growth only"]'::jsonb,0,'Each 10 dB step means 10 times more intensity.','original'),
+('111.42.c.2.N',4,'The height of a ball thrown upward over time is best modeled by what type of function?','["exponential", "quadratic", "logarithmic", "linear"]'::jsonb,1,'Gravity produces a parabola.','original'),
+('111.42.c.2.O',4,'A Ferris wheel has a radius of 20 m, its center is 22 m above ground, and it completes one turn every 8 minutes. What is the midline of a sinusoidal model of the height?','["42 m", "20 m", "22 m", "8 m"]'::jsonb,2,'The midline is at the center height.','original'),
+('111.42.c.2.O',4,'For the same Ferris wheel, what is the amplitude of the height model?','["40 m", "22 m", "8 m", "20 m"]'::jsonb,3,'The amplitude equals the radius.','original'),
+('111.42.c.2.O',4,'The tide height is modeled by h = 3 sin(πt/6) + 5, where t is in hours. What is the period?','["12 hours", "6 hours", "5 hours", "3 hours"]'::jsonb,0,'Period = 2π ÷ (π/6) = 12.','original'),
+('111.42.c.2.P',2,'What is sin 30°?','["√3/2", "1/2", "1", "√2/2"]'::jsonb,1,'A special-angle value.','original'),
+('111.42.c.2.P',3,'What is cos(π/3)?','["0", "√2/2", "1/2", "√3/2"]'::jsonb,2,'π/3 = 60°, and cos 60° = 1/2.','original'),
+('111.42.c.2.P',3,'What is tan 45°?','["√3", "0", "undefined", "1"]'::jsonb,3,'sin 45° = cos 45°.','original'),
+('111.42.c.2.P',3,'What is sin(π/2)?','["1", "√2/2", "1/2", "0"]'::jsonb,0,'The point on the unit circle at π/2 is (0, 1).','original'),
+('111.42.c.3.A',3,'For x = t and y = t² with t from −2 to 2, what shape does the graph trace?','["a circle", "a parabola", "a line", "a hyperbola"]'::jsonb,1,'Eliminating t gives y = x².','original'),
+('111.42.c.3.A',3,'For x = 2t and y = 3t, what shape does the graph trace?','["a circle", "an ellipse", "a line", "a parabola"]'::jsonb,2,'Both coordinates are linear in t.','original'),
+('111.42.c.3.A',3,'If x = cos t and y = sin t for 0 ≤ t ≤ 2π, what does the graph trace?','["a parabola", "a sine wave", "a line", "a unit circle"]'::jsonb,3,'x² + y² = 1.','original'),
+('111.42.c.3.B',3,'Eliminate the parameter from x = t + 1 and y = 2t. Which rectangular equation results?','["y = 2x − 2", "y = 2x + 2", "y = x − 1", "y = 2x"]'::jsonb,0,'t = x − 1, so y = 2(x − 1).','original'),
+('111.42.c.3.B',3,'Which pair of parametric equations represents y = x² + 1?','["x = t + 1, y = t²", "x = t, y = t² + 1", "x = t², y = t", "x = 1, y = t"]'::jsonb,1,'Let x equal the parameter.','original'),
+('111.42.c.3.B',4,'Which rectangular equation matches x = 3 cos t and y = 3 sin t?','["x² − y² = 9", "x² + y² = 3", "x² + y² = 9", "x + y = 3"]'::jsonb,2,'cos²t + sin²t = 1.','original'),
+('111.42.c.3.C',4,'A ball is launched with horizontal speed 10 m/s. Which parametric equation for x(t) gives its horizontal position (ignoring air resistance)?','["x = 10t²", "x = t + 10", "x = 10/t", "x = 10t"]'::jsonb,3,'Constant horizontal speed gives distance equal to speed times time.','original'),
+('111.42.c.3.C',4,'Why are parametric equations helpful for modeling projectile motion?','["they let x and y each depend on time", "they ignore time", "they remove gravity", "they make the path a straight line"]'::jsonb,0,'Position components can be written separately in terms of t.','original'),
+('111.42.c.3.C',3,'A boat moves so that x = 4t and y = 3t. How far from the start is it after 2 hours?','["14", "10", "7", "5"]'::jsonb,1,'At t = 2, (8, 6) and the distance is √(64 + 36) = 10.','original'),
+('111.42.c.3.D',3,'Convert the polar point (2, π/2) to rectangular coordinates.','["(−2, 0)", "(2, 0)", "(0, 2)", "(0, 0)"]'::jsonb,2,'x = 2 cos(π/2) = 0 and y = 2 sin(π/2) = 2.','original'),
+('111.42.c.3.D',3,'Convert the rectangular point (3, 3) to polar form with r > 0.','["(6, π/4)", "(3√2, π/2)", "(3, π/4)", "(3√2, π/4)"]'::jsonb,3,'r = √18 and the angle is 45°.','original'),
+('111.42.c.3.D',3,'What is r for the rectangular point (−5, 0)?','["5", "0", "25", "−5"]'::jsonb,0,'r is the distance from the origin.','original'),
+('111.42.c.3.E',3,'What is the graph of r = 4 in polar coordinates?','["a line through the origin", "a circle of radius 4 centered at the origin", "a spiral", "a parabola"]'::jsonb,1,'Every point is 4 units from the origin.','original')
+) as v(code, diff, prompt, choices, ans, expl, src)
+join public.teks_items i on i.code = v.code and i.is_standard
+join public.teks_documents d on d.id = i.document_id and d.subject = 'Mathematics' and d.language = 'en'
+on conflict (fingerprint) do nothing;
+insert into public.question_bank (teks_code, teks_item_id, subject, grade_num, course, difficulty, qtype, prompt, choices, answer_idx, explanation, source, status, gen_batch)
+select distinct on (v.prompt) v.code, i.id, d.subject,
+       case when i.grade_level = 'K' then 0 when i.grade_level ~ '^[0-9]+' then substring(i.grade_level from '^[0-9]+')::smallint end,
+       case when i.grade_level is null then i.grade_course_title end,
+       v.diff, 'mc', v.prompt, v.choices, v.ans, v.expl, v.src, 'checked', 'hs_precalc_v1'
+from (values
+('111.42.c.3.E',3,'What is the graph of θ = π/4 in polar coordinates?','["a circle", "a spiral", "a line through the origin", "a parabola"]'::jsonb,2,'All points lie along a fixed angle.','original'),
+('111.42.c.3.E',4,'How many petals does r = 3 cos(2θ) have?','["3", "2", "6", "4"]'::jsonb,3,'A rose curve with an even n has 2n petals.','original'),
+('111.42.c.3.F',2,'If a plane cuts a double-napped cone perpendicular to its axis, what shape forms?','["a circle", "an ellipse that is not a circle", "a parabola", "a hyperbola"]'::jsonb,0,'A perpendicular cut gives a circle.','original'),
+('111.42.c.3.F',3,'If a plane cuts both nappes of a double-napped cone, what shape forms?','["an ellipse", "a hyperbola", "a parabola", "a circle"]'::jsonb,1,'Both pieces of the cone are cut.','original'),
+('111.42.c.3.F',3,'If a plane is parallel to the side of the cone, what shape forms?','["an ellipse", "a hyperbola", "a parabola", "a circle"]'::jsonb,2,'It cuts only one nappe without closing.','original'),
+('111.42.c.3.G',3,'Which conic is the locus of points whose distances to two fixed points add up to a constant?','["a circle", "a parabola", "a hyperbola", "an ellipse"]'::jsonb,3,'The fixed points are foci.','original'),
+('111.42.c.3.G',3,'Which conic is the locus of points equally distant from a focus and a line?','["a parabola", "a hyperbola", "a circle", "an ellipse"]'::jsonb,0,'The line is the directrix.','original'),
+('111.42.c.3.G',4,'Which conic is the locus of points whose distances to two fixed points differ by a constant?','["a parabola", "a hyperbola", "an ellipse", "a circle"]'::jsonb,1,'The absolute difference of the distances is constant.','original'),
+('111.42.c.3.H',3,'An ellipse has center (1, 2), horizontal semi-axis 5 and vertical semi-axis 3. Which equation matches?','["(x − 1)²/9 + (y − 2)²/25 = 1", "(x + 1)²/25 + (y + 2)²/9 = 1", "(x − 1)²/25 + (y − 2)²/9 = 1", "(x − 1)²/5 + (y − 2)²/3 = 1"]'::jsonb,2,'The squares of the semi-axes go in the denominators.','original'),
+('111.42.c.3.H',3,'What are the coordinates of the center of the ellipse (x + 3)²/16 + (y − 4)²/4 = 1?','["(3, 4)", "(−3, −4)", "(3, −4)", "(−3, 4)"]'::jsonb,3,'Read the signs inside the parentheses and flip them.','original'),
+('111.42.c.3.H',4,'For (x)²/25 + (y)²/9 = 1, how far from the center are the foci?','["4", "5", "3", "8"]'::jsonb,0,'c = √(25 − 9) = 4.','original'),
+('111.42.c.3.I',3,'Which equation is a hyperbola?','["x² + y² = 9", "x²/9 − y²/4 = 1", "x²/9 + y²/4 = 1", "y = x²"]'::jsonb,1,'A minus sign between the squared terms gives a hyperbola.','original'),
+('111.42.c.3.I',3,'What are the coordinates of the center of the hyperbola (x − 2)²/9 − (y + 1)²/4 = 1?','["(2, 1)", "(−2, 1)", "(2, −1)", "(−2, −1)"]'::jsonb,2,'Take the opposite signs of the shifts.','original'),
+('111.42.c.3.I',4,'A hyperbola has a = 3 and b = 4 with a horizontal transverse axis through the origin. What are the slopes of its asymptotes?','["±12", "±3/4", "±1", "±4/3"]'::jsonb,3,'The slopes are ±b/a.','original'),
+('111.42.c.4.A',3,'On the unit circle, what are the coordinates of the point at angle π?','["(−1, 0)", "(1, 0)", "(0, −1)", "(0, 1)"]'::jsonb,0,'cos π = −1 and sin π = 0.','original'),
+('111.42.c.4.A',3,'What is the period of the cosine function in radians?','["4π", "2π", "π", "π/2"]'::jsonb,1,'A full turn around the unit circle.','original'),
+('111.42.c.4.A',3,'What is cos(3π/2)?','["−1", "undefined", "0", "1"]'::jsonb,2,'The point is (0, −1).','original'),
+('111.42.c.4.B',2,'How many radians equal 180°?','["π/2", "2π", "1", "π"]'::jsonb,3,'A half turn is π radians.','original'),
+('111.42.c.4.B',3,'Convert 135° to radians.','["3π/4", "2π/3", "5π/4", "π/4"]'::jsonb,0,'135 × π/180.','original'),
+('111.42.c.4.B',3,'Convert 5π/6 radians to degrees.','["120°", "150°", "165°", "135°"]'::jsonb,1,'(5π/6) × (180/π).','original'),
+('111.42.c.4.C',3,'Which angle is coterminal with 60°?','["300°", "120°", "420°", "240°"]'::jsonb,2,'Add 360°.','original'),
+('111.42.c.4.C',3,'What is the reference angle for 210°?','["210°", "60°", "150°", "30°"]'::jsonb,3,'210° − 180° = 30°.','original'),
+('111.42.c.4.C',3,'What is the reference angle for 7π/6?','["π/6", "5π/6", "π/3", "7π/6"]'::jsonb,0,'7π/6 − π = π/6.','original'),
+('111.42.c.4.D',3,'A wheel turns 3 full revolutions counterclockwise. What is the angle measure in radians?','["3", "6π", "12π", "3π"]'::jsonb,1,'Each revolution is 2π.','original'),
+('111.42.c.4.D',3,'A wheel turns 90° clockwise. What is the angle in radians, using the standard convention?','["π", "−π", "−π/2", "π/2"]'::jsonb,2,'Clockwise rotation is negative.','original'),
+('111.42.c.4.D',4,'A point on a circle of radius 5 rotates through an angle of 2 radians. What arc length does it travel?','["2.5", "7", "5", "10"]'::jsonb,3,'s = rθ.','original'),
+('111.42.c.4.E',3,'In a right triangle, the side opposite angle A is 3 and the hypotenuse is 5. What is sin A?','["3/5", "5/3", "4/5", "3/4"]'::jsonb,0,'sin = opposite ÷ hypotenuse.','original'),
+('111.42.c.4.E',3,'If sin θ = 3/5 and θ is in the first quadrant, what is cos θ?','["3/5", "4/5", "5/3", "3/4"]'::jsonb,1,'A 3-4-5 triangle.','original'),
+('111.42.c.4.E',4,'If tan θ = 1 and 0 < θ < π/2, what is θ?','["π/2", "π/3", "π/4", "π/6"]'::jsonb,2,'Opposite equals adjacent.','original'),
+('111.42.c.4.F',3,'A ship sails 10 km on a bearing of 090°. In which direction is it heading?','["due west", "due north", "due south", "due east"]'::jsonb,3,'Bearings are measured clockwise from north.','original'),
+('111.42.c.4.F',4,'A plane flies 100 km on a bearing of 030°. About how far north has it traveled?','["86.6 km", "100 km", "50 km", "173 km"]'::jsonb,0,'100 cos 30°.','original'),
+('111.42.c.4.F',4,'A hiker walks 5 km north and then 12 km east. How far is the hiker from the start?','["7 km", "13 km", "17 km", "60 km"]'::jsonb,1,'√(25 + 144) = 13.','original'),
+('111.42.c.4.G',3,'Which equation expresses the Law of Sines?','["a² = b² + c²", "a sin A = b cos B", "a/sin A = b/sin B", "a + b = sin A + sin B"]'::jsonb,2,'Sides are proportional to the sines of opposite angles.','original')
+) as v(code, diff, prompt, choices, ans, expl, src)
+join public.teks_items i on i.code = v.code and i.is_standard
+join public.teks_documents d on d.id = i.document_id and d.subject = 'Mathematics' and d.language = 'en'
+on conflict (fingerprint) do nothing;
+insert into public.question_bank (teks_code, teks_item_id, subject, grade_num, course, difficulty, qtype, prompt, choices, answer_idx, explanation, source, status, gen_batch)
+select distinct on (v.prompt) v.code, i.id, d.subject,
+       case when i.grade_level = 'K' then 0 when i.grade_level ~ '^[0-9]+' then substring(i.grade_level from '^[0-9]+')::smallint end,
+       case when i.grade_level is null then i.grade_course_title end,
+       v.diff, 'mc', v.prompt, v.choices, v.ans, v.expl, v.src, 'checked', 'hs_precalc_v1'
+from (values
+('111.42.c.4.G',4,'In triangle ABC, A = 30°, B = 45° and a = 10. What is b?','["5√2", "20", "10", "10√2"]'::jsonb,3,'b = 10 sin45° ÷ sin30° = 10√2.','original'),
+('111.42.c.4.G',3,'The Law of Sines is most useful when you know what?','["two angles and a side", "three sides only", "only the area", "only one angle"]'::jsonb,0,'Such as AAS or ASA.','original'),
+('111.42.c.4.H',3,'Which equation is the Law of Cosines?','["c² = a² + b²", "c² = a² + b² − 2ab cos C", "c² = a² − b²", "c = a sin C"]'::jsonb,1,'It generalizes the Pythagorean theorem.','original'),
+('111.42.c.4.H',4,'In triangle ABC, a = 3, b = 4 and C = 90°. What is c?','["7", "1", "5", "12"]'::jsonb,2,'cos 90° = 0, so c² = 9 + 16.','original'),
+('111.42.c.4.H',3,'Which information lets you start with the Law of Cosines?','["one side and one angle", "only two angles", "only one side", "three sides"]'::jsonb,3,'SSS or SAS cases.','original'),
+('111.42.c.4.I',2,'What two things does a vector have?','["magnitude and direction", "only magnitude", "mass and charge", "only direction"]'::jsonb,0,'A vector is more than a size.','original'),
+('111.42.c.4.I',3,'What is the magnitude of the vector <3, 4>?','["7", "5", "1", "12"]'::jsonb,1,'√(9 + 16).','original'),
+('111.42.c.4.I',3,'What is the magnitude of <−5, 12>?','["7", "17", "13", "169"]'::jsonb,2,'√(25 + 144).','original'),
+('111.42.c.4.I',3,'A plane flies at 200 mph heading east. Which vector models its velocity?','["<−200, 0>", "<200, 200>", "<0, 200>", "<200, 0>"]'::jsonb,3,'East is the positive x direction.','original'),
+('111.42.c.4.J',3,'What is <2, 3> + <4, −1>?','["<6, 2>", "<2, 4>", "<6, 4>", "<8, 3>"]'::jsonb,0,'Add components.','original'),
+('111.42.c.4.J',4,'Geometrically, adding two vectors with the tip-to-tail method gives a vector from where to where?','["from the tip of the first to the tail of the second", "from the tail of the first to the tip of the second", "from the tail of the first to the tail of the second", "from the tip of the first to the tip of the second"]'::jsonb,1,'The resultant closes the triangle.','original'),
+('111.42.c.4.K',4,'A boat heads east at 6 m/s while a current flows north at 8 m/s. What is the boat''s speed relative to the ground?','["14 m/s", "48 m/s", "10 m/s", "2 m/s"]'::jsonb,2,'√(36 + 64).','original'),
+('111.42.c.4.K',3,'Two forces <3, 0> N and <0, 4> N act on an object. What is the resultant force?','["<12, 0> N", "<0, 7> N", "<7, 0> N", "<3, 4> N"]'::jsonb,3,'Add the vectors.','original'),
+('111.42.c.4.K',4,'If a force vector is doubled, what happens to its direction and magnitude?','["the direction stays the same and the magnitude doubles", "the direction reverses", "the direction doubles", "the magnitude stays the same"]'::jsonb,0,'A positive scalar multiple keeps the direction.','original'),
+('111.42.c.5.A',3,'What is Σ (k = 1 to 4) of k?','["24", "10", "16", "4"]'::jsonb,1,'1 + 2 + 3 + 4.','original'),
+('111.42.c.5.A',3,'What is Σ (k = 1 to 3) of 2k?','["9", "6", "12", "18"]'::jsonb,2,'2 + 4 + 6.','original'),
+('111.42.c.5.A',4,'What is the sum of the infinite geometric series 8 + 4 + 2 + 1 + ...?','["15", "∞", "12", "16"]'::jsonb,3,'S = a ÷ (1 − r) = 8 ÷ (1/2).','original'),
+('111.42.c.5.B',3,'Which recursive formula describes the arithmetic sequence 3, 7, 11, 15, ...?','["a₁ = 3, aₙ = aₙ₋₁ + 4", "a₁ = 4, aₙ = aₙ₋₁ + 3", "a₁ = 3, aₙ = aₙ₋₁ + 3", "a₁ = 3, aₙ = 4aₙ₋₁"]'::jsonb,0,'Each term adds 4.','original'),
+('111.42.c.5.B',3,'Which recursive formula describes the geometric sequence 2, 6, 18, 54, ...?','["a₁ = 2, aₙ = aₙ₋₁ + 3", "a₁ = 2, aₙ = 3aₙ₋₁", "a₁ = 3, aₙ = 2aₙ₋₁", "a₁ = 2, aₙ = aₙ₋₁ + 4"]'::jsonb,1,'Each term is 3 times the one before.','original'),
+('111.42.c.5.B',3,'A sequence has a₁ = 5 and aₙ = aₙ₋₁ − 2. What is a₄?','["3", "−3", "−1", "1"]'::jsonb,2,'5, 3, 1, −1.','original'),
+('111.42.c.5.C',3,'What is the 10th term of the arithmetic sequence 2, 5, 8, ...?','["30", "32", "27", "29"]'::jsonb,3,'aₙ = 2 + 3(9).','original'),
+('111.42.c.5.C',3,'What is the sum of the first 5 terms of the arithmetic sequence 1, 3, 5, 7, 9?','["25", "20", "15", "30"]'::jsonb,0,'Sₙ = n(a₁ + aₙ)/2 = 5 × 10/2.','original'),
+('111.42.c.5.C',4,'What is the sum of the whole numbers from 1 to 100?','["5000", "5050", "10100", "5100"]'::jsonb,1,'100 × 101 ÷ 2.','original'),
+('111.42.c.5.D',3,'Which sigma notation represents 3 + 6 + 9 + 12?','["Σ (k = 1 to 12) of 3", "Σ (k = 1 to 3) of 3k", "Σ (k = 1 to 4) of 3k", "Σ (k = 1 to 4) of k + 3"]'::jsonb,2,'Each term is 3 times its position.','original'),
+('111.42.c.5.D',3,'Which sigma notation represents 2 + 4 + 8 + 16?','["Σ (k = 1 to 4) of 2k", "Σ (k = 1 to 4) of k²", "Σ (k = 1 to 4) of k + 2", "Σ (k = 1 to 4) of 2ᵏ"]'::jsonb,3,'The terms are powers of 2.','original'),
+('111.42.c.5.D',4,'Which sigma expression gives 1 + 3 + 5 + 7 + 9?','["Σ (k = 1 to 5) of (2k − 1)", "Σ (k = 1 to 9) of k", "Σ (k = 1 to 5) of (2k + 1)", "Σ (k = 1 to 5) of 2k"]'::jsonb,0,'The kth odd number is 2k − 1.','original'),
+('111.42.c.5.E',3,'What is the 5th term of the geometric sequence 3, 6, 12, ...?','["30", "48", "24", "96"]'::jsonb,1,'3 × 2⁴.','original'),
+('111.42.c.5.E',3,'What is the sum of the first 4 terms of 1, 2, 4, 8, ...?','["16", "14", "15", "31"]'::jsonb,2,'1 + 2 + 4 + 8.','original'),
+('111.42.c.5.E',4,'Under what condition does an infinite geometric series have a finite sum?','["|r| > 1", "r = 1", "r > 2", "|r| < 1"]'::jsonb,3,'Terms must shrink toward zero.','original'),
+('111.42.c.5.F',3,'What is the coefficient of x² in the expansion of (x + 1)⁴?','["6", "1", "12", "4"]'::jsonb,0,'C(4, 2) = 6.','original'),
+('111.42.c.5.F',3,'How many terms are there in the expansion of (a + b)⁵?','["4", "6", "5", "10"]'::jsonb,1,'There are n + 1 terms.','original'),
+('111.42.c.5.F',4,'What is the second term in the expansion of (x + 2)³?','["8", "3x²", "6x²", "12x"]'::jsonb,2,'C(3, 1) · x² · 2 = 6x².','original'),
+('111.42.c.5.G',3,'Which expression equals log(a) + log(b)?','["log(a + b)", "log(a/b)", "log(a) · log(b)", "log(ab)"]'::jsonb,3,'The product rule.','original')
+) as v(code, diff, prompt, choices, ans, expl, src)
+join public.teks_items i on i.code = v.code and i.is_standard
+join public.teks_documents d on d.id = i.document_id and d.subject = 'Mathematics' and d.language = 'en'
+on conflict (fingerprint) do nothing;
+insert into public.question_bank (teks_code, teks_item_id, subject, grade_num, course, difficulty, qtype, prompt, choices, answer_idx, explanation, source, status, gen_batch)
+select distinct on (v.prompt) v.code, i.id, d.subject,
+       case when i.grade_level = 'K' then 0 when i.grade_level ~ '^[0-9]+' then substring(i.grade_level from '^[0-9]+')::smallint end,
+       case when i.grade_level is null then i.grade_course_title end,
+       v.diff, 'mc', v.prompt, v.choices, v.ans, v.expl, v.src, 'checked', 'hs_precalc_v1'
+from (values
+('111.42.c.5.G',3,'What is log₂ 8?','["3", "16", "4", "2"]'::jsonb,0,'2³ = 8.','original'),
+('111.42.c.5.G',3,'Which expression equals three times the logarithm of x?','["(log x)³", "log(x³)", "log(3x)", "log(x + 3)"]'::jsonb,1,'The power rule.','original'),
+('111.42.c.5.G',4,'Simplify log₅ 125 − log₅ 5.','["25", "3", "2", "1"]'::jsonb,2,'3 − 1 = 2.','original'),
+('111.42.c.5.H',3,'Solve log₂ x = 5.','["x = 25", "x = 10", "x = 7", "x = 32"]'::jsonb,3,'2⁵ = 32.','original'),
+('111.42.c.5.H',4,'Solve log x + log(x − 3) = 1 for x.','["x = 5", "x = 4", "x = 10", "x = −2"]'::jsonb,0,'x(x − 3) = 10, so x = 5 or −2, and only 5 is valid.','original'),
+('111.42.c.5.H',3,'Solve ln x = 0.','["no solution", "x = 1", "x = 0", "x = e"]'::jsonb,1,'e⁰ = 1.','original'),
+('111.42.c.5.I',3,'Solve 2ˣ = 16.','["x = 8", "x = 2", "x = 4", "x = 3"]'::jsonb,2,'2⁴ = 16.','original'),
+('111.42.c.5.I',4,'An investment of $1000 grows by 5% per year. Which equation finds the time t when it reaches $2000?','["1000t = 2000(1.05)", "1000(0.05)ᵗ = 2000", "1000 + 0.05t = 2000", "1000(1.05)ᵗ = 2000"]'::jsonb,3,'Exponential growth with a ratio of 1.05.','original'),
+('111.42.c.5.J',3,'Solve x³ − 4x = 0.','["x = 0, 2, −2", "x = 0, 4", "x = 2 only", "x = 4 only"]'::jsonb,0,'x(x − 2)(x + 2) = 0.','original'),
+('111.42.c.5.J',4,'What does the Rational Root Theorem suggest as possible rational roots of x³ + 2x² − x − 2 = 0?','["±1, ±3", "±1, ±2", "only 0", "±2, ±4"]'::jsonb,1,'Factors of −2 divided by factors of 1.','original'),
+('111.42.c.5.J',4,'How many real roots (counting multiplicity) can a cubic with real coefficients have at most?','["1", "4", "3", "2"]'::jsonb,2,'A degree-3 polynomial has 3 roots in the complex numbers.','original'),
+('111.42.c.5.K',3,'Solve (x − 1)(x + 3) ≤ 0.','["x ≤ −3", "x ≥ 1", "x ≤ −3 or x ≥ 1", "−3 ≤ x ≤ 1"]'::jsonb,3,'The product is nonpositive between the roots.','original'),
+('111.42.c.5.K',4,'Which interval notation shows the solution to x² − 9 ≥ 0?','["(−∞, −3] ∪ [3, ∞)", "(−3, 3)", "[3, ∞)", "[−3, 3]"]'::jsonb,0,'The inequality includes the endpoints.','original'),
+('111.42.c.5.L',3,'Which x value makes (x − 1)/(x + 2) undefined?','["0", "−2", "1", "2"]'::jsonb,1,'The denominator must not be zero.','original'),
+('111.42.c.5.L',4,'Solve (x − 1)/(x + 2) > 0.','["x > −2", "x > 1 only", "x < −2 or x > 1", "−2 < x < 1"]'::jsonb,2,'The sign is positive when numerator and denominator agree.','original'),
+('111.42.c.5.L',4,'Solve 1/x < 1 for x > 0.','["x < 1", "0 < x < 1", "x > 0", "x > 1"]'::jsonb,3,'Multiplying by positive x gives 1 < x.','original'),
+('111.42.c.5.M',2,'What is sin²θ + cos²θ equal to?','["1", "2", "0", "sin 2θ"]'::jsonb,0,'The Pythagorean identity.','original'),
+('111.42.c.5.M',3,'Which expression equals tan θ?','["sin θ · cos θ", "sin θ / cos θ", "cos θ / sin θ", "1 / sin θ"]'::jsonb,1,'The quotient identity.','original'),
+('111.42.c.5.M',3,'Which expression equals sec θ?','["sin θ / cos θ", "cos θ / sin θ", "1 / cos θ", "1 / sin θ"]'::jsonb,2,'The reciprocal identity.','original'),
+('111.42.c.5.M',4,'Simplify 1 − cos²θ.','["1", "cos θ", "tan²θ", "sin²θ"]'::jsonb,3,'From sin²θ + cos²θ = 1.','original'),
+('111.42.c.5.N',3,'Solve sin x = 1/2 for 0 ≤ x < π/2.','["x = π/6", "x = π/4", "x = π/3", "x = π/2"]'::jsonb,0,'sin 30° = 1/2.','original'),
+('111.42.c.5.N',4,'How many solutions does cos x = 0 have on [0, 2π]?','["3", "2", "1", "4"]'::jsonb,1,'x = π/2 and x = 3π/2.','original'),
+('111.42.c.5.N',4,'Solve 2 sin x − 1 = 0 on [0, 2π].','["x = π/4 and 3π/4", "x = π/6 only", "x = π/6 and 5π/6", "x = π/3 and 2π/3"]'::jsonb,2,'sin x = 1/2 in quadrants I and II.','original')
+) as v(code, diff, prompt, choices, ans, expl, src)
+join public.teks_items i on i.code = v.code and i.is_standard
+join public.teks_documents d on d.id = i.document_id and d.subject = 'Mathematics' and d.language = 'en'
+on conflict (fingerprint) do nothing;

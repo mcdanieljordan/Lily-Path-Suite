@@ -1,0 +1,62 @@
+{"c": "117.102.b.1.A", "d": 2, "q": "Which sense do you use to see the colors in a painting?", "o": ["sight", "taste", "hearing", "smell"], "a": 0, "e": "Your eyes see color."}
+{"c": "117.102.b.1.A", "d": 2, "q": "Which sense tells you that a clay bowl feels bumpy?", "o": ["hearing", "touch", "taste", "smell"], "a": 1, "e": "Your hands feel texture."}
+{"c": "117.102.b.1.B", "d": 2, "q": "A line that goes straight across the page is...", "o": ["bumpy", "tiny", "horizontal", "round"], "a": 2, "e": "Horizontal lines go side to side."}
+{"c": "117.102.b.1.B", "d": 2, "q": "A circle, a square, and a triangle are all kinds of...", "o": ["smells", "sounds", "songs", "shapes"], "a": 3, "e": "Shapes are an element of art."}
+{"c": "117.102.b.1.B", "d": 3, "q": "When the same pattern of stripes keeps happening again and again, we call it...", "o": ["repetition", "balance", "taste", "noise"], "a": 0, "e": "Repetition repeats an element."}
+{"c": "117.102.b.2.A", "d": 2, "q": "Which tool could you use to make a wavy line?", "o": ["a shoe", "a crayon", "a cup", "a spoon"], "a": 1, "e": "Crayons make lines."}
+{"c": "117.102.b.2.A", "d": 2, "q": "Red, blue, and yellow are examples of...", "o": ["sounds", "lines", "colors", "textures"], "a": 2, "e": "Colors are an element of art."}
+{"c": "117.102.b.2.B", "d": 2, "q": "When you put shapes on paper where they feel right to you, you are arranging them...", "o": ["by a machine", "by a rule book", "by accident only", "your own way"], "a": 3, "e": "Arranging intuitively means trusting your eyes."}
+{"c": "117.102.b.2.C", "d": 2, "q": "Which is a way to make art with paint?", "o": ["using a brush", "using a fork to eat", "using a clock", "using a pillow"], "a": 0, "e": "Painting uses brushes."}
+{"c": "117.102.b.2.C", "d": 3, "q": "Pressing a carved block with ink onto paper is called...", "o": ["baking", "printmaking", "swimming", "gardening"], "a": 1, "e": "Printmaking makes prints."}
+{"c": "117.102.b.2.C", "d": 2, "q": "Building art by joining clay, paper, and boxes is called making a...", "o": ["recipe", "play", "sculpture", "song"], "a": 2, "e": "Sculptures are 3-D."}
+{"c": "117.102.b.3.A", "d": 2, "q": "A picture of a dog shows the subject of the artwork. The subject is the...", "o": ["paper", "paint tube", "frame", "dog"], "a": 3, "e": "The subject is what the picture is about."}
+{"c": "117.102.b.3.B", "d": 2, "q": "Art can show a picture of your...", "o": ["family", "favorite words only", "nothing", "numbers only"], "a": 0, "e": "Artists share experiences."}
+{"c": "117.102.b.3.B", "d": 3, "q": "When a friend draws something different from what you draw, it shows people have...", "o": ["the same ideas", "different ideas", "no ideas", "no friends"], "a": 1, "e": "People think differently."}
+{"c": "117.102.b.3.C", "d": 2, "q": "Which everyday item was designed by an artist?", "o": ["a cloud", "a rock", "a poster", "a leaf"], "a": 2, "e": "Posters are designed."}
+{"c": "117.102.b.3.C", "d": 2, "q": "We use art every day when we see...", "o": ["only bugs", "only thunder", "only dirt", "pictures on books and signs"], "a": 3, "e": "Art is all around us."}
+{"c": "117.102.b.3.D", "d": 3, "q": "Counting the petals in a flower drawing connects art to...", "o": ["math", "baking", "sleeping", "swimming"], "a": 0, "e": "Counting links art and math."}
+{"c": "117.102.b.4.A", "d": 2, "q": "When you tell someone what you made in your drawing, you are sharing your...", "o": ["backpack", "ideas", "lunch", "shoes"], "a": 1, "e": "Artists explain their work."}
+{"c": "117.102.b.4.B", "d": 3, "q": "A place where many artworks are shown for people to see is a...", "o": ["garage", "bakery", "museum", "bus"], "a": 2, "e": "Museums display art."}
+{"c": "117.102.b.4.C", "d": 3, "q": "A folder that keeps your pictures together is called a...", "o": ["puzzle", "playground", "pillow", "portfolio"], "a": 3, "e": "A portfolio collects artwork."}
+{"c": "117.103.b.1.A", "d": 2, "q": "Which voice do you use when you sing a song?", "o": ["singing voice", "calling voice", "inner voice", "whispering voice"], "a": 0, "e": "Singing voice makes music."}
+{"c": "117.103.b.1.A", "d": 2, "q": "The voice you use to talk to a friend is your...", "o": ["whispering voice", "speaking voice", "singing voice", "calling voice"], "a": 1, "e": "Speaking voice is for talking."}
+{"c": "117.103.b.1.A", "d": 3, "q": "The voice you use to call your friend across the playground is your...", "o": ["inner voice", "speaking voice", "calling voice", "whispering voice"], "a": 2, "e": "A calling voice carries far."}
+{"c": "117.103.b.1.A", "d": 3, "q": "The quiet voice you use in your head when you think is your...", "o": ["singing voice", "speaking voice", "calling voice", "inner voice"], "a": 3, "e": "Inner voice is silent."}
+{"c": "117.103.b.1.B", "d": 2, "q": "A child's singing voice usually sounds...", "o": ["higher than a grown man's voice", "like a trumpet", "silent", "lower than a drum"], "a": 0, "e": "Children sing higher."}
+{"c": "117.103.b.1.C", "d": 2, "q": "Which group of instruments includes drums and rattles?", "o": ["brass", "percussion", "woodwinds", "strings"], "a": 1, "e": "Percussion instruments are struck or shaken."}
+{"c": "117.103.b.1.C", "d": 3, "q": "Violins and cellos belong to the...", "o": ["percussion family", "woodwind family", "string family", "brass family"], "a": 2, "e": "Strings are plucked or bowed."}
+{"c": "117.103.b.1.D", "d": 2, "q": "Two sounds where one is high and one is low are...", "o": ["the same", "silent", "quiet", "different"], "a": 3, "e": "High and low are different."}
+{"c": "117.103.b.1.D", "d": 2, "q": "A song where the singers use more and more volume is getting...", "o": ["louder", "slower", "softer", "shorter"], "a": 0, "e": "Louder means more volume."}
+{"c": "117.103.b.1.D", "d": 2, "q": "When the players speed up, the tempo of the music is...", "o": ["silent", "fast", "soft", "slow"], "a": 1, "e": "Faster means quick."}
+{"c": "117.103.b.1.E", "d": 2, "q": "The steady pulse you feel in music is the...", "o": ["color", "story", "beat", "shape"], "a": 2, "e": "The beat is steady."}
+{"c": "117.103.b.1.E", "d": 3, "q": "Clapping the words of a song is clapping the...", "o": ["story", "color", "shape", "rhythm"], "a": 3, "e": "Rhythm follows the words."}
+{"c": "117.103.b.2.A", "d": 2, "q": "Playing a rhythm stick or drum with the class is playing a classroom...", "o": ["instrument", "shoe", "toy only", "vegetable"], "a": 0, "e": "Classroom instruments are played together."}
+{"c": "117.103.b.2.B", "d": 3, "q": "Learning songs from different countries helps you hear music from different...", "o": ["shapes", "cultures", "weathers", "colors"], "a": 1, "e": "Music reflects cultures."}
+{"c": "117.103.b.2.C", "d": 2, "q": "Marching to the beat is a way to...", "o": ["read", "sleep", "move to music", "paint"], "a": 2, "e": "Moving shows the beat."}
+{"c": "117.103.b.2.C", "d": 3, "q": "Walking and hopping are movements that travel across the floor. They are called...", "o": ["silent movements", "non-locomotor movements", "sit-down movements", "locomotor movements"], "a": 3, "e": "Locomotor means moving from place to place."}
+{"c": "117.103.b.2.C", "d": 3, "q": "Swaying while staying in one place is a...", "o": ["non-locomotor movement", "march", "locomotor movement", "run"], "a": 0, "e": "Non-locomotor stays in place."}
+{"c": "117.103.b.2.D", "d": 3, "q": "Tapping the steady beat on your knees while others clap a different rhythm is...", "o": ["a nap", "partwork", "a picture", "a mistake"], "a": 1, "e": "Partwork is different parts at once."}
+{"c": "117.103.b.2.E", "d": 2, "q": "To sing softly, you use a...", "o": ["whistle", "loud voice", "quiet voice", "shout"], "a": 2, "e": "Soft means quiet."}
+{"c": "117.103.b.2.E", "d": 2, "q": "To make the music faster, you...", "o": ["stop", "sleep", "play slower", "play quicker"], "a": 3, "e": "Quicker is faster."}
+{"c": "117.103.b.3.A", "d": 2, "q": "A rhyme that you chant with a game is a type of...", "o": ["musical game", "bike", "recipe", "map"], "a": 0, "e": "Rhymes can be musical."}
+{"c": "117.103.b.3.A", "d": 3, "q": "A song sung only during a holiday season is a...", "o": ["math problem", "seasonal song", "science lab", "storybook"], "a": 1, "e": "Seasonal songs match a time of year."}
+{"c": "117.103.b.3.B", "d": 3, "q": "A song about counting from one to ten connects music with...", "o": ["swimming", "sleeping", "math", "painting only"], "a": 2, "e": "Counting songs link math."}
+{"c": "117.103.b.4.A", "d": 2, "q": "At a concert, a good audience member...", "o": ["runs around", "shouts", "talks loudly", "listens quietly and claps at the end"], "a": 3, "e": "Audiences listen politely."}
+{"c": "117.103.b.4.B", "d": 2, "q": "When you pat your knees in time with the music, you are keeping a steady...", "o": ["beat", "story", "color", "picture"], "a": 0, "e": "Beat is steady."}
+{"c": "117.103.b.4.C", "d": 3, "q": "When two songs have an identical steady pulse, their beat is the...", "o": ["different", "same", "lost", "silent"], "a": 1, "e": "Same beat means same pulse."}
+{"c": "117.104.b.1.A", "d": 2, "q": "Pretending to be a doctor at play helps you learn about...", "o": ["only art", "nothing", "yourself and others", "only math"], "a": 2, "e": "Dramatic play builds self-awareness."}
+{"c": "117.104.b.1.B", "d": 2, "q": "Walking like a big elephant uses expressive...", "o": ["spelling", "painting", "counting", "movement"], "a": 3, "e": "Movement shows ideas."}
+{"c": "117.104.b.1.C", "d": 2, "q": "Meowing like a cat is copying a...", "o": ["sound", "number", "color", "picture"], "a": 0, "e": "Imitate means copy."}
+{"c": "117.104.b.1.D", "d": 3, "q": "Pretending your hands are a bird flying is imitating an...", "o": ["alphabet", "object or animal", "number", "crayon"], "a": 1, "e": "Imitating recreates things."}
+{"c": "117.104.b.2.A", "d": 2, "q": "Using your voice safely in a play means not...", "o": ["using a calm voice", "taking turns", "screaming too long", "speaking clearly"], "a": 2, "e": "Safe use protects your voice."}
+{"c": "117.104.b.2.B", "d": 2, "q": "When you play the role of a fireman in a pretend game, you are...", "o": ["painting", "reading a book", "cooking", "acting like someone else"], "a": 3, "e": "Roles are pretend characters."}
+{"c": "117.104.b.2.C", "d": 3, "q": "Dramatic play uses pretend, imagination, and...", "o": ["acting", "spelling quizzes", "nap time", "math tests"], "a": 0, "e": "Dramatic play is pretending."}
+{"c": "117.104.b.2.D", "d": 2, "q": "Joining your class in a pretend kitchen is taking part in...", "o": ["a test", "dramatic play", "a race", "a spelling bee"], "a": 1, "e": "Dramatic play involves pretending."}
+{"c": "117.104.b.3.A", "d": 2, "q": "You can make a stage for your play using...", "o": ["a bridge", "only airplanes", "tables and chairs", "only boats"], "a": 2, "e": "Classroom objects can build a stage."}
+{"c": "117.104.b.3.B", "d": 3, "q": "A simple costume can be made from...", "o": ["nothing", "glass only", "metal only", "paper, cardboard, or cloth"], "a": 3, "e": "Simple materials work."}
+{"c": "117.104.b.3.C", "d": 3, "q": "Practicing a play before showing it is called...", "o": ["rehearsing", "sleeping", "losing", "forgetting"], "a": 0, "e": "Rehearse means practice."}
+{"c": "117.104.b.3.D", "d": 2, "q": "When classmates work together to put on a play, they...", "o": ["compete", "cooperate", "argue", "leave"], "a": 1, "e": "Cooperation helps everyone."}
+{"c": "117.104.b.4.A", "d": 3, "q": "Acting out a story about your own family's traditions shows your...", "o": ["lunch", "shoes", "culture", "weather"], "a": 2, "e": "Plays can share family cultures."}
+{"c": "117.104.b.4.B", "d": 3, "q": "Acting out the story of the first Thanksgiving is a story from...", "o": ["a cooking show", "a space trip", "a sports game", "American history"], "a": 3, "e": "It shows stories of the past."}
+{"c": "117.104.b.5.A", "d": 2, "q": "Good audience behavior at a play is to...", "o": ["watch quietly and clap at the end", "walk around", "use your phone loudly", "shout out"], "a": 0, "e": "Audiences should be respectful."}
+{"c": "117.104.b.5.B", "d": 3, "q": "After a play, you can talk about...", "o": ["nothing", "what you saw and how it made you feel", "only the weather", "only what you ate"], "a": 1, "e": "Discussing builds understanding."}

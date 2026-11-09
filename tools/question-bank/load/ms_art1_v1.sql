@@ -1,0 +1,42 @@
+insert into public.question_bank (teks_code, teks_item_id, subject, grade_num, course, difficulty, qtype, prompt, choices, answer_idx, explanation, source, status, gen_batch)
+select distinct on (v.prompt) v.code, i.id, d.subject,
+       case when i.grade_level = 'K' then 0 when i.grade_level ~ '^[0-9]+' then substring(i.grade_level from '^[0-9]+')::smallint end,
+       case when i.grade_level is null then i.grade_course_title end,
+       v.diff, 'mc', v.prompt, v.choices, v.ans, v.expl, v.src, 'checked', 'ms_art1_v1'
+from (values
+('117.202.c.1.A',2,'A sixth grader draws the folds of a real sweater she is holding in front of her. Her idea comes from ___.','["Direct observation", "A rule in a textbook", "A dream she forgot", "A photocopied worksheet"]'::jsonb,0,'Looking at a real object is direct observation.','original'),
+('117.202.c.1.A',2,'Which choice is an original source for a drawing idea?','["A copied logo", "A sketch you make of a real plant in the garden", "A cartoon someone else drew", "A coloring page"]'::jsonb,1,'Original sources come from first-hand experience.','original'),
+('117.202.c.1.B',2,'Which element of art describes how a surface feels or looks like it feels, such as rough or smooth?','["Space", "Line", "Texture", "Value"]'::jsonb,2,'Texture is surface quality.','original'),
+('117.202.c.1.B',2,'A student mixes white into blue paint to make it lighter. She is changing the ___ of the color.','["Form", "Line", "Shape", "Value"]'::jsonb,3,'Value is how light or dark a color is.','original'),
+('117.202.c.1.C',2,'A wallpaper design repeats the same flower again and again. This shows the principle of ___.','["Repetition or pattern", "Contrast", "Scale", "Balance only"]'::jsonb,0,'Repeating an element makes a pattern.','original'),
+('117.202.c.1.C',2,'An artist makes one bright red shape stand out in a gray painting. She uses ___ to draw the eye.','["Proportion", "Emphasis", "Rhythm", "Unity"]'::jsonb,1,'Emphasis highlights the focal point.','original'),
+('117.202.c.1.D',3,'A painting of a boat on a storm-tossed sea makes viewers feel worried. This is the work''s ___ property.','["Chemical", "Legal", "Expressive", "Mathematical"]'::jsonb,2,'Expressive properties convey feeling and meaning.','original'),
+('117.202.c.1.D',3,'When artists borrow imagery from existing work and give it a new meaning, they use ___.','["Rubbing", "Tracing only", "Erasing", "Appropriation"]'::jsonb,3,'Appropriation reuses imagery.','original'),
+('117.202.c.2.A',3,'A student plans a drawing from an idea of her own about her family tradition. She is creating an artwork from ___.','["Personal experience", "A worksheet answer", "A store ad", "Another artist''s finished piece"]'::jsonb,0,'Original work can come from personal experience.','original'),
+('117.202.c.2.A',3,'Which choice best describes an original artwork?','["It is a printout", "It shows the artist''s own ideas and choices", "It is a tracing of a photo", "It is a copy of a poster"]'::jsonb,1,'Originality means the artist''s own vision.','original'),
+('117.202.c.2.B',3,'A student sketches three different ideas for a poster, picks the best one and then improves it. She is using the ___ process.','["Guessing", "Memorizing", "Art-making", "Skipping"]'::jsonb,2,'The art-making process includes planning and revising.','original'),
+('117.202.c.2.B',3,'Solving a design problem like ''make a bag that is easy to carry'' means applying ___.','["Copying a bag", "Random luck", "Ignoring the need", "Creative thinking and planning"]'::jsonb,3,'Design solves problems.','original'),
+('117.202.c.2.C',2,'Which of these is a printmaking technique?','["Carving a block, rolling ink and pressing it on paper", "Sewing cloth", "Stirring watercolor", "Molding clay"]'::jsonb,0,'Relief printing uses a carved block.','original'),
+('117.202.c.2.C',2,'A student shapes clay into a bowl, lets it dry and fires it in a kiln. She is making ___.','["Photography", "Ceramics", "Watercolor", "Printmaking"]'::jsonb,1,'Clay fired in a kiln is ceramics.','original'),
+('117.202.c.3.A',3,'A mural showing a city rebuilding after a flood reflects an influence of ___ on art.','["Weather forecasts", "Bus routes", "Historical events", "Lunch menus"]'::jsonb,2,'Events shape what artists make.','original'),
+('117.202.c.3.A',3,'An artwork protesting a law shows the influence of ___ events.','["Fashion trends only", "Sports scores", "Cooking", "Political"]'::jsonb,3,'Art can respond to politics.','original'),
+('117.202.c.3.B',3,'A painting that shows hope using a rising sun conveys a(n) ___ theme.','["Universal", "Local only", "Secret", "Private"]'::jsonb,0,'Universal themes cross cultures.','original'),
+('117.202.c.3.B',3,'Which of these is a universal theme found in art around the world?','["Bus numbers", "Family and community", "Parking rules", "Tax forms"]'::jsonb,1,'Family appears across cultures.','original'),
+('117.202.c.3.C',3,'Why do cathedrals, temples and mosques look different around the world?','["Builders ignore culture", "They are all identical", "Societies'' beliefs and resources shape their art and architecture", "Weather decides everything"]'::jsonb,2,'Culture shapes architecture.','original'),
+('117.202.c.3.C',3,'A society that valued trade built large market halls with decorated walls. This explains the relationship between ___ and art.','["Money and sleep", "Food and sports", "Math and sound", "Society and architecture"]'::jsonb,3,'Buildings reflect values.','original'),
+('117.202.c.3.D',2,'Which job might an art student have as a career?','["Museum curator", "Plumber", "Pilot", "Surveyor"]'::jsonb,0,'Curators care for museum collections.','original'),
+('117.202.c.3.D',2,'An avocational art activity is ___.','["A school test", "Painting for enjoyment on weekends", "A full-time job", "A tax form"]'::jsonb,1,'Avocational means pursued for love of it.','original'),
+('117.202.c.4.A',2,'A student writes a response to a painting using words like ''texture'' and ''balance.'' She is using appropriate ___.','["Slang only", "Silence", "Art vocabulary", "Math symbols"]'::jsonb,2,'Using art words makes responses precise.','original'),
+('117.202.c.4.A',2,'Which sentence uses art vocabulary?','["It was nice", "It looks cool", "I like it", "The artist used diagonal lines to create movement"]'::jsonb,3,'Specific terms add clarity.','original'),
+('117.202.c.4.B',3,'A critique method often starts with ___ the artwork, then analyzing, interpreting and judging.','["Describing", "Copying", "Ignoring", "Selling"]'::jsonb,0,'Describe, analyze, interpret, judge.','original'),
+('117.202.c.4.B',3,'In a critique, ''interpreting'' an artwork means ___.','["Listing only the colors", "Explaining what you think it means", "Selling it", "Copying it"]'::jsonb,1,'Interpretation gives meaning.','original'),
+('117.202.c.4.C',2,'A portfolio is a collection of ___.','["Tickets", "Receipts", "An artist''s selected work over time", "Snack wrappers"]'::jsonb,2,'Portfolios showcase artwork.','original'),
+('117.202.c.4.C',2,'Which belongs in a student art portfolio?','["Random papers", "Blank sheets", "Homework from other classes only", "Finished pieces with sketches that show growth"]'::jsonb,3,'A portfolio shows progress.','original'),
+('117.202.c.4.D',2,'A field trip to a gallery lets a student see original artworks ___.','["In person, outside the classroom", "Only in a book", "Only online", "Only on a worksheet"]'::jsonb,0,'Venues outside class expand learning.','original'),
+('117.202.c.4.D',2,'Which place is a venue to see original art outside school?','["Parking lot", "Art museum", "Bus stop", "Gas station"]'::jsonb,1,'Museums display art.','original'),
+('117.202.c.4.E',2,'At a gallery opening, good exhibition etiquette is to ___.','["Touch the sculptures", "Take items from the wall", "Keep hands off the artwork and speak quietly", "Run through the room"]'::jsonb,2,'Respect the art and others.','original'),
+('117.202.c.4.E',2,'When displaying your own artwork at school, you should ___.','["Crumple it", "Leave it unnamed", "Hide it", "Label it and present it neatly"]'::jsonb,3,'Neat display shows respect.','original')
+) as v(code, diff, prompt, choices, ans, expl, src)
+join public.teks_items i on i.code = v.code and i.is_standard
+join public.teks_documents d on d.id = i.document_id and d.subject = 'Fine Arts' and d.language = 'en'
+on conflict (fingerprint) do nothing;

@@ -1,0 +1,526 @@
+{"c": "127.112.d.1.A", "d": 3, "q": "A packaged rooftop unit differs from a split system because all its components are in:", "o": ["One cabinet", "Separate rooms", "Underground vaults", "Two buildings"], "a": 0, "e": "Packaged units are self-contained."}
+{"c": "127.112.d.1.A", "d": 4, "q": "A commercial chilled-water system cools air by circulating:", "o": ["Sand through ducts", "Cold water to coils in air handlers", "Hot gas to the roof", "Steam to the walls"], "a": 1, "e": "Chilled water carries cooling."}
+{"c": "127.112.d.1.B", "d": 3, "q": "A large office tower is most likely served by a:", "o": ["Single portable fan", "Window unit per floor", "Central chilled-water plant", "Fireplace"], "a": 2, "e": "Large buildings use central plants."}
+{"c": "127.112.d.1.B", "d": 4, "q": "A small strip-mall store is commonly cooled by a:", "o": ["Cooling tower plant", "Absorption chiller for the whole block", "Steam boiler loop", "Rooftop packaged unit"], "a": 3, "e": "Small stores use rooftop units."}
+{"c": "127.112.d.1.C", "d": 3, "q": "Commercial air system capacity is usually stated in:", "o": ["Tons or BTU per hour", "Volts per foot", "Gallons per mile", "Pounds per inch"], "a": 0, "e": "Capacity is cooling output."}
+{"c": "127.112.d.1.C", "d": 4, "q": "A 5-ton unit provides how many BTU per hour of cooling?", "o": ["600,000", "60,000", "12,000", "5,000"], "a": 1, "e": "5 x 12,000 = 60,000."}
+{"c": "127.112.d.2.A", "d": 3, "q": "Complete combustion of natural gas produces carbon dioxide and:", "o": ["Carbon monoxide", "Soot", "Water vapor", "Sulfur"], "a": 2, "e": "Complete burn yields CO2 and H2O."}
+{"c": "127.112.d.2.A", "d": 4, "q": "Incomplete combustion is a hazard mainly because it creates:", "o": ["Cooler flames", "More nitrogen", "Extra oxygen", "Carbon monoxide"], "a": 3, "e": "CO is poisonous."}
+{"c": "127.112.d.2.B", "d": 3, "q": "Flue gas from a gas furnace contains mostly nitrogen, carbon dioxide, and:", "o": ["Water vapor", "Ammonia", "Chlorine", "Fresh oxygen only"], "a": 0, "e": "Flue gas composition."}
+{"c": "127.112.d.2.B", "d": 4, "q": "Flue gases are vented outdoors to keep them from:", "o": ["Raising voltage", "Entering the occupied space", "Cooling the burners", "Wetting the duct"], "a": 1, "e": "Venting protects occupants."}
+{"c": "127.112.d.2.C", "d": 3, "q": "A furnace vent system includes a vent pipe, connector, and a:", "o": ["Condensate pump only", "Humidifier", "Termination cap", "Fuse box"], "a": 2, "e": "Terminations finish the vent."}
+{"c": "127.112.d.2.C", "d": 4, "q": "A draft hood on a natural-draft furnace helps by:", "o": ["Heating the room", "Storing fuel", "Filtering air", "Relieving excess draft and back-drafts"], "a": 3, "e": "The hood stabilizes draft."}
+{"c": "127.112.d.2.D", "d": 3, "q": "When selecting a vent for a furnace, the installer follows the:", "o": ["Manufacturer instructions and fuel gas code", "Color of the furnace", "Lowest price", "Neighbor's advice"], "a": 0, "e": "Codes govern venting."}
+{"c": "127.112.d.2.D", "d": 4, "q": "A Category I vent is used with furnaces that operate with:", "o": ["Condensing flue gases", "Non-positive vent pressure and flue gas above dew point", "No flue at all", "Positive pressure at all times"], "a": 1, "e": "Category definitions."}
+{"c": "127.112.d.2.E", "d": 3, "q": "Proper combustion in a gas burner is judged by flame color, which should be mostly:", "o": ["Yellow and sooty", "Black", "Blue", "Red"], "a": 2, "e": "Blue flame is efficient."}
+{"c": "127.112.d.2.E", "d": 4, "q": "A burner with a lazy yellow flame often needs more:", "o": ["Gas pressure", "Fuel oil", "Water", "Primary air"], "a": 3, "e": "Yellow flame means too little air."}
+{"c": "127.112.d.2.F", "d": 3, "q": "A condensing furnace vent is usually made of:", "o": ["PVC plastic", "Aluminum foil", "Cast iron", "Single-wall galvanized steel"], "a": 0, "e": "Cool flue gas allows plastic."}
+{"c": "127.112.d.2.F", "d": 4, "q": "Venting for a high-efficiency furnace must be sloped to:", "o": ["Fill the vent", "Drain condensate back to the furnace", "Heat the attic", "Pool water"], "a": 1, "e": "Condensate drains properly."}
+{"c": "127.112.d.2.G", "d": 3, "q": "A barometric damper on a flue pipe controls:", "o": ["Humidity only", "Fuel pressure", "Draft", "Voltage"], "a": 2, "e": "Dampers regulate draft."}
+{"c": "127.112.d.2.G", "d": 4, "q": "A draft inducer is a fan that:", "o": ["Pumps refrigerant", "Mixes fuel", "Cools the room", "Pulls flue gases through the heat exchanger"], "a": 3, "e": "Inducers create draft."}
+{"c": "127.112.d.2.H", "d": 3, "q": "Vent size for a gas appliance is chosen from tables based on input rating and vent:", "o": ["Height and lateral length", "Location of thermostat", "Brand", "Paint color"], "a": 0, "e": "Tables set sizes."}
+{"c": "127.112.d.2.H", "d": 4, "q": "A vent that is too large for a small appliance can cause:", "o": ["Stronger draft", "Condensation and poor draft", "Lower pressure", "Faster heating"], "a": 1, "e": "Oversized vents cool gases."}
+{"c": "127.112.d.2.I", "d": 3, "q": "A heat anticipator in a thermostat is set to match the:", "o": ["Room color", "Fuel type", "Current draw of the control circuit", "Duct size"], "a": 2, "e": "Anticipator matches amps."}
+{"c": "127.112.d.2.I", "d": 4, "q": "Setting the anticipator too low can cause the furnace to:", "o": ["Overheat the thermostat", "Run constantly", "Stay off", "Short cycle"], "a": 3, "e": "Wrong setting changes cycling."}
+{"c": "127.112.d.3.A", "d": 3, "q": "A closed hydronic system recirculates:", "o": ["The same water in a sealed loop", "Steam only", "Air", "Fresh water each time"], "a": 0, "e": "Closed means sealed."}
+{"c": "127.112.d.3.A", "d": 4, "q": "The unit of heat energy commonly used in hydronic work is the:", "o": ["Lumen", "BTU", "Newton", "Volt"], "a": 1, "e": "BTU measures heat."}
+{"c": "127.112.d.3.B", "d": 3, "q": "Major parts of a hot-water heating system include the boiler, pump, and:", "o": ["Spark plugs", "Condenser coil", "Radiators or baseboard units", "Compressor"], "a": 2, "e": "Emitters deliver heat."}
+{"c": "127.112.d.3.B", "d": 4, "q": "The expansion tank in a hot-water system absorbs:", "o": ["Voltage spikes", "Gas leaks", "Sound", "Water volume changes as it heats"], "a": 3, "e": "Tanks cushion expansion."}
+{"c": "127.112.d.3.C", "d": 3, "q": "The circulator pump in a hot-water system moves:", "o": ["Heated water through the piping", "Refrigerant", "Fuel to the burner", "Air through filters"], "a": 0, "e": "Pumps circulate water."}
+{"c": "127.112.d.3.C", "d": 4, "q": "An air vent on a hydronic loop removes:", "o": ["Heat only", "Trapped air that blocks flow", "Fuel", "Water"], "a": 1, "e": "Air stops circulation."}
+{"c": "127.112.d.3.D", "d": 3, "q": "Before working on a hot boiler, a technician should let the system:", "o": ["Be filled with air", "Stay under pressure", "Cool and relieve pressure", "Run hotter"], "a": 2, "e": "Scalding is a hazard."}
+{"c": "127.112.d.3.D", "d": 4, "q": "The relief valve on a boiler discharges to prevent:", "o": ["Cold rooms", "Low flow", "Wet floors", "Dangerous over-pressure"], "a": 3, "e": "Safety valve."}
+{"c": "127.112.d.3.E", "d": 3, "q": "To start a hot-water system after service, the technician first makes sure the system is:", "o": ["Filled with water and purged of air", "Empty", "Disconnected", "Wet with oil"], "a": 0, "e": "Never fire a dry boiler."}
+{"c": "127.112.d.3.E", "d": 4, "q": "A boiler aquastat controls:", "o": ["Duct size", "Water temperature", "Air speed", "Gas pressure"], "a": 1, "e": "It holds temperature setpoint."}
+{"c": "127.112.d.3.F", "d": 3, "q": "Low-pressure boilers operate at no more than:", "o": ["150 psi", "1000 psi", "15 psi for steam", "500 psi"], "a": 2, "e": "Low-pressure steam limit."}
+{"c": "127.112.d.3.F", "d": 4, "q": "Before blowing down a low-water cutoff, the technician must make sure that:", "o": ["All valves are closed", "The burner is firing high", "The boiler is hot and unattended", "Everyone clear of the discharge and procedures are followed"], "a": 3, "e": "Safe procedure."}
+{"c": "127.112.d.3.G", "d": 3, "q": "Common hydronic piping layouts include series loop, one-pipe, and:", "o": ["Two-pipe systems", "Zero-pipe", "Seven-pipe", "Open-top"], "a": 0, "e": "Standard layouts."}
+{"c": "127.112.d.3.G", "d": 4, "q": "A primary-secondary piping arrangement lets boilers and loads:", "o": ["Run without water", "Have independent flow", "Use the same gas line", "Share the same pump only"], "a": 1, "e": "Hydraulic separation."}
+{"c": "127.112.d.3.H", "d": 3, "q": "The pressure difference across a circulator pump is read with:", "o": ["A thermometer", "An ohmmeter", "Two gauges, one at each side", "A level"], "a": 2, "e": "Differential pressure."}
+{"c": "127.112.d.3.H", "d": 4, "q": "If the pressure drop across a pump is zero, the pump may be:", "o": ["Too small", "Overheated", "Working perfectly", "Not moving water"], "a": 3, "e": "Zero differential suggests no flow."}
+{"c": "127.112.d.3.I", "d": 3, "q": "Heating water flow in gallons per minute is found by dividing the heat load by 500 times the:", "o": ["Temperature drop", "Boiler weight", "Pump color", "Pipe length"], "a": 0, "e": "GPM = BTUH / (500 x delta T)."}
+{"c": "127.112.d.3.I", "d": 4, "q": "A 60,000 BTUH load with a 20-degree drop needs how many gpm?", "o": ["12", "6", "3", "60"], "a": 1, "e": "60,000 / (500 x 20) = 6."}
+{"c": "127.112.d.3.J", "d": 3, "q": "A pump is selected by matching the flow rate needed to the:", "o": ["Pipe color", "Building age", "Head loss of the system", "Fuel brand"], "a": 2, "e": "Pump curve meets system curve."}
+{"c": "127.112.d.3.J", "d": 4, "q": "A pump curve plots head against:", "o": ["Temperature", "Voltage", "Noise", "Flow rate"], "a": 3, "e": "Pump curves show head vs flow."}
+{"c": "127.112.d.4.A", "d": 3, "q": "Very low indoor humidity in winter can cause:", "o": ["Dry skin and static shocks", "Condensation", "Mold on windows", "Stronger breathing"], "a": 0, "e": "Dry air is uncomfortable."}
+{"c": "127.112.d.4.A", "d": 4, "q": "Too much indoor humidity can promote:", "o": ["Static shocks", "Mold growth", "Dry throats", "Cracked skin"], "a": 1, "e": "Moisture grows mold."}
+{"c": "127.112.d.4.B", "d": 3, "q": "A bypass humidifier uses air from the furnace to:", "o": ["Cool the burner", "Recover refrigerant", "Evaporate water into the airstream", "Filter dust"], "a": 2, "e": "Bypass types add moisture."}
+{"c": "127.112.d.4.B", "d": 4, "q": "A steam humidifier makes moisture by:", "o": ["Spraying cold water", "Freezing water", "Condensing gas", "Boiling water with electric elements"], "a": 3, "e": "Steam humidifiers boil water."}
+{"c": "127.112.d.4.C", "d": 3, "q": "The water supply to a humidifier should include a:", "o": ["Shutoff valve and drain", "Thermostat", "Light bulb", "Spark plug"], "a": 0, "e": "Service valves needed."}
+{"c": "127.112.d.4.C", "d": 4, "q": "Mineral buildup in a humidifier is cleaned to restore:", "o": ["Voltage", "Proper output", "Duct size", "Fuel supply"], "a": 1, "e": "Scale lowers performance."}
+{"c": "127.112.d.4.D", "d": 3, "q": "A MERV rating describes how well a filter:", "o": ["Cools air", "Dries air", "Captures particles", "Heats air"], "a": 2, "e": "Higher MERV catches more."}
+{"c": "127.112.d.4.D", "d": 4, "q": "Compared with a MERV 4 filter, a MERV 13 filter captures:", "o": ["Nothing", "Less dust", "Only large lint", "Smaller particles"], "a": 3, "e": "Higher ratings capture smaller particles."}
+{"c": "127.112.d.4.E", "d": 3, "q": "When installing a furnace filter, the airflow arrow should point:", "o": ["Toward the blower", "Away from the blower", "Toward the ceiling", "Toward the room"], "a": 0, "e": "Arrow shows flow direction."}
+{"c": "127.112.d.4.E", "d": 4, "q": "A clogged filter reduces airflow and can cause the coil to:", "o": ["Cool faster", "Freeze up", "Save energy", "Run hotter"], "a": 1, "e": "Low airflow freezes coils."}
+{"c": "127.112.d.4.F", "d": 3, "q": "A manometer measuring across a filter shows the filter's:", "o": ["Age", "Cost", "Pressure drop", "Color"], "a": 2, "e": "Static pressure drop."}
+{"c": "127.112.d.4.F", "d": 4, "q": "If the pressure drop across a filter climbs well above its rated value, the filter should be:", "o": ["Ignored", "Painted", "Moved", "Changed"], "a": 3, "e": "High drop means loaded."}
+{"c": "127.112.d.4.G", "d": 3, "q": "An accessory that improves indoor air by killing microbes on a coil is a:", "o": ["UV light", "Gas valve", "Fuse", "Thermostat"], "a": 0, "e": "UV disinfects surfaces."}
+{"c": "127.112.d.4.G", "d": 4, "q": "An energy recovery ventilator transfers heat and moisture between:", "o": ["Water and oil", "Exhaust and incoming fresh air", "Two rooms", "Fuel and air"], "a": 1, "e": "ERVs reclaim energy."}
+{"c": "127.112.d.4.H", "d": 3, "q": "Before cleaning an electronic air cleaner, the technician should:", "o": ["Open the fuel line", "Touch the plates live", "Turn off the power", "Add water while on"], "a": 2, "e": "High-voltage cell."}
+{"c": "127.112.d.4.H", "d": 4, "q": "Collector plates of an electronic air cleaner are usually washed with:", "o": ["Bleach on live cells", "Gasoline", "Sand", "Mild detergent and water"], "a": 3, "e": "Gentle cleaning."}
+{"c": "127.112.d.5.A", "d": 3, "q": "A common refrigerant leak detector uses a:", "o": ["Soap bubble solution", "Hammer", "Ruler", "Glue gun"], "a": 0, "e": "Bubbles show leaks."}
+{"c": "127.112.d.5.A", "d": 4, "q": "An electronic leak detector senses refrigerant by detecting:", "o": ["Pressure", "Halogen in the air sample", "Color", "Heat"], "a": 1, "e": "Halogen detectors sniff refrigerant."}
+{"c": "127.112.d.5.B", "d": 3, "q": "Pressurizing with nitrogen and checking with soap bubbles is a:", "o": ["Recovery", "Charge check", "Leak test", "Evacuation"], "a": 2, "e": "Standing pressure test."}
+{"c": "127.112.d.5.B", "d": 4, "q": "A pressure that drops steadily on a gauge after charging with nitrogen suggests:", "o": ["A full charge", "Cooler gas only", "A good seal", "A leak"], "a": 3, "e": "Falling pressure means leak."}
+{"c": "127.112.d.5.C", "d": 3, "q": "A vacuum pump is used to remove air and moisture from a:", "o": ["Refrigerant system", "Duct", "Furnace flue", "Water heater"], "a": 0, "e": "Evacuation."}
+{"c": "127.112.d.5.C", "d": 4, "q": "A micron gauge measures:", "o": ["Voltage", "Deep vacuum levels", "Temperature of air", "Gas flow"], "a": 1, "e": "Microns indicate vacuum."}
+{"c": "127.112.d.5.D", "d": 3, "q": "Evacuation boils moisture out of a system by:", "o": ["Chilling the pump", "Adding oil", "Lowering pressure so water vaporizes", "Heating the room"], "a": 2, "e": "Low pressure lowers boiling point."}
+{"c": "127.112.d.5.D", "d": 4, "q": "A system is considered dry when the vacuum holds below about:", "o": ["760 mm only", "29 inches only", "50,000 microns", "500 microns"], "a": 3, "e": "Deep vacuum target."}
+{"c": "127.112.d.5.E", "d": 3, "q": "A recovery machine pulls refrigerant into a:", "o": ["Recovery cylinder", "Fuel can", "Water tank", "Toolbox"], "a": 0, "e": "Recovered refrigerant is stored."}
+{"c": "127.112.d.5.E", "d": 4, "q": "A recovery cylinder must never be filled beyond:", "o": ["100 percent", "80 percent of its capacity", "120 percent", "50 liters"], "a": 1, "e": "Leave expansion space."}
+{"c": "127.112.d.5.F", "d": 3, "q": "During recovery, the technician should wear gloves and:", "o": ["A tie", "Sandals", "Safety glasses", "A scarf"], "a": 2, "e": "Liquid refrigerant can freeze skin."}
+{"c": "127.112.d.5.F", "d": 4, "q": "Recovery is complete when the system reaches the:", "o": ["Same pressure as the shop", "Lowest temperature", "Highest pressure", "Required vacuum level for that refrigerant"], "a": 3, "e": "EPA specifies levels."}
+{"c": "127.112.d.5.G", "d": 3, "q": "A deep vacuum is achieved with a vacuum pump rated for:", "o": ["Low micron performance", "High voltage", "High pressure", "Fuel use"], "a": 0, "e": "Pump capability matters."}
+{"c": "127.112.d.5.G", "d": 4, "q": "Using large-diameter hoses for evacuation helps by:", "o": ["Slowing it", "Speeding the process", "Cooling the pump", "Adding moisture"], "a": 1, "e": "Bigger hoses flow better."}
+{"c": "127.112.d.5.H", "d": 3, "q": "A charging scale is used to measure the:", "o": ["Speed of fan", "Room humidity", "Weight of refrigerant added", "Voltage drop"], "a": 2, "e": "Weigh in the charge."}
+{"c": "127.112.d.5.H", "d": 4, "q": "A manifold gauge set connects to the system's:", "o": ["Air vent", "Thermostat", "Filter", "Service ports"], "a": 3, "e": "Gauges attach at ports."}
+{"c": "127.112.d.5.I", "d": 3, "q": "Purging with dry nitrogen helps remove:", "o": ["Moisture and contaminants", "Voltage", "Heat only", "Oil only"], "a": 0, "e": "Nitrogen sweeps the lines."}
+{"c": "127.112.d.5.I", "d": 4, "q": "When brazing, nitrogen flows through the line so that:", "o": ["Flux dries", "No scale forms inside the tube", "The tube melts", "The torch cools"], "a": 1, "e": "Prevents oxidation."}
+{"c": "127.112.d.5.J", "d": 3, "q": "The most accurate way to charge many systems is by:", "o": ["Guesswork", "Sound", "Weight", "Touch"], "a": 2, "e": "Weighing is precise."}
+{"c": "127.112.d.5.J", "d": 4, "q": "Charging by superheat or subcooling relies on:", "o": ["Duct length", "Thermostat color", "Filter size", "Pressure and temperature readings"], "a": 3, "e": "Measured values guide charge."}
+{"c": "127.112.d.6.A", "d": 3, "q": "A step-down transformer produces a secondary voltage that is:", "o": ["Lower than the primary", "Higher than the primary", "Zero", "Equal always"], "a": 0, "e": "Step-down reduces voltage."}
+{"c": "127.112.d.6.A", "d": 4, "q": "A common HVAC control transformer converts line voltage to:", "o": ["6 volts", "24 volts", "480 volts", "1,000 volts"], "a": 1, "e": "Control circuits use 24 V."}
+{"c": "127.112.d.6.B", "d": 3, "q": "AC voltage is produced by a generator whose coil rotates in a:", "o": ["Oil sump", "Vacuum tube", "Magnetic field", "Water bath"], "a": 2, "e": "Rotation induces voltage."}
+{"c": "127.112.d.6.B", "d": 4, "q": "One full cycle of an AC sine wave consists of a positive alternation and a:", "o": ["Zero alternation", "Double positive", "Square wave", "Negative alternation"], "a": 3, "e": "Sine waves alternate."}
+{"c": "127.112.d.6.C", "d": 3, "q": "A 120/208 volt wye service from the utility feeds a commercial rooftop unit with how many hot conductors?", "o": ["3", "6", "1", "2"], "a": 0, "e": "Three phases."}
+{"c": "127.112.d.6.C", "d": 4, "q": "Single-phase 240 volt service has two hot legs that are:", "o": ["120 degrees apart", "180 degrees apart", "90 degrees apart", "In phase"], "a": 1, "e": "Split-phase."}
+{"c": "127.112.d.6.D", "d": 3, "q": "In an inductive circuit, the current:", "o": ["Leads the voltage", "Is in phase", "Lags the voltage", "Is zero"], "a": 2, "e": "Inductors lag."}
+{"c": "127.112.d.6.D", "d": 4, "q": "In a capacitive circuit, the current:", "o": ["Is steady DC", "Lags the voltage", "Equals zero", "Leads the voltage"], "a": 3, "e": "Capacitors lead."}
+{"c": "127.112.d.6.E", "d": 3, "q": "A run capacitor stays in the circuit to improve motor:", "o": ["Efficiency while running", "Fuel mix", "Humidity", "Duct size"], "a": 0, "e": "Run caps are continuous duty."}
+{"c": "127.112.d.6.E", "d": 4, "q": "A start capacitor is in the circuit only:", "o": ["All the time", "For a brief time while the motor starts", "After shutdown", "Never"], "a": 1, "e": "Start caps are intermittent."}
+{"c": "127.112.d.6.F", "d": 3, "q": "A three-phase induction motor does not need a start capacitor because the three phases create:", "o": ["A frozen field", "No field", "A rotating magnetic field", "A steady DC field"], "a": 2, "e": "Phases self-start."}
+{"c": "127.112.d.6.F", "d": 4, "q": "Single-phase motors need a starting mechanism because a single-phase field:", "o": ["Is absent", "Rotates fast", "Is DC", "Pulses rather than rotates"], "a": 3, "e": "No starting torque without help."}
+{"c": "127.112.d.6.G", "d": 3, "q": "A permanent split-capacitor motor is often used in:", "o": ["Fan applications", "Welding", "Arc lighting", "Large chillers"], "a": 0, "e": "PSC motors drive fans."}
+{"c": "127.112.d.6.G", "d": 4, "q": "A shaded-pole motor is a low-torque motor often found in:", "o": ["Chillers", "Small fans and appliances", "Industrial pumps", "Elevators"], "a": 1, "e": "Simple, low-cost motor."}
+{"c": "127.112.d.6.H", "d": 3, "q": "When testing a capacitor, always first:", "o": ["Cut it", "Heat it", "Discharge it safely", "Charge it more"], "a": 2, "e": "Stored charge is dangerous."}
+{"c": "127.112.d.6.H", "d": 4, "q": "Capacitors can hold a shock hazard even when the power is:", "o": ["Disconnected from the earth", "On only", "At 5 volts", "Off"], "a": 3, "e": "Stored energy remains."}
+{"c": "127.112.d.6.I", "d": 3, "q": "A capacitor is tested with a meter set to measure:", "o": ["Capacitance in microfarads", "Speed", "Humidity", "Frequency of gas"], "a": 0, "e": "Compare to rating."}
+{"c": "127.112.d.6.I", "d": 4, "q": "A transformer winding that reads infinite resistance is:", "o": ["Grounded", "Open", "Shorted", "Good"], "a": 1, "e": "Open circuit."}
+{"c": "127.112.d.7.A", "d": 3, "q": "Semiconductor materials such as silicon conduct:", "o": ["Exactly like rubber", "Better than copper", "Better than insulators but less than metals", "Only when frozen"], "a": 2, "e": "Semiconductors are in between."}
+{"c": "127.112.d.7.A", "d": 4, "q": "Adding impurities to silicon to change its conductivity is called:", "o": ["Soldering", "Melting", "Plating", "Doping"], "a": 3, "e": "Doping creates N and P types."}
+{"c": "127.112.d.7.B", "d": 3, "q": "A diode allows current to flow:", "o": ["In one direction", "Only at night", "In both directions", "In no direction"], "a": 0, "e": "Diodes are one-way valves."}
+{"c": "127.112.d.7.B", "d": 4, "q": "An LED emits light when current passes:", "o": ["Across a gap", "Forward through it", "In reverse", "Never"], "a": 1, "e": "Forward bias lights it."}
+{"c": "127.112.d.7.C", "d": 3, "q": "Resistors are marked with:", "o": ["Sound waves", "Magnets", "Color bands", "Letters of the alphabet only"], "a": 2, "e": "Bands give value."}
+{"c": "127.112.d.7.C", "d": 4, "q": "A variable resistor used to adjust volume is a:", "o": ["Fuse", "Relay", "Diode", "Potentiometer"], "a": 3, "e": "Pots change resistance."}
+{"c": "127.112.d.7.D", "d": 3, "q": "A thermistor changes resistance with:", "o": ["Temperature", "Voltage", "Sound", "Color"], "a": 0, "e": "Thermal sensor."}
+{"c": "127.112.d.7.D", "d": 4, "q": "A cad cell changes resistance with:", "o": ["Heat", "Light", "Humidity", "Pressure"], "a": 1, "e": "Cad cells sense light."}
+{"c": "127.112.d.7.E", "d": 3, "q": "A diode is tested with a meter on the:", "o": ["Amps setting live", "Frequency setting only", "Diode test or resistance setting", "Gas setting"], "a": 2, "e": "Check forward and reverse."}
+{"c": "127.112.d.7.E", "d": 4, "q": "A good diode reads low resistance one way and:", "o": ["Infinite both ways", "Low both ways", "Zero both ways", "Very high resistance the other way"], "a": 3, "e": "One-way conduction."}
+{"c": "127.112.d.7.F", "d": 3, "q": "The connector commonly used for a computer monitor today includes HDMI and:", "o": ["DisplayPort", "Phone jack", "Coaxial dish", "Banana plug"], "a": 0, "e": "Video ports."}
+{"c": "127.112.d.7.F", "d": 4, "q": "A USB port is mainly used to connect:", "o": ["Gas valves", "Peripheral devices", "Ducts", "Water lines"], "a": 1, "e": "Universal Serial Bus."}
+{"c": "127.112.d.8.A", "d": 3, "q": "A thermostat's function is to:", "o": ["Store air", "Create heat", "Sense temperature and control equipment", "Filter water"], "a": 2, "e": "Controls the system."}
+{"c": "127.112.d.8.A", "d": 4, "q": "A thermostat is typically located:", "o": ["Over a heating register", "Outdoors in the rain", "In direct sunlight", "On an interior wall away from drafts and sun"], "a": 3, "e": "Placement affects accuracy."}
+{"c": "127.112.d.8.B", "d": 4, "q": "A bimetal thermostat senses temperature using:", "o": ["Two metals that expand differently", "Gas", "Radio", "A battery"], "a": 0, "e": "Bimetal bends."}
+{"c": "127.112.d.8.C", "d": 3, "q": "Before removing an old thermostat, the technician should:", "o": ["Cut wires randomly", "Turn off power to the system", "Leave the power on", "Remove the furnace"], "a": 1, "e": "Prevent shorts."}
+{"c": "127.112.d.8.C", "d": 4, "q": "Thermostat wires are labeled with letters such as R, W, and Y to show the:", "o": ["Weight", "Brand of the wire", "Function of each terminal", "Age"], "a": 2, "e": "Terminal codes."}
+{"c": "127.112.d.8.D", "d": 3, "q": "A basic control system includes a sensor, a controller, and a:", "o": ["Brick", "Roof", "Foundation", "Controlled device"], "a": 3, "e": "Sense, decide, act."}
+{"c": "127.112.d.8.D", "d": 4, "q": "In a control loop, feedback tells the controller:", "o": ["How the system is responding", "The owner's name", "The color of the room", "The cost of the unit"], "a": 0, "e": "Closed loop."}
+{"c": "127.112.d.8.E", "d": 3, "q": "Controls that use compressed air to operate are called:", "o": ["Manual", "Pneumatic", "Electronic", "Hydraulic"], "a": 1, "e": "Pneumatic uses air."}
+{"c": "127.112.d.8.E", "d": 4, "q": "A relay is an example of an:", "o": ["Manual valve", "Optical control", "Electromechanical control", "Pneumatic control"], "a": 2, "e": "Coil and contacts."}
+{"c": "127.112.d.8.F", "d": 3, "q": "A systematic approach to troubleshooting starts with:", "o": ["Guessing", "Replacing parts at random", "Doing nothing", "Gathering information about the complaint"], "a": 3, "e": "Information first."}
+{"c": "127.112.d.8.F", "d": 4, "q": "After finding and fixing a fault, the technician should:", "o": ["Verify the system works properly", "Leave immediately", "Skip checks", "Break something else"], "a": 0, "e": "Confirm repair."}
+{"c": "127.112.d.8.G", "d": 3, "q": "Manufacturer troubleshooting charts are found in the unit's:", "o": ["Shipping label", "Service literature", "Brochure photo", "Warranty card only"], "a": 1, "e": "Use the factory info."}
+{"c": "127.112.d.8.G", "d": 4, "q": "A wiring diagram attached inside the panel helps the technician to:", "o": ["Order lunch", "Count fins", "Trace circuits", "Paint the cover"], "a": 2, "e": "Diagrams guide diagnosis."}
+{"c": "127.112.d.8.H", "d": 3, "q": "A technician isolates a no-power problem by first checking the:", "o": ["Fuel price", "Filter color", "Duct size", "Main power supply and disconnect"], "a": 3, "e": "Start at the source."}
+{"c": "127.112.d.8.H", "d": 4, "q": "If the control transformer secondary has no voltage but the primary has voltage, the transformer is:", "o": ["Likely bad", "New", "Overloaded", "Working"], "a": 0, "e": "No output with input."}
+{"c": "127.112.d.8.I", "d": 3, "q": "A tool used to check for voltage in HVAC work is a:", "o": ["Tape measure", "Multimeter", "Plumb bob", "Hammer"], "a": 1, "e": "Meters measure electricity."}
+{"c": "127.112.d.8.J", "d": 3, "q": "When checking a motor winding for continuity, power should be:", "o": ["Reversed", "Doubled", "Off", "On"], "a": 2, "e": "Ohm checks need power off."}
+{"c": "127.112.d.8.J", "d": 4, "q": "A winding that reads very high resistance to ground when it should be isolated is:", "o": ["Burned", "Grounded", "Shorted", "Good"], "a": 3, "e": "Isolation to ground is good."}
+{"c": "127.112.d.8.K", "d": 3, "q": "A cooling unit with a running fan but no compressor may have a bad:", "o": ["Contactor or run capacitor", "Drain pan", "Filter", "Duct"], "a": 0, "e": "Compressor circuit check."}
+{"c": "127.112.d.8.K", "d": 4, "q": "When a contactor coil gets 24 volts but the contacts do not close, the likely fault is:", "o": ["A low charge", "A defective contactor", "A dirty filter", "A kinked duct"], "a": 1, "e": "Replace the contactor."}
+{"c": "127.112.d.9.A", "d": 3, "q": "In a gas furnace sequence, a call for heat first starts the:", "o": ["Filter", "Humidifier", "Draft inducer", "Gas valve open"], "a": 2, "e": "Pre-purge."}
+{"c": "127.112.d.9.A", "d": 4, "q": "The blower on a gas furnace starts after the heat exchanger warms up, controlled by a:", "o": ["Drain", "Spark", "Filter", "Timed delay or fan switch"], "a": 3, "e": "Prevents cold air."}
+{"c": "127.112.d.9.B", "d": 3, "q": "On a ladder diagram, switches are shown in series with the load to indicate they:", "o": ["All must close for the load to run", "Do nothing", "Are decorative", "Operate in any order"], "a": 0, "e": "Series logic."}
+{"c": "127.112.d.9.B", "d": 4, "q": "A limit switch in a furnace control circuit opens when temperature is:", "o": ["Zero", "Too high", "Normal", "Too low"], "a": 1, "e": "Safety shutoff."}
+{"c": "127.112.d.9.C", "d": 3, "q": "A hot surface igniter lights a burner by:", "o": ["Making a spark in air", "Burning oil", "Glowing hot enough to ignite gas", "Using a pilot flame"], "a": 2, "e": "Hot surface."}
+{"c": "127.112.d.9.C", "d": 4, "q": "A standing pilot burner stays:", "o": ["Off until needed", "Underwater", "Cold", "Lit continuously"], "a": 3, "e": "Always on."}
+{"c": "127.112.d.9.D", "d": 3, "q": "Instruments used for gas heat troubleshooting include a multimeter and a:", "o": ["Manometer", "Ruler", "Hammer", "Metronome"], "a": 0, "e": "Gas pressure measure."}
+{"c": "127.112.d.9.D", "d": 4, "q": "A combustion analyzer helps check the furnace for:", "o": ["Water pH", "Carbon monoxide and oxygen levels in the flue", "Voltage only", "Room color"], "a": 1, "e": "Combustion test."}
+{"c": "127.112.d.9.E", "d": 3, "q": "When using a manometer on a gas valve, connect it to the valve's:", "o": ["Vent", "Door", "Pressure tap", "Drain"], "a": 2, "e": "Test port."}
+{"c": "127.112.d.9.E", "d": 4, "q": "After checking gas pressure, the technician must:", "o": ["Leave it open", "Smell for gas only", "Heat the tap", "Close the test port and check for leaks"], "a": 3, "e": "Leak check."}
+{"c": "127.112.d.9.F", "d": 3, "q": "If a furnace lights briefly and shuts off, a likely cause is a:", "o": ["Dirty flame sensor", "New thermostat", "Full filter", "Cold room"], "a": 0, "e": "Sensor needs cleaning."}
+{"c": "127.112.d.9.F", "d": 4, "q": "A furnace that short cycles on the high limit often has:", "o": ["A cold room", "Restricted airflow", "A new filter", "Too much fuel"], "a": 1, "e": "Overheats."}
+{"c": "127.112.d.10.A", "d": 3, "q": "A good troubleshooting approach for cooling systems begins by:", "o": ["Pulling the compressor", "Replacing parts first", "Verifying the complaint and checking the basics", "Waiting a week"], "a": 2, "e": "Start simple."}
+{"c": "127.112.d.10.A", "d": 4, "q": "The first checks on a cooling system with no cold air are the thermostat, power, and:", "o": ["Brand of unit", "Roof", "Paint", "Air filter"], "a": 3, "e": "Basic checks."}
+{"c": "127.112.d.10.B", "d": 3, "q": "A problem where the compressor hums but does not start is likely:", "o": ["Electrical", "Filter", "Duct size", "Refrigerant color"], "a": 0, "e": "Hard start indicator."}
+{"c": "127.112.d.10.B", "d": 4, "q": "Low suction pressure with a frosted evaporator coil often points to:", "o": ["Cold weather", "Low airflow or low charge", "Wide ducts", "High charge"], "a": 1, "e": "Mechanical symptom."}
+{"c": "127.112.d.10.C", "d": 3, "q": "Many manufacturers provide a troubleshooting chart that lists:", "o": ["Jokes", "Weather", "Symptoms, causes, and fixes", "Prices"], "a": 2, "e": "Use the chart."}
+{"c": "127.112.d.10.C", "d": 4, "q": "A service facts label on the unit gives:", "o": ["Local news", "Owner's address", "Lunch menu", "Operating data and wiring"], "a": 3, "e": "Factory info."}
+{"c": "127.112.d.10.D", "d": 3, "q": "A technician measures superheat using a temperature probe and a:", "o": ["Pressure gauge", "Ruler", "Hammer", "Level"], "a": 0, "e": "Superheat needs P and T."}
+{"c": "127.112.d.10.D", "d": 4, "q": "Subcooling is measured on the:", "o": ["Flue", "Liquid line", "Return duct", "Gas line"], "a": 1, "e": "Liquid-line reading."}
+{"c": "127.112.d.10.E", "d": 3, "q": "A dirty condenser coil typically causes:", "o": ["Low head pressure", "No change", "High head pressure", "Frozen indoor coil"], "a": 2, "e": "Poor heat rejection."}
+{"c": "127.112.d.10.E", "d": 4, "q": "Restricted metering device symptoms include a cold liquid line and:", "o": ["High voltage", "Normal operation", "High suction pressure", "Low suction pressure"], "a": 3, "e": "Restriction."}
+{"c": "127.112.d.10.F", "d": 3, "q": "A basic safety rule when servicing cooling units is to:", "o": ["Lock out power before opening panels", "Remove guards", "Work live always", "Ignore labels"], "a": 0, "e": "Lockout first."}
+{"c": "127.112.d.10.F", "d": 4, "q": "Refrigerant liquid on skin can cause:", "o": ["Rash from heat", "Frostbite", "Nothing", "Sunburn"], "a": 1, "e": "Liquid refrigerant freezes tissue."}
+{"c": "127.112.d.11.A", "d": 3, "q": "A heat pump in heating mode moves heat from:", "o": ["Fuel to air", "Ground to roof", "Outdoors to indoors", "Indoors to outdoors"], "a": 2, "e": "Even cold air has heat."}
+{"c": "127.112.d.11.A", "d": 4, "q": "The reversing valve in a heat pump changes:", "o": ["Duct shape", "Filter", "Voltage", "The direction of refrigerant flow"], "a": 3, "e": "It switches modes."}
+{"c": "127.112.d.11.B", "d": 3, "q": "A heat pump that uses the earth or water as its heat source is a:", "o": ["Geothermal heat pump", "Furnace", "Air-source unit", "Boiler"], "a": 0, "e": "Ground source."}
+{"c": "127.112.d.11.B", "d": 4, "q": "A split-system heat pump has indoor and outdoor sections connected by:", "o": ["Wire only", "Refrigerant lines", "Hoses of water", "Ducts only"], "a": 1, "e": "Line set."}
+{"c": "127.112.d.11.C", "d": 3, "q": "A closed-loop geothermal system circulates:", "o": ["Air", "Oil", "Antifreeze solution in buried pipe", "Natural gas"], "a": 2, "e": "Sealed loop."}
+{"c": "127.112.d.11.C", "d": 4, "q": "An open-loop geothermal system uses:", "o": ["Sand", "Roof air", "Gasoline", "Well or surface water"], "a": 3, "e": "Water source."}
+{"c": "127.112.d.11.D", "d": 3, "q": "Besides the compressor, a heat pump has an outdoor coil, an indoor coil, and a:", "o": ["Reversing valve", "Spark plug", "Heat anticipator", "Chimney"], "a": 0, "e": "Heat pump parts."}
+{"c": "127.112.d.11.D", "d": 4, "q": "The accumulator on a heat pump protects the compressor from:", "o": ["Dust", "Liquid refrigerant returning", "Noise", "High voltage"], "a": 1, "e": "Prevents slugging."}
+{"c": "127.112.d.11.E", "d": 3, "q": "Electric strip heat in a heat pump system is used as:", "o": ["A humidifier", "Primary cooling", "Supplemental or backup heat", "A filter"], "a": 2, "e": "Backup heat."}
+{"c": "127.112.d.11.E", "d": 4, "q": "During defrost, the heat pump may energize strip heat to:", "o": ["Save energy", "Cool the coil", "Add humidity", "Prevent cold air from blowing indoors"], "a": 3, "e": "Tempers the air."}
+{"c": "127.112.d.11.F", "d": 3, "q": "COP stands for coefficient of:", "o": ["Performance", "Production", "Power", "Pressure"], "a": 0, "e": "COP is efficiency ratio."}
+{"c": "127.112.d.11.F", "d": 4, "q": "A heat pump with a COP of 3 delivers how many units of heat for each unit of electricity used?", "o": ["30", "3", "0.3", "1"], "a": 1, "e": "COP is output over input."}
+{"c": "127.112.d.11.G", "d": 3, "q": "The outdoor unit of a heat pump should be placed on a stand so that snow and water:", "o": ["Freeze solid", "Cover it", "Do not block airflow or the coil", "Pile up"], "a": 2, "e": "Install above grade."}
+{"c": "127.112.d.11.G", "d": 4, "q": "The refrigerant line set for a heat pump should be:", "o": ["Any size", "Pinched", "Uninsulated", "Sized and insulated per instructions"], "a": 3, "e": "Proper line set."}
+{"c": "127.112.d.11.H", "d": 3, "q": "A suction line accumulator is an accessory that:", "o": ["Stores liquid before it reaches the compressor", "Heats the room", "Starts the fan", "Filters air"], "a": 0, "e": "Protects compressor."}
+{"c": "127.112.d.11.H", "d": 4, "q": "A check valve in a heat pump circuit allows refrigerant to flow:", "o": ["Backward", "One way only", "Neither way", "Both ways"], "a": 1, "e": "Check valves direct flow."}
+{"c": "127.112.d.11.I", "d": 3, "q": "A defrost control is a part of the heat pump:", "o": ["Gas line", "Filter bank", "Control circuit", "Duct system"], "a": 2, "e": "Defrost logic."}
+{"c": "127.112.d.11.I", "d": 4, "q": "A heat pump that stays in defrost too long may have a faulty:", "o": ["Filter", "Chimney", "Duct", "Defrost sensor or board"], "a": 3, "e": "Sensor failure."}
+{"c": "127.112.d.11.J", "d": 3, "q": "A heat pump that blows cold air in heating mode might have a bad:", "o": ["Reversing valve or its solenoid", "Window", "Roof", "Filter"], "a": 0, "e": "Valve fault."}
+{"c": "127.112.d.11.J", "d": 4, "q": "Low airflow across the indoor coil in heating mode causes:", "o": ["Cold liquid line", "High head pressure", "Low head pressure", "No change"], "a": 1, "e": "Dirty coil or filter."}
+{"c": "127.112.d.12.A", "d": 3, "q": "Threaded fasteners include bolts, screws, and:", "o": ["Rivets", "Pins", "Studs", "Staples"], "a": 2, "e": "Threads grip."}
+{"c": "127.112.d.12.A", "d": 4, "q": "A lock washer under a nut helps prevent:", "o": ["Rust only", "Overheating", "Leaks", "Loosening from vibration"], "a": 3, "e": "Locking."}
+{"c": "127.112.d.12.B", "d": 3, "q": "A gasket is used to:", "o": ["Seal between two mating surfaces", "Cool oil", "Measure flow", "Join two pipes"], "a": 0, "e": "Gaskets seal."}
+{"c": "127.112.d.12.B", "d": 4, "q": "A shaft seal keeps lubricant in and contaminants:", "o": ["Wet", "Out", "Hot", "In"], "a": 1, "e": "Seals protect."}
+{"c": "127.112.d.12.C", "d": 3, "q": "Lubricants reduce friction and:", "o": ["Noise only", "Voltage", "Wear", "Humidity"], "a": 2, "e": "Oil protects parts."}
+{"c": "127.112.d.12.C", "d": 4, "q": "Grease is generally used on bearings that are:", "o": ["Made of wood", "Always dry", "Submerged in oil", "Not oil-fed"], "a": 3, "e": "Grease stays in place."}
+{"c": "127.112.d.12.D", "d": 3, "q": "A grease gun is used to lubricate bearings through a:", "o": ["Zerk fitting", "Spark plug", "Valve stem", "Drain cap"], "a": 0, "e": "Fitting accepts grease."}
+{"c": "127.112.d.12.D", "d": 4, "q": "Over-greasing a motor bearing can cause:", "o": ["Longer life", "Overheating and seal damage", "Cooler operation", "Better efficiency"], "a": 1, "e": "More is not better."}
+{"c": "127.112.d.12.E", "d": 3, "q": "A V-belt is a belt with a cross-section shaped like a:", "o": ["Star", "Circle", "Trapezoid", "Square"], "a": 2, "e": "V shape."}
+{"c": "127.112.d.12.E", "d": 4, "q": "Proper belt tension is checked by pressing the belt and measuring:", "o": ["Length", "Color", "Weight", "Deflection"], "a": 3, "e": "Tension check."}
+{"c": "127.112.d.12.F", "d": 3, "q": "A coupling connects a motor shaft to the:", "o": ["Driven shaft", "Filter", "Roof", "Duct"], "a": 0, "e": "Shaft connection."}
+{"c": "127.112.d.12.F", "d": 4, "q": "A flexible coupling allows for small:", "o": ["Temperature changes", "Misalignment", "Voltage changes", "Flow changes"], "a": 1, "e": "Flex absorbs offset."}
+{"c": "127.112.d.12.G", "d": 3, "q": "Shaft alignment is checked with a:", "o": ["Voltmeter", "Thermometer", "Straightedge or dial indicator", "Flow meter"], "a": 2, "e": "Alignment tools."}
+{"c": "127.112.d.12.G", "d": 4, "q": "Misaligned couplings cause:", "o": ["Quiet running", "Longer life", "Cooler bearings", "Vibration and premature wear"], "a": 3, "e": "Alignment matters."}
+{"c": "127.112.d.12.H", "d": 3, "q": "Ball bearings reduce friction using:", "o": ["Rolling balls", "Sliding blocks", "Rubber", "Glue"], "a": 0, "e": "Rolling elements."}
+{"c": "127.112.d.12.H", "d": 4, "q": "A sleeve bearing supports a shaft with a:", "o": ["Magnets", "Film of oil on a bushing surface", "Steel rollers", "Row of balls"], "a": 1, "e": "Plain bearings."}
+{"c": "127.112.d.12.I", "d": 3, "q": "A leading cause of bearing failure is:", "o": ["Quiet running", "Over-cleaning", "Lack of lubrication", "Cool air"], "a": 2, "e": "Dry bearings fail."}
+{"c": "127.112.d.12.I", "d": 4, "q": "A bearing that runs hot and noisy likely has:", "o": ["Good alignment", "New grease", "Perfect fit", "Contamination or poor lubrication"], "a": 3, "e": "Signs of failure."}
+{"c": "127.112.d.12.J", "d": 3, "q": "A bearing puller is used to:", "o": ["Remove a bearing without damaging the shaft", "Install a belt", "Measure flow", "Cut a pipe"], "a": 0, "e": "Proper tool."}
+{"c": "127.112.d.12.J", "d": 4, "q": "When installing a bearing, force should be applied to the:", "o": ["Cage only", "Inner race if pressed onto the shaft", "Balls directly", "Outer race on a shaft fit"], "a": 1, "e": "Press the correct race."}
+{"c": "127.112.d.12.K", "d": 3, "q": "Preventive maintenance includes inspecting, cleaning, and:", "o": ["Ignoring parts", "Waiting for failure", "Lubricating equipment on a schedule", "Painting only"], "a": 2, "e": "PM prevents breakdowns."}
+{"c": "127.112.d.12.K", "d": 4, "q": "Cleaning a condenser coil during PM improves:", "o": ["Color", "Weight", "Noise", "Efficiency"], "a": 3, "e": "Clean coils work better."}
+{"c": "127.112.d.12.L", "d": 3, "q": "Good customer relations include being:", "o": ["Courteous and explaining the work", "Silent", "Messy", "Rude"], "a": 0, "e": "Professionalism."}
+{"c": "127.112.d.12.L", "d": 4, "q": "After a service call, the technician should leave the work area:", "o": ["Unlocked", "Clean", "Dirty", "Open"], "a": 1, "e": "Respect property."}
+{"c": "127.112.d.13.A", "d": 3, "q": "Sheet metal used in ducts is commonly:", "o": ["Lead", "Brass sheet", "Galvanized steel", "Copper foil"], "a": 2, "e": "Zinc-coated steel."}
+{"c": "127.112.d.13.A", "d": 4, "q": "Sheet metal thickness is expressed as:", "o": ["Volts", "Meters", "Pounds", "Gauge"], "a": 3, "e": "Lower gauge is thicker."}
+{"c": "127.112.d.13.B", "d": 3, "q": "Aluminum is lighter and more corrosion resistant than:", "o": ["Steel", "Feathers", "Paper", "Air"], "a": 0, "e": "Property comparison."}
+{"c": "127.112.d.13.B", "d": 4, "q": "An alloy is a metal made by:", "o": ["Cooling water", "Combining two or more elements", "Painting", "Heating air"], "a": 1, "e": "Alloys mix metals."}
+{"c": "127.112.d.13.C", "d": 3, "q": "A common tool for cutting sheet metal by hand is:", "o": ["Hammer", "Wrench", "Aviation snips", "Pliers"], "a": 2, "e": "Snips cut sheet."}
+{"c": "127.112.d.13.C", "d": 4, "q": "A layout line on sheet metal is marked with a:", "o": ["Crayon", "Marker only", "Pencil on aluminum only", "Scribe"], "a": 3, "e": "Scribes mark metal."}
+{"c": "127.112.d.13.D", "d": 3, "q": "A Pittsburgh seam is commonly used on:", "o": ["Duct corners", "Floors", "Roofs", "Water pipes"], "a": 0, "e": "Longitudinal seam type."}
+{"c": "127.112.d.13.D", "d": 4, "q": "S-slips and drive cleats join:", "o": ["Round ducts only", "Rectangular duct sections", "Wires", "Pipes"], "a": 1, "e": "Connectors."}
+{"c": "127.112.d.13.E", "d": 3, "q": "Ductwork is hung from the structure using:", "o": ["Tape", "String", "Strap or rod hangers", "Rope"], "a": 2, "e": "Hangers support."}
+{"c": "127.112.d.13.E", "d": 4, "q": "Hanger spacing for ducts is set by the:", "o": ["Brand", "Color", "Weather", "Duct size and local code"], "a": 3, "e": "Spacing rules."}
+{"c": "127.112.d.13.F", "d": 3, "q": "Thermal insulation reduces:", "o": ["Heat transfer", "Pressure", "Airflow", "Voltage"], "a": 0, "e": "Insulation resists heat."}
+{"c": "127.112.d.13.F", "d": 4, "q": "Acoustic duct lining helps reduce:", "o": ["Light", "Noise", "Weight", "Cost"], "a": 1, "e": "Sound absorption."}
+{"c": "127.112.d.13.G", "d": 3, "q": "Duct insulation on cold ducts should have a:", "o": ["Hole every foot", "Bare metal", "Vapor barrier on the outside", "Flammable cover"], "a": 2, "e": "Prevents condensation."}
+{"c": "127.112.d.13.G", "d": 4, "q": "Seams in ductwork are sealed with:", "o": ["Paper", "Masking tape", "Wax", "Mastic or UL-listed tape"], "a": 3, "e": "Leak prevention."}
+{"c": "127.112.d.13.H", "d": 3, "q": "A register or diffuser is attached to the duct with:", "o": ["A boot or collar", "Glue", "Wire", "Rope"], "a": 0, "e": "Proper boot."}
+{"c": "127.112.d.13.H", "d": 4, "q": "Registers should be installed to avoid blowing air directly:", "o": ["At the floor", "At people seated nearby", "At the wall", "At the ceiling"], "a": 1, "e": "Avoid drafts."}
+{"c": "127.112.d.13.I", "d": 3, "q": "A takeoff fitting connects a branch duct to the:", "o": ["Furnace flue", "Condensate drain", "Main trunk duct", "Roof"], "a": 2, "e": "Takeoff."}
+{"c": "127.112.d.13.I", "d": 4, "q": "Flexible duct is attached to a collar using a:", "o": ["Staple", "Glue only", "Nail", "Clamp or strap"], "a": 3, "e": "Secure joint."}
+{"c": "127.112.d.14.A", "d": 3, "q": "Fiberglass duct board is made of:", "o": ["Compressed glass fibers with a facing", "Wood", "Steel", "Plastic"], "a": 0, "e": "Fiberglass."}
+{"c": "127.112.d.14.A", "d": 4, "q": "Flexible duct has a wire helix that holds its:", "o": ["Length", "Round shape", "Weight", "Color"], "a": 1, "e": "Helix."}
+{"c": "127.112.d.14.B", "d": 3, "q": "Fiberglass duct board is cut with a:", "o": ["Torch", "Axe", "Special knife and straightedge", "Hammer"], "a": 2, "e": "Knife cutting."}
+{"c": "127.112.d.14.B", "d": 4, "q": "A V-groove cut in duct board allows it to be:", "o": ["Painted", "Burned", "Hung", "Folded into a corner"], "a": 3, "e": "Folds into shape."}
+{"c": "127.112.d.14.C", "d": 3, "q": "Fiberglass duct joints are closed with:", "o": ["Aluminum foil tape with a heat-activated or pressure seal", "String", "Paper tape", "Rubber bands"], "a": 0, "e": "Approved tape."}
+{"c": "127.112.d.14.C", "d": 4, "q": "Staples used to close duct board are:", "o": ["Pinned", "Outward clinch type", "Welded", "Glued"], "a": 1, "e": "Correct staple."}
+{"c": "127.112.d.14.D", "d": 3, "q": "To make a duct module, the fabricator measures, cuts, and:", "o": ["Paints the inside", "Stretches it", "Folds and seals the pieces", "Burns the edges"], "a": 2, "e": "Fabrication steps."}
+{"c": "127.112.d.14.D", "d": 4, "q": "A shiplap edge is cut to help the joint:", "o": ["Rattle", "Slide", "Leak", "Overlap and seal tightly"], "a": 3, "e": "Closure method."}
+{"c": "127.112.d.14.E", "d": 3, "q": "Fiberglass duct hangers are installed to support the duct without:", "o": ["Crushing it", "Cutting it", "Removing it", "Painting it"], "a": 0, "e": "Support method."}
+{"c": "127.112.d.14.E", "d": 4, "q": "Duct board hangers are often wide straps spaced:", "o": ["Only at ends", "At intervals set by the maker", "Never", "Randomly"], "a": 1, "e": "Spacing."}
+{"c": "127.112.d.14.F", "d": 3, "q": "Minor damage to fiberglass duct, such as a small tear, is repaired with:", "o": ["Glue gun", "Paint", "Approved tape or patch", "Nothing"], "a": 2, "e": "Repair method."}
+{"c": "127.112.d.14.F", "d": 4, "q": "Major damage to a section of fiberglass duct usually requires:", "o": ["Taping once", "Painting it", "Ignoring it", "Replacing the damaged section"], "a": 3, "e": "Replace."}
+{"c": "127.112.d.14.G", "d": 3, "q": "Flexible duct attaches to fiberglass duct board using a:", "o": ["Sheet metal collar and clamp", "String", "Nail", "Wire only"], "a": 0, "e": "Takeoff."}
+{"c": "127.112.d.14.G", "d": 4, "q": "When attaching flex duct, the inner liner is secured over the collar with a:", "o": ["Tack", "Draw band", "Rubber band", "Paper clip"], "a": 1, "e": "Draw band."}
+{"c": "127.113.d.1.A", "d": 3, "q": "A common unsafe act that leads to accidents is:", "o": ["Wearing safety glasses", "Reading the instructions", "Skipping personal protective equipment", "Using a ladder correctly"], "a": 2, "e": "Unsafe acts cause injuries."}
+{"c": "127.113.d.1.A", "d": 4, "q": "An example of an unsafe condition is:", "o": ["A posted exit", "A clear walkway", "A dry shop", "A wet floor with no warning sign"], "a": 3, "e": "Conditions create hazards."}
+{"c": "127.113.d.1.B", "d": 3, "q": "If a worker sees an unsafe condition, the best action is to:", "o": ["Report it and help correct it", "Hide it", "Walk around it", "Ignore it"], "a": 0, "e": "Report hazards."}
+{"c": "127.113.d.1.B", "d": 4, "q": "An unsafe act by a coworker should be handled by:", "o": ["Laughing", "Speaking up or telling a supervisor", "Imitating", "Staying silent"], "a": 1, "e": "Correct unsafe behavior."}
+{"c": "127.113.d.1.C", "d": 3, "q": "Besides medical bills, accidents cost a company through lost time and:", "o": ["Faster work", "More profit", "Reduced productivity", "Lower rates"], "a": 2, "e": "Accidents have costs."}
+{"c": "127.113.d.1.C", "d": 4, "q": "Direct costs of an injury include medical care and:", "o": ["Cheaper tools", "Paint", "Extra vacation", "Workers' compensation"], "a": 3, "e": "Direct costs."}
+{"c": "127.113.d.1.D", "d": 3, "q": "Hard hats protect the head from:", "o": ["Falling objects", "Rain on skin", "Light", "Hunger"], "a": 0, "e": "PPE use."}
+{"c": "127.113.d.1.D", "d": 4, "q": "PPE should be inspected before use for:", "o": ["Brand", "Damage or wear", "Price", "Color"], "a": 1, "e": "Check gear."}
+{"c": "127.113.d.1.E", "d": 3, "q": "A hazard that plumbers face working with soldering is:", "o": ["Sunburn indoors", "Dizziness from cold", "Burns from hot tools and pipe", "Frostbite"], "a": 2, "e": "Heat hazard."}
+{"c": "127.113.d.1.E", "d": 4, "q": "Working in a crawl space can expose a plumber to:", "o": ["Open fields", "Sunlight", "High-rise winds", "Confined space hazards"], "a": 3, "e": "Specific hazards."}
+{"c": "127.113.d.1.F", "d": 3, "q": "A ladder used to reach a roof should extend:", "o": ["At least 3 feet above the edge", "No height", "Level with the edge", "Below the edge"], "a": 0, "e": "Ladder rule."}
+{"c": "127.113.d.1.F", "d": 4, "q": "For a straight ladder, the 4-to-1 rule means the base is placed 1 foot out for every:", "o": ["2 feet of height", "4 feet of height", "10 feet of height", "1 foot of height"], "a": 1, "e": "Angle guideline."}
+{"c": "127.113.d.1.G", "d": 3, "q": "Trenches over 5 feet deep generally require:", "o": ["A rope", "Nothing", "Shoring or sloping", "A sign only"], "a": 2, "e": "Cave-in protection."}
+{"c": "127.113.d.1.G", "d": 4, "q": "Spoil piles from a trench should be kept:", "o": ["Beneath equipment", "In the trench", "At the edge", "At least 2 feet from the edge"], "a": 3, "e": "Prevent cave-ins."}
+{"c": "127.113.d.1.H", "d": 3, "q": "Lockout/tagout ensures that equipment is:", "o": ["De-energized during repair", "Hot", "Ignored", "Running"], "a": 0, "e": "Energy control."}
+{"c": "127.113.d.1.H", "d": 4, "q": "Only the person who put on a lock should:", "o": ["Paint it", "Remove it", "Cut it", "Ignore it"], "a": 1, "e": "Personal lock."}
+{"c": "127.113.d.1.I", "d": 3, "q": "An MSDS, now called an SDS, lists information about:", "o": ["Wages", "Tool prices", "A chemical's hazards and handling", "Weather"], "a": 2, "e": "Safety data."}
+{"c": "127.113.d.1.I", "d": 4, "q": "Before using a product like PVC cement, a worker should read its:", "o": ["Warranty", "Catalog", "Receipt", "Safety data sheet"], "a": 3, "e": "Know hazards."}
+{"c": "127.113.d.2.A", "d": 3, "q": "A plumbing career job title is:", "o": ["Journeyman plumber", "Pilot", "Dancer", "Pastry chef"], "a": 0, "e": "Trade titles."}
+{"c": "127.113.d.2.A", "d": 4, "q": "A worker who has completed an apprenticeship and passed the exam is a:", "o": ["Helper only", "Journeyman", "Beginner", "Retiree"], "a": 1, "e": "Career path."}
+{"c": "127.113.d.2.B", "d": 3, "q": "To become a plumber, one usually completes an:", "o": ["Art class", "Game", "Apprenticeship", "Cooking class"], "a": 2, "e": "Training path."}
+{"c": "127.113.d.2.B", "d": 4, "q": "A plumbing license shows that a person has met:", "o": ["Height only", "Age only", "Color rules", "State qualification requirements"], "a": 3, "e": "Licensing."}
+{"c": "127.113.d.2.C", "d": 3, "q": "A trade association for plumbers is the:", "o": ["Plumbing-Heating-Cooling Contractors Association", "Art Guild", "Music Teachers Club", "Garden Society"], "a": 0, "e": "Industry groups."}
+{"c": "127.113.d.2.C", "d": 4, "q": "Industries that employ plumbers include construction and:", "o": ["Fashion modeling", "Building maintenance", "Farming only", "Opera"], "a": 1, "e": "Where plumbers work."}
+{"c": "127.113.d.2.D", "d": 3, "q": "When working in a customer's home, a plumber should:", "o": ["Use their towels", "Ignore messes", "Protect floors and furniture", "Move belongings carelessly"], "a": 2, "e": "Respect property."}
+{"c": "127.113.d.2.D", "d": 4, "q": "A drop cloth in a customer's bathroom is used to:", "o": ["Mop floors", "Hide tools", "Block doors", "Protect surfaces from damage"], "a": 3, "e": "Care for property."}
+{"c": "127.113.d.2.E", "d": 3, "q": "Keeping the work area clean helps prevent:", "o": ["Accidents and lost tools", "Efficiency", "Pride", "Quality"], "a": 0, "e": "Tidy site."}
+{"c": "127.113.d.2.E", "d": 4, "q": "A clean job site reflects well on the plumber's:", "o": ["Hair", "Professionalism", "Shoes", "Truck"], "a": 1, "e": "Clean work shows care."}
+{"c": "127.113.d.2.F", "d": 3, "q": "Using industry standards ensures that work is:", "o": ["Cheap only", "Unseen", "Safe and acceptable to inspectors", "Fast only"], "a": 2, "e": "Standards matter."}
+{"c": "127.113.d.2.F", "d": 4, "q": "Plumbing codes are enforced to protect:", "o": ["Paint", "Contractors' profits only", "Weather", "Public health and safety"], "a": 3, "e": "Code purpose."}
+{"c": "127.113.d.3.A", "d": 3, "q": "A low-flow toilet saves water by using:", "o": ["Less water per flush", "Hot water", "No water", "More water per flush"], "a": 0, "e": "Water efficiency."}
+{"c": "127.113.d.3.A", "d": 4, "q": "A faucet aerator reduces water use by mixing air into the:", "o": ["Tank", "Stream", "Drain", "Pipe wall"], "a": 1, "e": "Aerators."}
+{"c": "127.113.d.3.B", "d": 3, "q": "Graywater reuse systems collect water from sinks and showers to use for:", "o": ["Bathing infants", "Drinking", "Irrigation or toilet flushing", "Cooking"], "a": 2, "e": "Reuse."}
+{"c": "127.113.d.3.B", "d": 4, "q": "A rainwater harvesting system collects water from the:", "o": ["Well", "Pool only", "Sewer", "Roof"], "a": 3, "e": "Harvest."}
+{"c": "127.113.d.3.C", "d": 3, "q": "Designing a reuse system involves choosing storage, filtration, and:", "o": ["Distribution piping", "Carpet", "Wall color", "Paint"], "a": 0, "e": "System design."}
+{"c": "127.113.d.3.C", "d": 4, "q": "Reclaimed water pipes are often marked with the color:", "o": ["Yellow", "Purple", "Red", "Blue"], "a": 1, "e": "Color coding."}
+{"c": "127.113.d.4.A", "d": 4, "q": "A tubing cutter makes a clean cut on:", "o": ["Glass", "Wood", "Copper tubing", "Concrete"], "a": 2, "e": "Cutter use."}
+{"c": "127.113.d.4.B", "d": 3, "q": "When using a hacksaw, the blade teeth should point:", "o": ["Toward the handle", "Sideways", "Upward", "Away from the handle on the forward stroke"], "a": 3, "e": "Cutting direction."}
+{"c": "127.113.d.4.B", "d": 4, "q": "A level is used to check whether a pipe is:", "o": ["Plumb or level", "Dirty", "Hot", "New"], "a": 0, "e": "Alignment."}
+{"c": "127.113.d.4.C", "d": 3, "q": "Selecting the right tool for the job helps prevent:", "o": ["Quality", "Damage and injury", "Success", "Accuracy"], "a": 1, "e": "Choose well."}
+{"c": "127.113.d.4.C", "d": 4, "q": "Using a screwdriver as a chisel is an example of:", "o": ["Required practice", "Safe practice", "Misusing a tool", "Good practice"], "a": 2, "e": "Wrong tool."}
+{"c": "127.113.d.4.D", "d": 3, "q": "Tools should be kept clean and:", "o": ["Rusty", "Wet", "Loose", "Sharp and in good repair"], "a": 3, "e": "Maintenance."}
+{"c": "127.113.d.4.D", "d": 4, "q": "A mushroomed chisel head should be:", "o": ["Ground or replaced", "Hit harder", "Ignored", "Painted"], "a": 0, "e": "Hazard."}
+{"c": "127.113.d.4.E", "d": 3, "q": "Before drilling a wall, check for hidden:", "o": ["Flowers", "Pipes and wiring", "Paint", "Color"], "a": 1, "e": "Check first."}
+{"c": "127.113.d.4.E", "d": 4, "q": "Marking a drill location with a center punch keeps the bit from:", "o": ["Squeaking", "Heating", "Walking off the spot", "Shining"], "a": 2, "e": "Prepare surface."}
+{"c": "127.113.d.4.F", "d": 3, "q": "When using power tools, you should wear:", "o": ["Sandals", "Rings", "Loose scarf", "Safety glasses"], "a": 3, "e": "Eye protection."}
+{"c": "127.113.d.4.F", "d": 4, "q": "A damaged power cord should be:", "o": ["Repaired or replaced before use", "Ignored", "Used briefly", "Wrapped in tape"], "a": 0, "e": "Cord safety."}
+{"c": "127.113.d.4.G", "d": 3, "q": "A tape measure reads in feet and:", "o": ["Gallons", "Inches", "Volts", "Ounces"], "a": 1, "e": "Linear measure."}
+{"c": "127.113.d.4.G", "d": 4, "q": "A rule marked in sixteenths shows the smallest division of:", "o": ["1 inch", "1 foot", "1/16 inch", "1/2 inch"], "a": 2, "e": "Fractions."}
+{"c": "127.113.d.5.A", "d": 3, "q": "Adding 1/2 and 1/4 gives:", "o": ["2/6", "1/3", "1/8", "3/4"], "a": 3, "e": "1/2 + 1/4 = 3/4."}
+{"c": "127.113.d.5.A", "d": 4, "q": "Multiplying 3/4 by 8 gives:", "o": ["6", "2", "5", "24"], "a": 0, "e": "3/4 x 8 = 6."}
+{"c": "127.113.d.5.B", "d": 3, "q": "The fraction 1/4 as a decimal is:", "o": ["2.5", "0.25", "0.14", "0.4"], "a": 1, "e": "1 divided by 4."}
+{"c": "127.113.d.5.B", "d": 4, "q": "The decimal 0.375 as a fraction is:", "o": ["3/5", "1/3", "3/8", "3/10"], "a": 2, "e": "0.375 = 3/8."}
+{"c": "127.113.d.5.C", "d": 3, "q": "One meter equals how many centimeters?", "o": ["12", "1,000", "10", "100"], "a": 3, "e": "Metric."}
+{"c": "127.113.d.5.C", "d": 4, "q": "A pipe measuring 2,500 millimeters is how many meters?", "o": ["2.5", "0.25", "25", "250"], "a": 0, "e": "Divide by 1,000."}
+{"c": "127.113.d.5.D", "d": 3, "q": "The square of 7 is:", "o": ["14", "49", "77", "21"], "a": 1, "e": "7 x 7."}
+{"c": "127.113.d.5.D", "d": 4, "q": "The square root of 144 is:", "o": ["72", "14", "12", "24"], "a": 2, "e": "12 x 12 = 144."}
+{"c": "127.113.d.5.E", "d": 3, "q": "The end of a pipe that fits into a fitting is called the:", "o": ["Cap", "Hub", "Union", "Spigot or male end"], "a": 3, "e": "Fitting parts."}
+{"c": "127.113.d.5.E", "d": 4, "q": "The face-to-face measurement of a fitting is also called its:", "o": ["Center-to-end or face dimension", "Brand", "Color", "Wall"], "a": 0, "e": "Fitting dimension."}
+{"c": "127.113.d.5.F", "d": 3, "q": "Fitting allowance is found in:", "o": ["A paycheck", "A fitting dimension table", "A menu", "A coupon"], "a": 1, "e": "Look up allowance."}
+{"c": "127.113.d.5.F", "d": 4, "q": "Thread engagement is the length of pipe that:", "o": ["Is painted", "Stays outside", "Goes into the fitting", "Is cut off"], "a": 2, "e": "Engagement."}
+{"c": "127.113.d.5.G", "d": 3, "q": "End-to-end measurement is taken from:", "o": ["Center to center", "Wall to wall", "Top to bottom", "One pipe end to the other"], "a": 3, "e": "Measurement type."}
+{"c": "127.113.d.5.G", "d": 4, "q": "Center-to-center measurement is used to:", "o": ["Locate fittings in a run", "Count pipes", "Check the weather", "Pay invoices"], "a": 0, "e": "Layout."}
+{"c": "127.113.d.6.A", "d": 3, "q": "An isometric drawing shows a pipe system with:", "o": ["Only a front view", "Three dimensions on 30-degree axes", "A flat map", "Words only"], "a": 1, "e": "Isometric."}
+{"c": "127.113.d.6.A", "d": 4, "q": "A pictorial drawing resembles a:", "o": ["Chart", "Table", "3D view of the system", "List"], "a": 2, "e": "Pictorial drawing."}
+{"c": "127.113.d.6.B", "d": 3, "q": "A symbol on a pipe drawing represents a:", "o": ["Cost", "Person", "Time", "Fitting or valve"], "a": 3, "e": "Symbols."}
+{"c": "127.113.d.6.B", "d": 4, "q": "A gate valve symbol on a schematic shows the valve is used to:", "o": ["Start and stop flow", "Cool flow", "Measure flow", "Filter flow"], "a": 0, "e": "Valve symbol."}
+{"c": "127.113.d.6.C", "d": 3, "q": "A plumbing drawing set may include floor plans, riser diagrams, and:", "o": ["Poetry", "Details", "Menus", "Recipes"], "a": 1, "e": "Types of drawings."}
+{"c": "127.113.d.6.C", "d": 4, "q": "A riser diagram shows piping between:", "o": ["Lights", "Cars", "Floors", "Rooms in the yard"], "a": 2, "e": "Vertical piping."}
+{"c": "127.113.d.6.D", "d": 3, "q": "The title block of a plumbing drawing includes the sheet:", "o": ["Lunch order", "Weather", "Song", "Number and project name"], "a": 3, "e": "Info."}
+{"c": "127.113.d.6.D", "d": 4, "q": "A drawing note often explains special:", "o": ["Instructions or materials", "Colors of cars", "Pictures", "Songs"], "a": 0, "e": "Notes."}
+{"c": "127.113.d.6.E", "d": 4, "q": "The three common orthographic views are top, front, and:", "o": ["Corner", "Right side", "Diagonal", "Hidden"], "a": 1, "e": "Views."}
+{"c": "127.113.d.6.F", "d": 3, "q": "An architect's scale of 1/4 inch = 1 foot means that a 3/4 inch line represents:", "o": ["6 feet", "12 feet", "3 feet", "1 foot"], "a": 2, "e": "Scale."}
+{"c": "127.113.d.6.F", "d": 4, "q": "On a 1/8-inch scale, a 12-foot wall is drawn how many inches long?", "o": ["0.5", "12", "3", "1.5"], "a": 3, "e": "12 x 1/8 = 1.5."}
+{"c": "127.113.d.6.G", "d": 3, "q": "Code requirements on drawings specify things like:", "o": ["Pipe size and slope", "Wall art", "Lunch time", "Brand of paint"], "a": 0, "e": "Code on plans."}
+{"c": "127.113.d.6.G", "d": 4, "q": "A plumber must make sure that the installation matches both the drawings and the:", "o": ["Neighbor's wishes", "Plumbing code", "Dress code", "Weather"], "a": 1, "e": "Compliance."}
+{"c": "127.113.d.7.A", "d": 3, "q": "Common plastic piping materials include PVC and:", "o": ["Brass", "Cast iron", "ABS", "Clay"], "a": 2, "e": "Plastic types."}
+{"c": "127.113.d.7.A", "d": 4, "q": "Schedule 40 and schedule 80 describe plastic pipe:", "o": ["Color", "Brand", "Length", "Wall thickness"], "a": 3, "e": "Schedule."}
+{"c": "127.113.d.7.B", "d": 3, "q": "PVC pipe should not be used for:", "o": ["Hot water lines over its temperature rating", "Drainage", "Cold water supply", "Irrigation"], "a": 0, "e": "Improper use."}
+{"c": "127.113.d.7.B", "d": 4, "q": "PVC pipe exposed to sunlight should be:", "o": ["Buried unprotected", "Protected or painted", "Heated", "Left bare"], "a": 1, "e": "UV damage."}
+{"c": "127.113.d.7.C", "d": 3, "q": "Fittings for plastic pipe include couplings, elbows, and:", "o": ["Wrenches", "Saws", "Tees", "Hammers"], "a": 2, "e": "Fittings."}
+{"c": "127.113.d.7.C", "d": 4, "q": "A ball valve made for plastic piping is often joined by:", "o": ["Welding", "Soldering", "Brazing", "Solvent cement or threads"], "a": 3, "e": "Valves."}
+{"c": "127.113.d.7.D", "d": 3, "q": "Plastic pipe needs hangers placed closer together than metal pipe because plastic is:", "o": ["More flexible", "Hotter", "Stronger", "Heavier"], "a": 0, "e": "Support spacing."}
+{"c": "127.113.d.7.D", "d": 4, "q": "Hangers used with plastic pipe should be:", "o": ["Rough", "Smooth to avoid damaging the pipe", "Sharp", "Tight enough to crush"], "a": 1, "e": "Support type."}
+{"c": "127.113.d.7.E", "d": 3, "q": "Plastic pipe must be allowed to move for:", "o": ["Cutting", "Painting", "Expansion and contraction", "Color"], "a": 2, "e": "Thermal movement."}
+{"c": "127.113.d.7.E", "d": 4, "q": "Over-tightening a clamp on plastic pipe can:", "o": ["Help it", "Seal it", "Cool it", "Restrict movement and cause stress"], "a": 3, "e": "Hanging technique."}
+{"c": "127.113.d.7.F", "d": 3, "q": "Before cementing PVC, the pipe end should be:", "o": ["Cut square and deburred", "Left rough", "Greased", "Painted"], "a": 0, "e": "Prep."}
+{"c": "127.113.d.7.F", "d": 4, "q": "The proper order for solvent welding PVC is primer first, then:", "o": ["Water", "Cement", "Paint", "Oil"], "a": 1, "e": "Joining."}
+{"c": "127.113.d.7.G", "d": 3, "q": "Plastic pipe should be stored:", "o": ["Under water", "On a point", "Supported along its full length", "Standing in the sun"], "a": 2, "e": "Storage."}
+{"c": "127.113.d.7.G", "d": 4, "q": "Cement and primer should be kept away from:", "o": ["Shade", "Cool rooms", "Bins", "Heat and flame"], "a": 3, "e": "Flammable."}
+{"c": "127.113.d.7.H", "d": 3, "q": "Plumbing codes list which plastic pipes are approved for:", "o": ["Specific uses", "Any use", "No use", "Decor"], "a": 0, "e": "Code."}
+{"c": "127.113.d.7.H", "d": 4, "q": "Pipe marked with NSF and a standard number shows it was:", "o": ["Used", "Tested for that application", "Cheap", "Colored"], "a": 1, "e": "Marking."}
+{"c": "127.113.d.8.A", "d": 3, "q": "Copper tubing types K, L, and M differ in:", "o": ["Length", "Brand", "Wall thickness", "Color only"], "a": 2, "e": "Types."}
+{"c": "127.113.d.8.A", "d": 4, "q": "The thickest wall of the three common copper tube types is:", "o": ["Type M", "Type D", "Type L", "Type K"], "a": 3, "e": "K is thickest."}
+{"c": "127.113.d.8.B", "d": 3, "q": "Copper tubing should be stored so that it is not:", "o": ["Bent or dented", "Clean", "Dry", "Straight"], "a": 0, "e": "Handling."}
+{"c": "127.113.d.8.B", "d": 4, "q": "Rigid copper tube ends should be capped during storage to keep out:", "o": ["Sound", "Dirt", "Light", "Heat"], "a": 1, "e": "Storage."}
+{"c": "127.113.d.8.C", "d": 3, "q": "Copper fittings are joined to tubing by:", "o": ["Stapling", "Taping", "Soldering or brazing", "Gluing"], "a": 2, "e": "Joining."}
+{"c": "127.113.d.8.C", "d": 4, "q": "A gate valve in copper piping is used to:", "o": ["Meter flow", "Cool water", "Filter water", "Shut off the water supply"], "a": 3, "e": "Valves."}
+{"c": "127.113.d.8.D", "d": 3, "q": "Copper tubing is supported with:", "o": ["Hangers spaced per code", "Nails through it", "String", "Tape"], "a": 0, "e": "Support."}
+{"c": "127.113.d.8.D", "d": 4, "q": "When copper touches steel hangers, the technician should isolate them to avoid:", "o": ["Light", "Galvanic corrosion", "Noise", "Heat"], "a": 1, "e": "Dissimilar metals."}
+{"c": "127.113.d.8.E", "d": 3, "q": "Before soldering, the tube end and fitting cup are cleaned until:", "o": ["Dull", "Green", "Bright and shiny", "Black"], "a": 2, "e": "Prep."}
+{"c": "127.113.d.8.E", "d": 4, "q": "Solder joints in potable water must use:", "o": ["Any solder", "Tin foil", "Lead solder", "Lead-free solder"], "a": 3, "e": "Safe."}
+{"c": "127.113.d.8.F", "d": 3, "q": "After cutting copper tube, the inside edge is reamed to remove:", "o": ["Burrs", "Zinc", "Color", "Water"], "a": 0, "e": "Reaming."}
+{"c": "127.113.d.8.F", "d": 4, "q": "A tube cutter should be tightened a little at a time to prevent:", "o": ["Rusting", "Deforming the tube", "Singing", "Cooling"], "a": 1, "e": "Cutting."}
+{"c": "127.113.d.8.G", "d": 3, "q": "A hazard when soldering is:", "o": ["Drips of water", "Noise", "Fire from the open flame", "Frostbite"], "a": 2, "e": "Torch safety."}
+{"c": "127.113.d.8.G", "d": 4, "q": "A heat shield behind a joint protects nearby:", "o": ["Hands", "Gloves", "Tools", "Combustible materials"], "a": 3, "e": "Precaution."}
+{"c": "127.113.d.8.H", "d": 3, "q": "Plumbing code specifies which copper tube types are allowed for:", "o": ["Water supply and drainage uses", "Roofing", "Painting", "Cooking"], "a": 0, "e": "Code."}
+{"c": "127.113.d.8.H", "d": 4, "q": "Type DWV copper is made for:", "o": ["Refrigeration", "Drain, waste, and vent systems", "Hot water supply", "Gas lines"], "a": 1, "e": "DWV tube."}
+{"c": "127.113.d.9.A", "d": 3, "q": "Carbon steel pipe is often used for:", "o": ["Drinking fountains", "Decor", "Gas and fire sprinkler lines", "Wiring"], "a": 2, "e": "Applications."}
+{"c": "127.113.d.9.A", "d": 4, "q": "Black iron pipe is commonly used for:", "o": ["Drinking water", "Wastewater", "Drains", "Natural gas piping"], "a": 3, "e": "Gas."}
+{"c": "127.113.d.9.B", "d": 3, "q": "Carbon steel pipe should be stored off the ground to prevent:", "o": ["Rust and contamination", "Shaping", "Cooling", "Growth"], "a": 0, "e": "Storage."}
+{"c": "127.113.d.9.B", "d": 4, "q": "Galvanized steel pipe is coated to resist:", "o": ["Noise", "Corrosion", "Light", "Fire"], "a": 1, "e": "Coating."}
+{"c": "127.113.d.9.C", "d": 3, "q": "Steel pipe hangers are spaced according to pipe:", "o": ["Weight of the crew", "Brand", "Size and code", "Color"], "a": 2, "e": "Support."}
+{"c": "127.113.d.9.C", "d": 4, "q": "Vertical steel pipe is supported at:", "o": ["One end only", "Never", "Random points", "Each floor or as required"], "a": 3, "e": "Risers."}
+{"c": "127.113.d.9.D", "d": 3, "q": "Threads on steel pipe are cut with:", "o": ["A die and threader", "A drill", "A wrench only", "Pliers"], "a": 0, "e": "Threading."}
+{"c": "127.113.d.9.D", "d": 4, "q": "Cutting oil is used when threading pipe to reduce:", "o": ["Weight", "Friction and heat", "Flow", "Noise only"], "a": 1, "e": "Oil helps."}
+{"c": "127.113.d.9.E", "d": 3, "q": "Codes for gas piping specify that steel pipe joints must be:", "o": ["Hidden", "Painted", "Leak tested", "Covered"], "a": 2, "e": "Testing."}
+{"c": "127.113.d.9.E", "d": 4, "q": "Threaded steel gas pipe joints are sealed with a compound rated for:", "o": ["Paint", "Water only", "Wood", "Gas"], "a": 3, "e": "Compound."}
+{"c": "127.113.d.10.A", "d": 3, "q": "Corrugated stainless steel tubing (CSST) is a flexible pipe used for:", "o": ["Fuel gas", "Rainwater", "Sewage", "Drains"], "a": 0, "e": "CSST."}
+{"c": "127.113.d.10.A", "d": 4, "q": "CSST must be installed by someone who is:", "o": ["Unqualified", "Trained and certified by the manufacturer", "A customer", "Any helper"], "a": 1, "e": "Training."}
+{"c": "127.113.d.10.B", "d": 3, "q": "CSST must be properly bonded to reduce risk from:", "o": ["Sun", "Rain", "Lightning", "Cold"], "a": 2, "e": "Bonding."}
+{"c": "127.113.d.10.B", "d": 4, "q": "CSST should not be used where it can be:", "o": ["Labeled", "Insulated", "Hung", "Damaged by sharp objects"], "a": 3, "e": "Improper use."}
+{"c": "127.113.d.10.C", "d": 3, "q": "CSST is supported at intervals set by the:", "o": ["Manufacturer and code", "Truck", "Weather", "Customer"], "a": 0, "e": "Hanging."}
+{"c": "127.113.d.10.C", "d": 4, "q": "CSST passing through a stud should be protected with a:", "o": ["Paint", "Striker plate or sleeve", "Rope", "Tape"], "a": 1, "e": "Protection."}
+{"c": "127.113.d.10.D", "d": 3, "q": "CSST is cut with a:", "o": ["Axe", "Hacksaw only", "Tubing cutter", "Torch"], "a": 2, "e": "Cutting."}
+{"c": "127.113.d.10.D", "d": 4, "q": "CSST fittings are attached with:", "o": ["Glue", "Solder", "Wire", "Mechanical fittings supplied by the maker"], "a": 3, "e": "Joining."}
+{"c": "127.113.d.10.E", "d": 3, "q": "CSST is shipped on:", "o": ["Coils or reels", "Sheets", "Boards", "Barrels"], "a": 0, "e": "Handling."}
+{"c": "127.113.d.10.E", "d": 4, "q": "CSST jacketing should be protected from:", "o": ["Cool", "Damage and sunlight", "Air", "Dryness"], "a": 1, "e": "Storage."}
+{"c": "127.113.d.10.F", "d": 3, "q": "Local codes may require CSST to be:", "o": ["Hidden", "Ignored", "Bonded and installed per listing", "Painted red"], "a": 2, "e": "Code."}
+{"c": "127.113.d.10.F", "d": 4, "q": "A pressure test is run on a gas line to prove it is:", "o": ["Hot", "Cold", "Dirty", "Free of leaks"], "a": 3, "e": "Test."}
+{"c": "127.113.d.11.A", "d": 3, "q": "Waste leaves a fixture through the drain and flows by:", "o": ["Gravity to the building drain", "Pressure", "A pump always", "A motor"], "a": 0, "e": "DWV flow."}
+{"c": "127.113.d.11.A", "d": 4, "q": "A building drain carries waste to the:", "o": ["Roof", "Building sewer", "Fixture", "Attic"], "a": 1, "e": "Path."}
+{"c": "127.113.d.11.B", "d": 3, "q": "A vent pipe lets air into the drainage system to prevent:", "o": ["Heating", "Cooling", "Siphoning of traps", "Noise only"], "a": 2, "e": "Venting."}
+{"c": "127.113.d.11.B", "d": 4, "q": "A cleanout provides access to:", "o": ["Cool a pipe", "Fill a tank", "Light a room", "Clear a clogged drain"], "a": 3, "e": "Cleanouts."}
+{"c": "127.113.d.11.C", "d": 3, "q": "A trap holds a water seal that blocks:", "o": ["Sewer gas", "Water", "Light", "Heat"], "a": 0, "e": "Traps."}
+{"c": "127.113.d.11.C", "d": 4, "q": "A P-trap is commonly found under a:", "o": ["Furnace", "Sink", "Window", "Roof"], "a": 1, "e": "Trap type."}
+{"c": "127.113.d.11.D", "d": 3, "q": "A sanitary tee is used to:", "o": ["Heat pipe", "Measure flow", "Connect a branch to a drain", "Reduce water pressure"], "a": 2, "e": "Fittings."}
+{"c": "127.113.d.11.D", "d": 4, "q": "A wye fitting is used to:", "o": ["Shut off flow", "Meter flow", "Make a sharp turn", "Join two drains while keeping smooth flow"], "a": 3, "e": "Fittings."}
+{"c": "127.113.d.11.E", "d": 3, "q": "Sewer gas leaking into a building is a:", "o": ["Health hazard", "Saving", "Feature", "Benefit"], "a": 0, "e": "Health issues."}
+{"c": "127.113.d.11.E", "d": 4, "q": "A plumber who violates the code may face:", "o": ["Holidays", "Fines or loss of license", "Prizes", "Raises"], "a": 1, "e": "Consequences."}
+{"c": "127.113.d.11.F", "d": 3, "q": "A line type on a plan for waste piping is often drawn as:", "o": ["Wavy line", "No line", "A solid heavy line", "Dotted star"], "a": 2, "e": "DWV symbols."}
+{"c": "127.113.d.11.F", "d": 4, "q": "A vent line on a drawing is commonly shown as:", "o": ["A box", "A solid fat line", "A circle", "A dashed line"], "a": 3, "e": "Symbols."}
+{"c": "127.113.d.11.G", "d": 3, "q": "An isometric DWV drawing helps a plumber to prepare a:", "o": ["Materials list", "Score card", "Menu", "Playlist"], "a": 0, "e": "Takeoff."}
+{"c": "127.113.d.11.G", "d": 4, "q": "The slope of a horizontal drain is typically:", "o": ["1 inch per foot", "1/4 inch per foot", "3 inches per foot", "Zero"], "a": 1, "e": "Slope."}
+{"c": "127.113.d.11.H", "d": 3, "q": "Common DWV pipe materials include PVC, ABS, and:", "o": ["Wood", "Rubber", "Cast iron", "Brass tubes"], "a": 2, "e": "Materials."}
+{"c": "127.113.d.11.H", "d": 4, "q": "Cast iron pipe for drains is valued for being:", "o": ["Cheap", "Light", "Flexible", "Quiet and fire resistant"], "a": 3, "e": "Properties."}
+{"c": "127.113.d.11.I", "d": 3, "q": "Code requires drain lines to be tested by:", "o": ["Water or air test", "Colors", "Paint", "Weather"], "a": 0, "e": "Code."}
+{"c": "127.113.d.11.I", "d": 4, "q": "A water test fills the DWV system to the:", "o": ["No level", "Top of the highest joint being tested", "Bottom", "Middle"], "a": 1, "e": "Testing."}
+{"c": "127.113.d.12.A", "d": 3, "q": "In the water cycle, water vapor cools and forms:", "o": ["Roads", "Rocks", "Clouds", "Mountains"], "a": 2, "e": "Cycle."}
+{"c": "127.113.d.12.A", "d": 4, "q": "Water falling from clouds is called:", "o": ["Evaporation", "Runoff", "Condensation", "Precipitation"], "a": 3, "e": "Cycle."}
+{"c": "127.113.d.12.B", "d": 3, "q": "A common water source for a home is a:", "o": ["Well or municipal supply", "Fire", "Power line", "Gas line"], "a": 0, "e": "Sources."}
+{"c": "127.113.d.12.B", "d": 4, "q": "Groundwater is water found:", "o": ["In clouds", "Beneath the surface in soil and rock", "In the sky", "On roofs"], "a": 1, "e": "Sources."}
+{"c": "127.113.d.12.C", "d": 3, "q": "Water from a municipal supply passes through a meter and a:", "o": ["Furnace", "Drain", "Main shutoff valve", "Chimney"], "a": 2, "e": "Service."}
+{"c": "127.113.d.12.C", "d": 4, "q": "A well pump delivers water to a:", "o": ["Roof", "Drain", "Chimney", "Pressure tank"], "a": 3, "e": "Well water."}
+{"c": "127.113.d.12.D", "d": 3, "q": "A pressure reducing valve protects plumbing from:", "o": ["High water pressure", "Low pressure", "Cold", "Noise only"], "a": 0, "e": "Valves."}
+{"c": "127.113.d.12.D", "d": 4, "q": "A backflow preventer stops water from:", "o": ["Moving forward", "Flowing backward into the supply", "Freezing", "Evaporating"], "a": 1, "e": "Devices."}
+{"c": "127.113.d.13.A", "d": 3, "q": "On a floor plan, hot water lines are often drawn as:", "o": ["No lines", "Dotted blue", "Solid lines", "Dashed lines only"], "a": 2, "e": "Symbols."}
+{"c": "127.113.d.13.A", "d": 4, "q": "A cold water line is often shown with a:", "o": ["No symbol", "Same as hot", "Red color only", "Dashed or distinct line type"], "a": 3, "e": "Distinguish."}
+{"c": "127.113.d.13.B", "d": 3, "q": "To draw water lines on a plan, a plumber uses a:", "o": ["Scale and straightedge", "Paint", "Saw", "Hammer"], "a": 0, "e": "Drawing."}
+{"c": "127.113.d.13.B", "d": 4, "q": "Fixtures are shown on the plan with:", "o": ["Random doodles", "Standard symbols", "Photos", "Words only"], "a": 1, "e": "Symbols."}
+{"c": "127.113.d.13.C", "d": 3, "q": "Sizing a water system starts with counting the:", "o": ["Doors", "Floors only", "Fixture units", "Windows"], "a": 2, "e": "Sizing."}
+{"c": "127.113.d.13.C", "d": 4, "q": "Higher flow demand requires a:", "o": ["Closed valve", "Smaller pipe", "Shorter pipe only", "Larger pipe size"], "a": 3, "e": "Sizing."}
+{"c": "127.113.d.14.A", "d": 3, "q": "Open-close valves are used to:", "o": ["Start and stop flow", "Reduce pressure", "Throttle flow", "Measure flow"], "a": 0, "e": "Gate and ball valves."}
+{"c": "127.113.d.14.A", "d": 4, "q": "A ball valve is shut off with:", "o": ["No motion", "A quarter turn", "Ten turns", "A key"], "a": 1, "e": "Quarter-turn."}
+{"c": "127.113.d.14.B", "d": 3, "q": "A globe valve is used to:", "o": ["Heat flow", "Measure flow", "Regulate flow", "Block flow forever"], "a": 2, "e": "Throttling."}
+{"c": "127.113.d.14.B", "d": 4, "q": "Flow regulation valves are not ideal for:", "o": ["Balancing", "Throttling", "Adjusting", "Full-open service with minimal pressure drop"], "a": 3, "e": "Selection."}
+{"c": "127.113.d.14.C", "d": 3, "q": "A pressure reducing valve is installed where:", "o": ["Supply pressure is higher than fixtures can handle", "Gas is used", "No water", "Pressure is already low"], "a": 0, "e": "PRV."}
+{"c": "127.113.d.14.C", "d": 4, "q": "A typical house water pressure target is about:", "o": ["5 psi", "50 to 60 psi", "500 psi", "1,000 psi"], "a": 1, "e": "Normal."}
+{"c": "127.113.d.14.D", "d": 3, "q": "A temperature and pressure relief valve on a water heater opens when:", "o": ["Water is cold", "Power is off", "Pressure or temperature gets too high", "Tank is empty"], "a": 2, "e": "Relief."}
+{"c": "127.113.d.14.D", "d": 4, "q": "The discharge pipe of a relief valve should point:", "o": ["Into the wall", "Upward", "Toward people", "Downward to a safe location"], "a": 3, "e": "Safety."}
+{"c": "127.114.d.1.A", "d": 3, "q": "A 6-foot folding rule is read to the nearest:", "o": ["Smallest marked division", "Mile", "Yard", "Foot"], "a": 0, "e": "Measuring."}
+{"c": "127.114.d.1.A", "d": 4, "q": "A 25-foot tape measure has a hook on the end that moves to account for its:", "o": ["Age", "Thickness when measuring inside or outside", "Color", "Brand"], "a": 1, "e": "Tape hook."}
+{"c": "127.114.d.1.B", "d": 3, "q": "A steel rule is divided into fractions of an inch such as:", "o": ["1/13", "1/11", "1/32 and 1/16", "1/7"], "a": 2, "e": "Rule."}
+{"c": "127.114.d.1.B", "d": 4, "q": "A micrometer is used when a measurement must be:", "o": ["Visual", "Quick only", "Rough", "Very precise"], "a": 3, "e": "Precision."}
+{"c": "127.114.d.1.C", "d": 3, "q": "Center-to-center measurement is taken from the middle of:", "o": ["One fitting to the middle of the other", "The pipe end", "The wall", "The floor"], "a": 0, "e": "Method."}
+{"c": "127.114.d.1.C", "d": 4, "q": "The end-to-center measure is taken from the pipe end to:", "o": ["The valve handle", "The center of a fitting", "The wall", "The ceiling"], "a": 1, "e": "Method."}
+{"c": "127.114.d.1.D", "d": 3, "q": "A plumber who uses a drill should clamp the work to keep it:", "o": ["Spinning", "Moving", "Stable", "Loose"], "a": 2, "e": "Safety."}
+{"c": "127.114.d.1.D", "d": 4, "q": "Power saws should be used with the guard in place to prevent:", "o": ["Friction", "Noise", "Cooling", "Injury"], "a": 3, "e": "Safe use."}
+{"c": "127.114.d.2.A", "d": 3, "q": "A masonry bit is used for drilling:", "o": ["Concrete or brick", "Steel plate", "Glass tubing", "Wood only"], "a": 0, "e": "Bits."}
+{"c": "127.114.d.2.A", "d": 4, "q": "A hole saw cuts:", "o": ["Slots", "Large round holes", "Threads", "Square holes"], "a": 1, "e": "Bits."}
+{"c": "127.114.d.2.B", "d": 3, "q": "Twist drill bits are used for drilling:", "o": ["Water", "Paper", "Metal and wood", "Concrete only"], "a": 2, "e": "Use."}
+{"c": "127.114.d.2.B", "d": 4, "q": "Using a drill bit with the wrong speed for the material can:", "o": ["Cool the work", "Do nothing", "Improve it", "Dull the bit and damage the work"], "a": 3, "e": "Application."}
+{"c": "127.114.d.3.A", "d": 3, "q": "The volume of a cylinder is found by multiplying pi times radius squared times:", "o": ["Height", "Weight", "Age", "Color"], "a": 0, "e": "Formula."}
+{"c": "127.114.d.3.A", "d": 4, "q": "A cylinder with a radius of 1 foot and a height of 2 feet has a volume near:", "o": ["2 cubic feet", "6.28 cubic feet", "3.14 cubic feet", "12.56 cubic feet"], "a": 1, "e": "3.14 x 1 x 2 = 6.28."}
+{"c": "127.114.d.3.B", "d": 3, "q": "A cubic foot of water holds about how many gallons?", "o": ["1", "3", "7.48", "10"], "a": 2, "e": "Conversion."}
+{"c": "127.114.d.3.B", "d": 4, "q": "A tank 2 ft by 3 ft by 4 ft has a volume of:", "o": ["9 cubic feet", "18 cubic feet", "12 cubic feet", "24 cubic feet"], "a": 3, "e": "2 x 3 x 4."}
+{"c": "127.114.d.3.C", "d": 3, "q": "A drain pipe that falls 1/4 inch per foot over 20 feet drops a total of:", "o": ["5 inches", "20 inches", "1 inch", "2 inches"], "a": 0, "e": "20 x 1/4."}
+{"c": "127.114.d.3.C", "d": 4, "q": "Grade is usually expressed as inches of fall per:", "o": ["Gallon", "Foot", "Mile", "Ounce"], "a": 1, "e": "Grade."}
+{"c": "127.114.d.3.D", "d": 3, "q": "An offset in piping is used to:", "o": ["Stop flow", "Increase flow", "Go around an obstruction", "Cool flow"], "a": 2, "e": "Offsets."}
+{"c": "127.114.d.3.D", "d": 4, "q": "For parallel offsets, the travel is figured using the offset and the:", "o": ["Price", "Weather", "Color", "Fitting angle"], "a": 3, "e": "Travel."}
+{"c": "127.114.d.3.E", "d": 3, "q": "Flow rate in a pipe is commonly measured in:", "o": ["Gallons per minute", "Feet", "Pounds per inch", "Volts"], "a": 0, "e": "Flow."}
+{"c": "127.114.d.3.E", "d": 4, "q": "Friction in a pipe tends to:", "o": ["Heat the sun", "Reduce pressure", "Stop gravity", "Raise pressure"], "a": 1, "e": "Friction."}
+{"c": "127.114.d.3.F", "d": 3, "q": "Water velocity in pipes is limited to prevent:", "o": ["Cooling", "Quality", "Noise and erosion", "Saving"], "a": 2, "e": "Velocity limit."}
+{"c": "127.114.d.3.F", "d": 4, "q": "Sizing a pipe too small will make pressure drop:", "o": ["Negative", "Zero", "Smaller", "Greater"], "a": 3, "e": "Sizing."}
+{"c": "127.114.d.4.A", "d": 3, "q": "A building maintenance technician is a job that may:", "o": ["Repair plumbing and other systems", "Cook meals", "Sing", "Fly planes"], "a": 0, "e": "Jobs."}
+{"c": "127.114.d.4.A", "d": 4, "q": "A pipefitter installs piping in:", "o": ["Only parks", "Commercial and industrial settings", "Only schools", "Only farm fields"], "a": 1, "e": "Pipefitting."}
+{"c": "127.114.d.4.B", "d": 3, "q": "Careers in plumbing may require continuing education to:", "o": ["Paint", "Sing", "Stay current with codes", "Learn dances"], "a": 2, "e": "Education."}
+{"c": "127.114.d.4.B", "d": 4, "q": "Experience and licenses often lead to advancement to:", "o": ["Clerk", "Intern forever", "Helper only", "Master plumber"], "a": 3, "e": "Career ladder."}
+{"c": "127.114.d.4.C", "d": 3, "q": "The plumbing industry includes contractors, suppliers, and:", "o": ["Inspectors", "Models", "Poets", "Actors"], "a": 0, "e": "Industry."}
+{"c": "127.114.d.4.C", "d": 4, "q": "A union apprenticeship is sponsored by a:", "o": ["Newspaper", "Joint committee of labor and employers", "Movie studio", "School band"], "a": 1, "e": "Associations."}
+{"c": "127.114.d.4.D", "d": 3, "q": "Treating company property well includes:", "o": ["Ignoring damage", "Using them for hobbies", "Taking care of tools and vehicles", "Losing tools"], "a": 2, "e": "Respect."}
+{"c": "127.114.d.4.D", "d": 4, "q": "Customer property should be:", "o": ["Ignored", "Moved without asking", "Damaged", "Protected during the work"], "a": 3, "e": "Property."}
+{"c": "127.114.d.4.E", "d": 3, "q": "A tidy work area helps a plumber to:", "o": ["Work safely and efficiently", "Lose items", "Slip", "Delay"], "a": 0, "e": "Clean."}
+{"c": "127.114.d.4.E", "d": 4, "q": "At the end of a job, the plumber should remove:", "o": ["Customer's furniture", "Debris and packaging", "Doors", "Light fixtures"], "a": 1, "e": "Cleanup."}
+{"c": "127.114.d.4.F", "d": 3, "q": "Using proper methods when installing pipe prevents:", "o": ["Safety", "Quality", "Leaks and rework", "Pride"], "a": 2, "e": "Methods."}
+{"c": "127.114.d.4.F", "d": 4, "q": "Following the code when installing pipe protects:", "o": ["The paint", "The tools", "The vans", "The customer and the public"], "a": 3, "e": "Code."}
+{"c": "127.114.d.5.A", "d": 3, "q": "A volt/ohm meter is used on plumbing equipment such as a water heater to check:", "o": ["Electrical power and elements", "Water hardness", "Pipe size", "Pipe slope"], "a": 0, "e": "Meters."}
+{"c": "127.114.d.5.A", "d": 4, "q": "An electric water heater element is tested for:", "o": ["Odor", "Continuity", "Taste", "Color"], "a": 1, "e": "Testing."}
+{"c": "127.114.d.5.B", "d": 3, "q": "Hangers are installed to support piping and to allow for:", "o": ["Noise", "Heat loss", "Expansion", "Rust"], "a": 2, "e": "Hangers."}
+{"c": "127.114.d.5.B", "d": 4, "q": "Holes cut through joists must follow code to avoid:", "o": ["Cooling", "Strengthening", "Drying", "Weakening the structure"], "a": 3, "e": "Penetrations."}
+{"c": "127.114.d.5.C", "d": 3, "q": "The type of hanger chosen depends on the pipe material, size, and:", "o": ["Location", "Age", "Brand", "Color"], "a": 0, "e": "Selecting."}
+{"c": "127.114.d.5.C", "d": 4, "q": "A clevis hanger supports pipe from:", "o": ["Below on a floor", "Above on a rod", "Inside the pipe", "Beside only"], "a": 1, "e": "Hanger."}
+{"c": "127.114.d.5.D", "d": 3, "q": "Pipe supports can be built from:", "o": ["Paper", "Foam", "Strut channel and clamps", "String"], "a": 2, "e": "Building supports."}
+{"c": "127.114.d.5.D", "d": 4, "q": "A trapeze hanger supports:", "o": ["One valve", "One wire", "A drain", "Several pipes on one frame"], "a": 3, "e": "Trapeze."}
+{"c": "127.114.d.5.E", "d": 3, "q": "Where pipes pass through a fire-rated wall, the opening must be:", "o": ["Fire-stopped", "Left open", "Covered with paper", "Painted"], "a": 0, "e": "Penetration."}
+{"c": "127.114.d.5.E", "d": 4, "q": "Sleeves through foundation walls protect the pipe and allow:", "o": ["Rust", "Movement", "Noise", "Leaks"], "a": 1, "e": "Code."}
+{"c": "127.114.d.5.F", "d": 3, "q": "A roof drain collects:", "o": ["Hot water", "Gas", "Rainwater from a flat roof", "Sewage"], "a": 2, "e": "Roof drains."}
+{"c": "127.114.d.5.F", "d": 4, "q": "Roof drain size depends on the roof area and local:", "o": ["Paint color", "Brand", "Truck type", "Rainfall rate"], "a": 3, "e": "Sizing."}
+{"c": "127.114.d.6.A", "d": 3, "q": "Before installing a toilet, the flange should be checked to see that it is:", "o": ["Secure and level", "Missing", "Rusted through", "Bent"], "a": 0, "e": "Toilet."}
+{"c": "127.114.d.6.A", "d": 4, "q": "A wax ring seals the toilet to the:", "o": ["Seat", "Flange", "Tank", "Wall"], "a": 1, "e": "Seal."}
+{"c": "127.114.d.6.B", "d": 3, "q": "A faucet is connected to the supply lines with:", "o": ["Tape alone", "Glue", "Compression or threaded fittings", "Nails"], "a": 2, "e": "Faucets."}
+{"c": "127.114.d.6.B", "d": 4, "q": "A sink drain requires a trap and a:", "o": ["Burner", "Fan", "Compressor", "Tailpiece"], "a": 3, "e": "Sinks."}
+{"c": "127.114.d.7.A", "d": 3, "q": "Piping plan types include plan view, elevation, and:", "o": ["Isometric", "Calendar", "Menu", "Poem"], "a": 0, "e": "Types."}
+{"c": "127.114.d.7.A", "d": 4, "q": "An elevation drawing shows a view from the:", "o": ["Top", "Side", "Below", "Inside only"], "a": 1, "e": "Types."}
+{"c": "127.114.d.7.B", "d": 3, "q": "A piping symbol for a tee shows a:", "o": ["Tank", "Valve stop", "Branch connection", "Pump"], "a": 2, "e": "Symbols."}
+{"c": "127.114.d.7.B", "d": 4, "q": "A detail drawing shows a:", "o": ["Calendar", "Whole city", "Weather", "Close-up of a specific connection"], "a": 3, "e": "Detail."}
+{"c": "127.114.d.7.C", "d": 3, "q": "A field sketch is a quick drawing made:", "o": ["On the job site", "In a movie", "In a museum", "At a bank"], "a": 0, "e": "Sketch."}
+{"c": "127.114.d.7.C", "d": 4, "q": "A good field sketch includes dimensions and:", "o": ["Colors only", "Notes", "Songs", "Jokes"], "a": 1, "e": "Sketch."}
+{"c": "127.114.d.7.D", "d": 3, "q": "A line list tells the size, material, and service of each:", "o": ["Employee", "Tool", "Pipe line", "Truck"], "a": 2, "e": "Lists."}
+{"c": "127.114.d.7.D", "d": 4, "q": "A drawing index lists:", "o": ["Employees", "Hours", "Fuel", "All sheets in the set"], "a": 3, "e": "Index."}
+{"c": "127.114.d.8.A", "d": 3, "q": "Valves that start and stop flow include gate valves and:", "o": ["Ball valves", "Globe valves", "Check valves", "Pressure valves"], "a": 0, "e": "On-off valves."}
+{"c": "127.114.d.8.A", "d": 4, "q": "A butterfly valve closes with a:", "o": ["Plug", "Rotating disc", "Plunger", "Spring"], "a": 1, "e": "Types."}
+{"c": "127.114.d.8.B", "d": 3, "q": "Valves that regulate flow include globe valves and:", "o": ["Check valves", "Ball valves", "Needle valves", "Gate valves"], "a": 2, "e": "Throttle."}
+{"c": "127.114.d.8.B", "d": 4, "q": "A needle valve is used for:", "o": ["Fast shutoff", "Large flow", "Draining", "Fine adjustment of small flow"], "a": 3, "e": "Flow control."}
+{"c": "127.114.d.8.C", "d": 3, "q": "A relief valve opens to:", "o": ["Relieve excess pressure", "Increase pressure", "Block flow", "Measure pressure"], "a": 0, "e": "Relief."}
+{"c": "127.114.d.8.C", "d": 4, "q": "A safety valve is typically used on:", "o": ["Fountains", "Steam and boiler systems", "Rainwater", "Toilets"], "a": 1, "e": "Safety valve."}
+{"c": "127.114.d.8.D", "d": 3, "q": "A check valve allows flow in:", "o": ["No direction", "Circles", "One direction only", "Both directions"], "a": 2, "e": "Check."}
+{"c": "127.114.d.8.D", "d": 4, "q": "A swing check valve uses a:", "o": ["Diaphragm only", "Rotating ball", "Gear", "Hinged disc"], "a": 3, "e": "Types."}
+{"c": "127.114.d.8.E", "d": 3, "q": "A valve actuator opens and closes a valve using a:", "o": ["Motor, air, or hydraulic power", "String", "Wind", "Hand only"], "a": 0, "e": "Actuators."}
+{"c": "127.114.d.8.E", "d": 4, "q": "An electric actuator is controlled by a:", "o": ["Blade", "Switch or control signal", "Hose", "Gear oil"], "a": 1, "e": "Control."}
+{"c": "127.114.d.8.F", "d": 3, "q": "Valves should be stored with the ends:", "o": ["Wet", "Bent", "Capped to keep out debris", "Open"], "a": 2, "e": "Storage."}
+{"c": "127.114.d.8.F", "d": 4, "q": "A large valve should be lifted using:", "o": ["Rope on the handle", "Foot", "Bare hands", "Proper rigging"], "a": 3, "e": "Handling."}
+{"c": "127.114.d.8.G", "d": 3, "q": "A valve installed in the line near a fixture is often called a:", "o": ["Stop valve", "Filter", "Pump", "Tank"], "a": 0, "e": "Locations."}
+{"c": "127.114.d.8.G", "d": 4, "q": "A valve position indicator shows whether it is:", "o": ["Wet or dry", "Open or closed", "Hot or cold", "New or used"], "a": 1, "e": "Position."}
+{"c": "127.114.d.8.H", "d": 3, "q": "Valve selection depends on the pressure, temperature, and:", "o": ["Brand", "Age", "Fluid being carried", "Color"], "a": 2, "e": "Selection."}
+{"c": "127.114.d.8.H", "d": 4, "q": "A valve for steam service must be rated for:", "o": ["Sound", "Low temperature only", "Sunlight", "High temperature and pressure"], "a": 3, "e": "Rating."}
+{"c": "127.114.d.8.I", "d": 3, "q": "Valve nameplate data includes size, pressure rating, and:", "o": ["Material", "Weather", "Color of truck", "Owner"], "a": 0, "e": "Nameplate."}
+{"c": "127.114.d.8.I", "d": 4, "q": "The letters WOG on a valve stand for:", "o": ["Wind, oxygen, gravity", "Water, oil, gas", "Wood, oak, glass", "Water, oxygen, ground"], "a": 1, "e": "Markings."}
+{"c": "127.114.d.9.A", "d": 3, "q": "An oxy-fuel torch has a regulator, hoses, and a:", "o": ["Mirror", "Drill", "Torch handle with tips", "Saw"], "a": 2, "e": "Parts."}
+{"c": "127.114.d.9.A", "d": 4, "q": "The regulator on a gas cylinder reduces:", "o": ["Volume", "Weight", "Temperature", "Cylinder pressure to working pressure"], "a": 3, "e": "Regulator."}
+{"c": "127.114.d.9.B", "d": 3, "q": "Before opening a cylinder valve, the regulator adjusting screw should be:", "o": ["Backed out (released)", "Painted", "Removed", "Tightened fully"], "a": 0, "e": "Procedure."}
+{"c": "127.114.d.9.B", "d": 4, "q": "When lighting a torch, always use a:", "o": ["Match near fuel", "Striker", "Candle", "Cigarette lighter in a cylinder"], "a": 1, "e": "Lighting."}
+{"c": "127.114.d.9.C", "d": 3, "q": "A flux is used when soldering to:", "o": ["Cool metal", "Add weight", "Clean oxides and help solder flow", "Add color"], "a": 2, "e": "Flux."}
+{"c": "127.114.d.9.C", "d": 4, "q": "Brazing filler metals melt above:", "o": ["200 degrees", "32 degrees", "400 degrees", "840 degrees Fahrenheit"], "a": 3, "e": "Brazing."}
+{"c": "127.114.d.9.D", "d": 3, "q": "Gas cylinders must be stored upright and:", "o": ["Chained or secured", "Open", "On their side", "Loose"], "a": 0, "e": "Cylinder safety."}
+{"c": "127.114.d.9.D", "d": 4, "q": "Welding goggles protect the eyes from:", "o": ["Cold", "Bright light and sparks", "Dust only", "Water"], "a": 1, "e": "Safety."}
+{"c": "127.114.d.10.A", "d": 3, "q": "Water pressure and flow are critical for sizing a water system, along with the pipe:", "o": ["Brand", "Color", "Length and fittings", "Weight"], "a": 2, "e": "Factors."}
+{"c": "127.114.d.10.A", "d": 4, "q": "Developed length of pipe includes the straight pipe and the equivalent length of:", "o": ["Paint", "Hangers", "Sleeves", "Fittings"], "a": 3, "e": "Developed length."}
+{"c": "127.114.d.10.B", "d": 3, "q": "Fixture units are values that represent a fixture's:", "o": ["Demand on the system", "Color", "Age", "Cost"], "a": 0, "e": "Fixture units."}
+{"c": "127.114.d.10.B", "d": 4, "q": "A bathtub has a higher fixture unit value than a:", "o": ["Shower valve only", "Lavatory", "Tub", "Hose"], "a": 1, "e": "Values."}
+{"c": "127.114.d.10.C", "d": 3, "q": "Water pipe is installed with the proper:", "o": ["Color", "Noise", "Slope for draining and supports", "Smell"], "a": 2, "e": "Installation."}
+{"c": "127.114.d.10.C", "d": 4, "q": "Piping should be protected from freezing by:", "o": ["Painting", "Leaving bare outdoors", "Sealing tight", "Insulating or routing in heated spaces"], "a": 3, "e": "Protection."}
+{"c": "127.114.d.10.D", "d": 3, "q": "A water piping system is tested with water or air at a pressure of at least:", "o": ["The working pressure", "1 psi", "Double the sun", "Zero"], "a": 0, "e": "Test."}
+{"c": "127.114.d.10.D", "d": 4, "q": "During a pressure test, the gauge should:", "o": ["Fall to zero", "Hold steady for the required time", "Rise forever", "Be removed"], "a": 1, "e": "Test."}
+{"c": "127.114.d.11.A", "d": 3, "q": "Backflow caused by a vacuum in the supply is called:", "o": ["Back-pressure", "Condensation", "Back-siphonage", "Overflow"], "a": 2, "e": "Backflow."}
+{"c": "127.114.d.11.A", "d": 4, "q": "Back-pressure backflow occurs when pressure downstream is:", "o": ["Zero", "Equal", "Lower", "Greater than supply pressure"], "a": 3, "e": "Backflow."}
+{"c": "127.114.d.11.B", "d": 3, "q": "A pollutant that can make people sick is called a:", "o": ["Contaminant", "Strainer", "Valve", "Fixture"], "a": 0, "e": "Hazard."}
+{"c": "127.114.d.11.B", "d": 4, "q": "A high hazard connection involves a substance that is:", "o": ["Pure", "Toxic", "Harmless", "Clean water"], "a": 1, "e": "Degree of hazard."}
+{"c": "127.114.d.11.C", "d": 3, "q": "An air gap protects a cross connection by providing:", "o": ["A valve only", "A longer pipe", "A physical separation in air", "A filter"], "a": 2, "e": "Protection."}
+{"c": "127.114.d.11.C", "d": 4, "q": "A reduced-pressure zone device is a:", "o": ["Tank", "Faucet", "Trap", "Backflow assembly for high hazards"], "a": 3, "e": "RPZ."}
+{"c": "127.114.d.12.A", "d": 3, "q": "When sizing a natural gas system, factors include appliance demand and pipe:", "o": ["Length", "Brand", "Color", "Smell"], "a": 0, "e": "Gas sizing."}
+{"c": "127.114.d.12.A", "d": 4, "q": "Gas appliance input is rated in:", "o": ["Volts", "BTU per hour", "Gallons", "Pounds"], "a": 1, "e": "Demand."}
+{"c": "127.114.d.12.B", "d": 3, "q": "A gas pipe system is tested by pressurizing with air or an inert gas and checking:", "o": ["For sound", "For smell only", "For leaks", "For color"], "a": 2, "e": "Testing."}
+{"c": "127.114.d.12.B", "d": 4, "q": "Gas piping must never be tested with:", "o": ["Dry air", "Inert gas", "Nitrogen", "Oxygen"], "a": 3, "e": "Test safe."}
+{"c": "127.114.d.13.A", "d": 3, "q": "A DWV fitting that makes a long sweep turn is a:", "o": ["Long-turn elbow", "Cap", "Plug", "Tee"], "a": 0, "e": "Fittings."}
+{"c": "127.114.d.13.A", "d": 4, "q": "A closet flange connects a toilet to the:", "o": ["Roof", "Drain", "Vent", "Supply"], "a": 1, "e": "Fittings."}
+{"c": "127.114.d.13.B", "d": 3, "q": "A DWV system is sized by the drainage fixture units and pipe:", "o": ["Hangers", "Color", "Slope and length", "Brand"], "a": 2, "e": "Sizing."}
+{"c": "127.114.d.13.B", "d": 4, "q": "A 3-inch drain is chosen over a 2-inch when the load in fixture units is:", "o": ["Smaller", "Negative", "Zero", "Greater"], "a": 3, "e": "Sizing."}
+{"c": "127.114.d.13.C", "d": 3, "q": "Common DWV materials include PVC, ABS, and:", "o": ["Cast iron", "Paper", "Brass pipe", "Foam"], "a": 0, "e": "Materials."}
+{"c": "127.114.d.13.C", "d": 4, "q": "ABS pipe is typically black and is joined with:", "o": ["Brazing", "ABS solvent cement", "Solder", "PVC primer"], "a": 1, "e": "Material."}
+{"c": "127.114.d.13.D", "d": 3, "q": "The slope of a pipe is found by dividing the fall by the:", "o": ["Diameter", "Weight", "Run", "Cost"], "a": 2, "e": "Slope formula."}
+{"c": "127.114.d.13.D", "d": 4, "q": "A 40-foot horizontal drain with 1/4 inch per foot slope falls:", "o": ["4 inches", "1 inch", "40 inches", "10 inches"], "a": 3, "e": "40 x 1/4."}
+{"c": "127.114.d.13.E", "d": 3, "q": "DWV systems are commonly tested with a water test or an:", "o": ["Air test", "Weight test", "Smell test", "Color test"], "a": 0, "e": "Testing."}
+{"c": "127.114.d.13.E", "d": 4, "q": "A test tee or plug is used to:", "o": ["Open pipes", "Seal openings for the test", "Cool pipes", "Drain pipes"], "a": 1, "e": "Test."}
+{"c": "127.114.d.13.F", "d": 3, "q": "The vent stack extends through the:", "o": ["Foundation", "Basement slab", "Roof", "Window"], "a": 2, "e": "Vent."}
+{"c": "127.114.d.13.F", "d": 4, "q": "A vent terminal must be placed away from:", "o": ["Walls", "Chimneys", "Roofs", "Windows and air intakes"], "a": 3, "e": "Vent location."}
+{"c": "127.114.d.14.A", "d": 3, "q": "A storage tank water heater keeps hot water in a:", "o": ["Insulated tank", "Filter", "Open pit", "Coil only"], "a": 0, "e": "Heaters."}
+{"c": "127.114.d.14.A", "d": 4, "q": "A tankless water heater heats water:", "o": ["Never", "On demand as it flows", "In a tank", "All day"], "a": 1, "e": "Point of use."}
+{"c": "127.114.d.14.B", "d": 3, "q": "An electric water heater has heating elements, a thermostat, and a:", "o": ["Burner", "Flue", "Relief valve", "Chimney"], "a": 2, "e": "Parts."}
+{"c": "127.114.d.14.B", "d": 4, "q": "A gas water heater has a burner, a thermocouple, and a:", "o": ["Element", "Heat pump", "Solar panel", "Flue"], "a": 3, "e": "Parts."}
+{"c": "127.114.d.14.C", "d": 3, "q": "A water heater installation includes a T&P relief valve and a:", "o": ["Discharge pipe", "Mixer", "Doorbell", "Hose bib"], "a": 0, "e": "Install."}
+{"c": "127.114.d.14.C", "d": 4, "q": "A gas water heater requires combustion air and:", "o": ["Electric elements", "Proper venting", "Solar panels", "A drain only"], "a": 1, "e": "Install."}
+{"c": "127.112.d.8.B", "d": 5, "q": "A programmable thermostat with a night setback of several degrees in winter mainly reduces:", "o": ["Refrigerant charge", "Filter pressure drop", "Heating energy use during the setback period", "Duct leakage"], "a": 2, "e": "Setback lowers load."}
+{"c": "127.112.d.8.I", "d": 5, "q": "To measure the current draw of one conductor safely, a technician uses a clamp meter around:", "o": ["Both conductors together", "The whole cable bundle", "The ground wire only", "A single conductor"], "a": 3, "e": "Fields cancel if both are enclosed."}
+{"c": "127.113.d.4.A", "d": 5, "q": "Jaws of a pipe wrench are designed to bite when pressure is applied in the direction of the:", "o": ["Open hook jaw movement", "Handle's blank side", "Adjusting nut", "Closed knuckle"], "a": 0, "e": "Pull toward the hook jaw."}
+{"c": "127.113.d.6.E", "d": 5, "q": "In orthographic projection of a pipe offset, the true length of the angled run appears in:", "o": ["Every view", "The view where the run is parallel to the plane", "Never in any view", "Only the top view always"], "a": 1, "e": "True length requires parallel view."}

@@ -1207,7 +1207,7 @@ body.groups-fullscreen .exit-fullscreen{display:block}
 .tw-count span span{font-size:inherit}
 #focusOverlay.tower-on .focus-btn::after{display:block;font-size:.5em;font-weight:700;opacity:.85;margin-top:2px}
 #focusOverlay.tower-on #focusPresent::after{content:'tower grows +1'}
-#focusOverlay.tower-on #focusNoJump::after{content:'tower collapses'}
+#focusOverlay.tower-on #focusNoJump::after{content:'no layer'}
 #focusOverlay.tower-on #focusAbsent::after{content:'tower holds'}
 /* clouds */
 #cloudView>#focusAuto{position:absolute;top:2px;left:50%;transform:translateX(-50%);width:62%;max-width:none;z-index:50}
@@ -1275,6 +1275,13 @@ body.groups-fullscreen #panel-groups{top:32px}
 #llHost iframe{width:100%;height:100%;border:0;display:block}
 html.ll-mode #llHost{display:block}
 html.ll-mode body>*:not(#appBar):not(#llHost):not(.modal-overlay):not(.toast){display:none !important}
+</style>
+<style id="kid-hand">
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+html,body,body *,input,button,select,textarea{font-family:'Patrick Hand','Comic Sans MS','Segoe Print',cursive!important}
+.student-name,.student-name *,.rb-name,.rb-name *,.group-student-name,.group-student-name *,.absent-chip,.champ-absent,.cl-name,.cloud *{text-transform:none!important}
+.student-name small,.rb-name small,.group-student-name small,.absent-chip small,.cloud small{margin-left:.3em}
+.leader-frog{filter:none!important}
 </style>
 </head>
 <body style="zoom: 125%;">
@@ -1547,7 +1554,7 @@ html.ll-mode body>*:not(#appBar):not(#llHost):not(.modal-overlay):not(.toast){di
     </select>
     <button class="ctrl-btn" id="reshuffleStudents" style="display:none" title="Shuffle the random order again">🎲 Shuffle</button>
     <button class="ctrl-btn primary" id="focusModeBtn" title="One student at a time, full screen">🐸 Hopper Mode</button>
-    <button class="ctrl-btn" id="towerSetupBtn2" title="Tower picture + joke-of-the-day video">🗼 Tower setup</button>
+    <button class="ctrl-btn" id="towerSetupBtn2" title="Tower picture + clip-of-the-day video">🗼 Tower setup</button>
     <input type="text" id="filterStudents" placeholder="🔍 Search students…" style="font-size:.85rem;padding:7px 12px;flex:1;max-width:240px;background:var(--bg-card);border:1px solid var(--border);color:var(--text);border-radius:999px">
   </div>
   <div class="student-list" id="studentList"><div class="student-row">
@@ -2045,7 +2052,7 @@ html.ll-mode body>*:not(#appBar):not(#llHost):not(.modal-overlay):not(.toast){di
     <button class="ctrl-btn" id="focusShuffle" style="display:none" title="Shuffle again">🎲 Shuffle</button>
     <button class="ctrl-btn" id="focusEdit" style="display:none" title="Edit this student">✏️</button>
     <button class="ctrl-btn primary" id="towerToggle" title="Tower mode on/off">🗼 Tower</button>
-    <button class="ctrl-btn" id="towerSetupBtn" title="Tower picture + joke video">⚙️</button>
+    <button class="ctrl-btn" id="towerSetupBtn" title="Tower picture + clip video">⚙️</button>
     <button class="ctrl-btn danger" id="focusClose" title="Exit (Esc)">✕ Exit</button>
   </div>
   <div class="focus-bar"><i id="focusBarFill" style="width:0%"></i></div>
@@ -2093,8 +2100,8 @@ html.ll-mode body>*:not(#appBar):not(#llHost):not(.modal-overlay):not(.toast){di
     <div class="tw-scenes" id="twScenes"></div>
     <div class="tw-demo"><canvas id="twDemoCv"></canvas><button class="ctrl-btn" id="twDemoBtn" type="button">▶ Preview</button></div>
   </div>
-  <div class="tw-sec">Joke of the day</div>
-  <div class="modal-field"><label>Title</label><input type="text" id="twVidTitle" placeholder="Joke of the Day" style="width:100%"></div>
+  <div class="tw-sec">Clip of the day</div>
+  <div class="modal-field"><label>Title</label><input type="text" id="twVidTitle" placeholder="Clip of the Day" style="width:100%"></div>
   <div class="modal-field"><label>Video link</label><input type="text" id="twVidUrl" placeholder="YouTube, Vimeo, or a direct .mp4 link" style="width:100%"></div>
   <div class="tw-file">
     <label class="ctrl-btn" for="twVidFile" style="cursor:pointer">⬆ Upload mp4</label><input type="file" id="twVidFile" accept="video/*" hidden="">
@@ -2104,7 +2111,7 @@ html.ll-mode body>*:not(#appBar):not(#llHost):not(.modal-overlay):not(.toast){di
   </div>
   <div class="tw-actions"><button class="ctrl-btn" id="twCancel" type="button">Cancel</button><button class="ctrl-btn primary" id="twSave" type="button">Save</button></div>
 </div></div>
-<div id="towerVideoModal"><div class="tv-bar"><span id="tvTitle">🎬 Joke of the Day</span><button class="ctrl-btn danger" id="tvClose" type="button">✕ Close</button></div><div id="tvBox"></div></div>
+<div id="towerVideoModal"><div class="tv-bar"><span id="tvTitle">🎬 Clip of the Day</span><button class="ctrl-btn danger" id="tvClose" type="button">✕ Close</button></div><div id="tvBox"></div></div>
 
 <!-- CLASS POINTS MODAL -->
 <div class="modal-overlay" id="classPointsModal"><div class="modal" style="max-width:520px;max-height:90vh;overflow:auto">
@@ -8103,7 +8110,7 @@ if(RRAuth.user&&RRAuth.hasKey())bootstrap();
 
 </script>
 <script id="rr-tower-js">
-/* ===== TOWER MODE — Hopper tower + rising name clouds + joke-of-the-day ===== */
+/* ===== TOWER MODE — Hopper tower + rising name clouds + clip-of-the-day ===== */
 (function(){
 'use strict';
 const $=id=>document.getElementById(id);
@@ -8116,7 +8123,7 @@ const tdb=()=>new Promise((res,rej)=>{const r=indexedDB.open('rr_tower',1);r.onu
 async function kget(k){try{const d=await tdb();return await new Promise(res=>{const q=d.transaction('k').objectStore('k').get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>res(null)})}catch(e){return null}}
 async function kput(k,v){const d=await tdb();return new Promise((res,rej)=>{const t=d.transaction('k','readwrite');t.objectStore('k').put(v,k);t.oncomplete=()=>res();t.onerror=()=>rej(t.error)})}
 async function kdel(k){try{const d=await tdb();return await new Promise(res=>{const t=d.transaction('k','readwrite');t.objectStore('k').delete(k);t.oncomplete=()=>res();t.onerror=()=>res()})}catch(e){}}
-let prefs={on:true,scene:'sunset',imgData:'',videoUrl:'',videoTitle:'Joke of the Day',videoFile:false},prefsLoaded=false;
+let prefs={on:true,scene:'sunset',imgData:'',videoUrl:'',videoTitle:'Clip of the Day',videoFile:false},prefsLoaded=false;
 async function loadPrefs(){if(prefsLoaded)return;prefsLoaded=true;const r=await kget('prefs');if(r)Object.assign(prefs,r)}
 
 /* ---------- sfx ---------- */
@@ -8406,20 +8413,20 @@ function towerSync(){
   const att=attendance[getAttendanceKey(rid)],N=students.length,src=twGetSrc(),key=src.key+'|'+N,T=twEnsure();
   const r=T.cv.getBoundingClientRect();if(Math.abs(r.width-T.W)>1||Math.abs(r.height-T.H)>1)T.resize();
   let h=0,nj=0,ab=0,mk=0;
-  for(const s of students){const st=statusOf(s,att);if(st==='present'){h++;mk++}else if(st==='nojump'){h=0;nj++;mk++}else if(st==='absent'){ab++;mk++}}
-  const goal=N-ab,summit=mk===N&&nj===0&&goal>0,fresh=key!==twKey||!twPrev;
+  for(const s of students){const st=statusOf(s,att);if(st==='present'){h++;mk++}else if(st==='nojump'){nj++;mk++}else if(st==='absent'){ab++;mk++}}
+  const goal=N-ab-nj,summit=mk===N&&goal>0,fresh=key!==twKey||!twPrev;
   if(key!==twKey){T.configure(N,src.canvas);twKey=key}
   if(fresh){T.unreveal();T.sync(h,goal,{quiet:true});if(summit)T.reveal(false)}
   else{
     if(!summit&&T.on())T.unreveal();
-    T.sync(h,goal,{collapse:nj>twPrev.nj});
+    T.sync(h,goal,{});
     if(summit&&!T.on())T.reveal(true);
   }
   if(!twPrev||twPrev.h!==h){const c=$('twCount');c.textContent=h;c.classList.remove('bump');void c.offsetWidth;c.classList.add('bump')}
   $('twGoal').textContent=goal;
   twPrev={h,nj,goal,summit,mk};
-  if(summit&&T.revealed)banner('win',`<div class="tb-t">You reached the top!</div><div class="tb-s">All ${goal} layers stacked</div><button class="tb-joke" data-act="joke">🎬 ${fmtEsc(prefs.videoTitle||'Joke of the Day')}</button>`);
-  else if(mk===N&&!summit)banner('fell',`<div class="tb-t">The tower fell</div><div class="tb-s">${nj} no-jump${nj>1?'s':''} · ${h} of ${goal} layers standing</div><button class="ctrl-btn" data-act="redo" style="font-size:1rem;padding:8px 18px">🔄 Build it again</button>`);
+  if(summit&&T.revealed)banner('win',`<div class="tb-t">You reached the top!</div><div class="tb-s">All ${goal} layers stacked</div><button class="tb-joke" data-act="joke">🎬 ${fmtEsc(prefs.videoTitle||'Clip of the Day')}</button>`);
+  else if(false)banner('fell',`<div class="tb-t">The tower fell</div><div class="tb-s">${nj} no-jump${nj>1?'s':''} · ${h} of ${goal} layers standing</div><button class="ctrl-btn" data-act="redo" style="font-size:1rem;padding:8px 18px">🔄 Build it again</button>`);
   else banner(null);
   try{cloudsSync(students,att)}catch(e){console.warn(e)}
 }
@@ -8442,7 +8449,7 @@ $('towerSetupBtn').addEventListener('click',()=>openSetup());
 $('towerSetupBtn2').addEventListener('click',()=>openSetup());
 $('towerBanner').addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;if(b.dataset.act==='joke')openJoke(false);else if(b.dataset.act==='redo')redoAttendance()});
 
-/* ---------- joke video ---------- */
+/* ---------- clip video ---------- */
 let jokeUrl='';
 function frame(src){const f=document.createElement('iframe');f.src=src;f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';f.allowFullscreen=true;f.referrerPolicy='strict-origin-when-cross-origin';return f}
 function embedFor(u){
@@ -8462,11 +8469,11 @@ async function jokeSource(useDraft){
 }
 async function openJoke(useDraft){
   await loadPrefs();const src=await jokeSource(useDraft);
-  if(!src){toast('Add a joke video first');if(!useDraft)openSetup(true);return}
+  if(!src){toast('Add a clip video first');if(!useDraft)openSetup(true);return}
   closeJoke();let el;
   if(src.blob){jokeUrl=URL.createObjectURL(src.blob);el=document.createElement('video');el.src=jokeUrl;el.controls=true;el.autoplay=true;el.playsInline=true}
   else el=embedFor(src.url);
-  $('tvTitle').textContent='🎬 '+((useDraft?$('twVidTitle').value.trim():prefs.videoTitle)||'Joke of the Day');
+  $('tvTitle').textContent='🎬 '+((useDraft?$('twVidTitle').value.trim():prefs.videoTitle)||'Clip of the Day');
   $('tvBox').appendChild(el);$('towerVideoModal').classList.add('open');
 }
 function closeJoke(){const m=$('towerVideoModal');if(!m)return;m.classList.remove('open');$('tvBox').innerHTML='';if(jokeUrl){URL.revokeObjectURL(jokeUrl);jokeUrl=''}}
@@ -8506,7 +8513,7 @@ async function openSetup(focusVideo){
 }
 function closeSetup(){$('towerSetupModal').classList.remove('open');demoSeq++;if(demo)demo.stop()}
 async function saveSetup(){
-  prefs.on=$('twOn').checked;prefs.scene=draft.scene;prefs.imgData=draft.imgData;prefs.videoTitle=$('twVidTitle').value.trim()||'Joke of the Day';
+  prefs.on=$('twOn').checked;prefs.scene=draft.scene;prefs.imgData=draft.imgData;prefs.videoTitle=$('twVidTitle').value.trim()||'Clip of the Day';
   if(draftFile){await kput('video',{blob:draftFile,name:draftFile.name,size:draftFile.size});prefs.videoFile=true;prefs.videoUrl=''}
   else if(draftRemove){await kdel('video');prefs.videoFile=false;prefs.videoUrl=$('twVidUrl').value.trim()}
   else if(!hadMeta)prefs.videoUrl=$('twVidUrl').value.trim();
@@ -8549,7 +8556,8 @@ window.RRTowerDebug={sync:towerSync,get TW(){return TW},prefs};
   const nameOf=s=>{const f=(s.firstName||s.name||'').trim(),l=(s.lastName||'').trim();return l?l+', '+f:f};
   function absentOf(r){const o={};try{const att=attendance[getAttendanceKey(r.id)];if(att&&att.records)att.records.forEach(x=>{if(x.status==='absent')o[x.studentId]=1})}catch(e){}return o}
   function find(id){id=String(id);for(const r of rosters)for(const s of r.students)if(uid(s)===id)return{r,s};return null}
-  let dirty=false;
+  let dirty=false,rtm=null;
+  function softRender(){clearTimeout(rtm);rtm=setTimeout(()=>{try{renderAttendance();if(typeof renderGroups==='function')renderGroups()}catch(e){}},400)}
   window.RRBridge={
     snapshot(){
       const classes=[];let sig='';
@@ -8562,8 +8570,13 @@ window.RRTowerDebug={sync:towerSync,get TW(){return TW},prefs};
       }
       return{sig,classes};
     },
-    setPoints(id,v){const f=find(id);if(!f)return;f.s.points=Math.max(0,Math.round(v)||0);dirty=true;dbPut('rosters',f.r);if(window.RRAuth&&RRAuth.scheduleSync)RRAuth.scheduleSync()},
-    setLeader(id,v){const f=find(id);if(!f)return;f.s.isLeader=!!v;dirty=true;dbPut('rosters',f.r)},
+    setPoints(id,v){const f=find(id);if(!f)return;f.s.points=Math.max(0,Math.round(v)||0);dirty=true;dbPut('rosters',f.r);softRender();if(window.RRAuth&&RRAuth.scheduleSync)RRAuth.scheduleSync()},
+    setLeader(id,v){const f=find(id);if(!f)return;f.s.isLeader=!!v;dirty=true;dbPut('rosters',f.r);softRender()},
+    setName(id,v){const f=find(id);if(!f)return;v=String(v||'').trim();if(!v)return;let fn,ln;
+      if(v.indexOf(',')>=0){const a=v.split(',');ln=a[0].trim();fn=a.slice(1).join(',').trim()}
+      else{const w=v.split(/\s+/);fn=w[0];ln=w.length>1?w.slice(1).join(' '):(f.s.lastName||'')}
+      if(!fn)return;f.s.firstName=fn;f.s.name=fn;f.s.lastName=ln;dirty=true;dbPut('rosters',f.r);
+      if(window.RRAuth&&RRAuth.saveStudentMeta)RRAuth.saveStudentMeta(f.s);softRender()},
     client(){return window.RRAuth&&RRAuth.client?RRAuth.client():null},
     user(){return window.RRAuth?RRAuth.user:null}
   };

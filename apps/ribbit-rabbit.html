@@ -1283,6 +1283,22 @@ html,body,body *,input,button,select,textarea{font-family:'Patrick Hand','Comic 
 .student-name small,.rb-name small,.group-student-name small,.absent-chip small,.cloud small{margin-left:.3em}
 .leader-frog{filter:none!important}
 </style>
+<style id="compact-board">
+#champBoard.compact .champ-card>*:not(.champ-head){display:none!important}
+#champBoard.compact .champ-card{padding:6px 16px!important;min-height:0!important;height:auto!important;flex:0 0 auto!important;width:auto!important;min-width:0!important}
+#champBoard.compact{gap:6px!important;grid-template-columns:repeat(auto-fill,minmax(90px,max-content))!important}
+#champToggle{margin:4px 0;padding:4px 12px;border-radius:999px;border:1px solid #4a3a85;background:#221748;color:#fff;cursor:pointer}
+</style>
+<script>(function(){var K='kid-zoom',z=1;try{z=parseFloat(localStorage.getItem(K))||1}catch(e){}
+function ap(){z=Math.min(3,Math.max(.5,Math.round(z*100)/100));document.documentElement.style.zoom=z;try{localStorage.setItem(K,String(z))}catch(e){}}
+ap();
+addEventListener('keydown',function(e){if(!(e.ctrlKey||e.metaKey))return;var k=e.key;if(k==='+'||k==='='){z+=.1}else if(k==='-'||k==='_'){z-=.1}else if(k==='0'){z=1}else return;e.preventDefault();ap()},true);
+addEventListener('wheel',function(e){if(!(e.ctrlKey||e.metaKey))return;e.preventDefault();z+=e.deltaY<0?.05:-.05;ap()},{passive:false});})();</script>
+<script>(function(){var K='rr_champOpen';function init(){var b=document.getElementById('champBoard');if(!b||document.getElementById('champToggle'))return;
+var t=document.createElement('button');t.id='champToggle';
+function set(o){b.classList.toggle('compact',!o);t.textContent=o?'▾ Hide scores':'▸ Show scores';try{localStorage.setItem(K,o?'1':'0')}catch(e){}}
+t.addEventListener('click',function(){set(b.classList.contains('compact'))});b.parentNode.insertBefore(t,b);var o=false;try{o=localStorage.getItem(K)==='1'}catch(e){}set(o)}
+if(document.readyState!=='loading')init();else document.addEventListener('DOMContentLoaded',init)})();</script>
 </head>
 <body style="zoom: 125%;">
 <div id="appBar"><button class="ab on" data-t="rr" type="button">🐸 Ribbit Rabbit</button><button class="ab" data-t="ll" type="button">⭐ Leader Locator</button></div>

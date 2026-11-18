@@ -333,6 +333,64 @@ function markNow() {
     el.classList.toggle('now', !!(isToday && r && mins >= r[0] && mins < r[1]));
   });
 }
+/* ---- now / next: follow the real clock, and a draggable countdown that shows on every Lily Path tab ---- */
+function schedNow() {
+  const d = new Date(), mins = d.getHours() * 60 + d.getMinutes() + d.getSeconds() / 60;
+  if (d.getDay() < 1 || d.getDay() > 5) return null;
+  const rs = S.periods.map(p => ({ p, r: parseRange(p.time) })).filter(x => x.r).sort((x, y) => x.r[0] - y.r[0]);
+  const cur = rs.find(x => mins >= x.r[0] && mins < x.r[1]);
+  const nxt = rs.find(x => x.r[0] > mins);
+  return { mins, cur, nxt };
+}
+let lastNowPid = null;
+function followClock(force) {
+  const n = schedNow(); if (!n) return;
+  const pid = n.cur ? n.cur.p.id : (n.nxt ? 'n' + n.nxt.p.id : 'none');
+  if (!force && pid === lastNowPid) return;
+  lastNowPid = pid;
+  const d = new Date(), editing = document.activeElement && document.activeElement.matches('input,textarea');
+  if (!editing) { S.wk = mondayOf(d); S.day = DAYS[d.getDay() - 1][0]; renderToday(); }
+  document.querySelectorAll(".period.next").forEach(e => e.classList.remove("next"));
+  if (n.nxt) { const e = $(`.period[data-pid="${n.nxt.p.id}"]`); if (e) e.classList.add('next'); }
+  const nowEl = n.cur && $(`.period[data-pid="${n.cur.p.id}"]`);
+  let onToday = true; try { onToday = active === TODAY_TAB; } catch (e) {}
+  if (nowEl && onToday) nowEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+}
+const fmtLeft = s => { s = Math.max(0, Math.ceil(s)); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60; return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(x).padStart(2, '0'); };
+(function periodClock() {
+  const el = document.createElement('div'); el.id = 'pclock';
+  el.innerHTML = '<div class="pc-top"><span class="pc-lbl"></span><button class="pc-x" title="Hide">–</button></div><div class="pc-time"></div><div class="pc-next"></div>';
+  document.body.appendChild(el);
+  let pos = null; try { pos = JSON.parse(localStorage.getItem('lily-pclock-pos') || 'null'); } catch (e) {}
+  const place = () => { if (pos) { el.style.left = Math.min(Math.max(0, pos.x), innerWidth - 60) + 'px'; el.style.top = Math.min(Math.max(0, pos.y), innerHeight - 40) + 'px'; el.style.right = 'auto'; } };
+  place(); addEventListener('resize', place);
+  let mini = false; try { mini = localStorage.getItem('lily-pclock-mini') === '1'; } catch (e) {}
+  const applyMini = () => el.classList.toggle('mini', mini);
+  applyMini();
+  el.querySelector('.pc-x').onclick = e => { e.stopPropagation(); mini = !mini; applyMini(); try { localStorage.setItem('lily-pclock-mini', mini ? '1' : '0'); } catch (e2) {} };
+  let dr = null;
+  el.addEventListener('pointerdown', e => { if (e.target.closest('button')) return; const r = el.getBoundingClientRect(); dr = { dx: e.clientX - r.left, dy: e.clientY - r.top }; el.setPointerCapture(e.pointerId); el.classList.add('drag'); });
+  el.addEventListener('pointermove', e => { if (!dr) return; pos = { x: e.clientX - dr.dx, y: e.clientY - dr.dy }; place(); });
+  const end = () => { if (!dr) return; dr = null; el.classList.remove('drag'); try { localStorage.setItem('lily-pclock-pos', JSON.stringify(pos)); } catch (e) {} };
+  el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
+  const tick = () => {
+    const n = schedNow(), lbl = el.querySelector('.pc-lbl'), tm = el.querySelector('.pc-time'), nx = el.querySelector('.pc-next');
+    el.classList.remove('low');
+    if (!n || (!n.cur && !n.nxt)) { lbl.textContent = n ? 'School day done' : 'No school today'; tm.textContent = '–'; nx.textContent = ''; return; }
+    if (n.cur) {
+      const left = (n.cur.r[1] - n.mins) * 60; lbl.textContent = n.cur.p.label + ' ends in'; tm.textContent = fmtLeft(left);
+      el.classList.toggle('low', left <= 300);
+      nx.textContent = n.nxt ? 'Next: ' + n.nxt.p.label + (n.nxt.p.cls ? ' · ' + n.nxt.p.cls.split('·')[0].trim() : '') : 'Last period';
+    } else {
+      lbl.textContent = n.nxt.p.label + ' starts in'; tm.textContent = fmtLeft((n.nxt.r[0] - n.mins) * 60);
+      nx.textContent = n.nxt.p.cls ? n.nxt.p.cls.split('·')[0].trim() : '';
+    }
+    followClock(false);
+  };
+  setInterval(tick, 1000); tick();
+})();
+addEventListener('DOMContentLoaded', () => followClock(true));
+setTimeout(() => followClock(true), 400);
 setInterval(markNow, 30000);
 
 function urlItem(u) {

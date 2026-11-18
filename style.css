@@ -358,3 +358,16 @@ body.tabdrag .dropz{display:flex;pointer-events:auto}
 .wknav{display:flex;align-items:center;gap:6px;color:#fff;font-weight:700;font-size:13px}
 .wknav button{background:rgba(255,255,255,.2);color:#fff;border-radius:9px;padding:5px 10px;font-weight:700}
 .wknav button:hover{background:rgba(255,255,255,.34)}
+
+/* floating period countdown */
+#pclock{position:fixed;top:54px;right:14px;z-index:9999;min-width:132px;padding:8px 12px;border-radius:14px;background:rgba(20,16,40,.92);color:#fff;box-shadow:0 6px 22px rgba(0,0,0,.35);border:1.5px solid rgba(255,255,255,.18);cursor:grab;user-select:none;touch-action:none;font-family:inherit}
+#pclock.drag{cursor:grabbing;opacity:.9}
+#pclock .pc-top{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:11px;opacity:.8}
+#pclock .pc-x{all:unset;cursor:pointer;padding:0 6px;font-size:14px;line-height:1}
+#pclock .pc-time{font-size:30px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+#pclock .pc-next{font-size:11px;opacity:.75;max-width:190px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#pclock.low .pc-time{color:#ff6b6b}
+#pclock.mini{min-width:0;padding:4px 10px}
+#pclock.mini .pc-lbl,#pclock.mini .pc-next{display:none}
+#pclock.mini .pc-time{font-size:18px}
+.period.next{outline:2px dashed var(--c,#888);outline-offset:2px}

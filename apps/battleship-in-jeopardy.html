@@ -2056,6 +2056,15 @@ function pubClass(n){try{const at=Date.now();_ccAt=at;localStorage.setItem('lily
 
 /* ---------- auto-import groups made in Leader Locator (same browser) ---------- */
 function gradeForClass(n){n=String(n||'').trim();if(/^k/i.test(n))return 0;const m=n.match(/\d/);return m?Math.min(10,+m[0]):3;}
+/* closest squad colour to a hex from Leader Locator; each squad gets its own slot */
+function nearestCi(hex,used){
+  const m=/^#?([0-9a-f]{6})$/i.exec(String(hex||''));if(!m)return -1;
+  const n=parseInt(m[1],16),r=n>>16,g=(n>>8)&255,bl=n&255;
+  let best=-1,bd=1e9;
+  for(let i=0;i<MAX_TEAMS;i++){if(used.has(i))continue;const c=parseInt(teamColor(i).slice(1),16);
+    const d=(r-(c>>16))**2+(g-((c>>8)&255))**2+(bl-(c&255))**2;if(d<bd){bd=d;best=i;}}
+  if(best>=0)used.add(best);return best;
+}
 function importHandoff(){
   let h=null;try{h=JSON.parse(localStorage.getItem('lily-groups-handoff')||'null');}catch(e){}
   if(!h||!h.classes)return false;
@@ -2067,7 +2076,8 @@ function importHandoff(){
     const name=cleanName(cls).slice(0,24)||'Class 1';
     const old=store.get('bj3-setup-'+name,null);
     const gr=old&&Array.isArray(old.teams)&&old.teams[0]?Math.max(0,Math.min(10,+old.teams[0].grade||0)):gradeForClass(name);
-    const teams=v.teams.slice(0,MAX_TEAMS).map(x=>({name:cleanName(x.name).slice(0,28)||'Squad',grade:gr,members:(x.members||[]).map(String)}));
+    const used=new Set();
+    const teams=v.teams.slice(0,MAX_TEAMS).map(x=>({name:cleanName(x.name).slice(0,28)||'Squad',grade:gr,members:(x.members||[]).map(String),ci:nearestCi(x.color,used)}));
     if(!meta.list.includes(name))meta.list.push(name);
     store.set('bj3-setup-'+name,{teams,cfg:old&&old.cfg?old.cfg:{...DEF_CFG}});
     seen[cls]=v.at||Date.now();changed=true;

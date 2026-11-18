@@ -70,7 +70,7 @@ function seed() {
   return {
     day: defaultDay(),
     periods, plan,
-    seedV: 10,
+    seedV: 11,
     lib: seedLib(),
   };
 }
@@ -90,6 +90,16 @@ if (S.seedV < 8) { const fresh = seedLib(); for (const id of ['a0', 'a1', 'a2'])
 if (S.seedV < 9) { const o = S.lib.find(i => i.id === 'a8'), n = seedLib().find(i => i.id === 'a8'); if (o && n && /Battleship-in-Jeopardy\/?$/i.test(o.url || '')) { o.url = n.url; o.local = n.local; } S.seedV = 9; }
 /* v10: Ribbit Rabbit and Leader Locator are separate tabs now; only the combined Ribbit-Leader tab embeds Leader Locator */
 if (S.seedV < 10) { const fresh = seedLib(); for (const id of ['a0']) { const o = S.lib.find(i => i.id === id), n = fresh.find(i => i.id === id); if (o && o.seeded && n) { o.url = n.url; o.local = n.local; } } S.seedV = 10; }
+/* v11: make sure Ribbit Rabbit and Leader Locator both have their own tab (put back if one was removed or never added) */
+if (S.seedV < 11) {
+  const fresh = seedLib();
+  for (const id of ['a1', 'a2']) {
+    const n = fresh.find(i => i.id === id);
+    const has = S.lib.some(i => i.id === id || (n && n.local && (i.local || '') === n.local));
+    if (!has && n) { const k = S.lib.findIndex(i => i.id === (id === 'a2' ? 'a1' : 'a0')); S.lib.splice(k < 0 ? 0 : k + 1, 0, n); }
+  }
+  S.seedV = 11;
+}
 if (!S.at) S.at = FRESH ? 0 : Date.now();
 let syncSoon = () => {};
 const save = () => { S.at = Date.now(); try { localStorage.setItem(KEY, JSON.stringify({ ...S, wk: undefined, lib: S.lib.filter(i => !i.blob && !i.temp) })); } catch (e) {} syncSoon(); };

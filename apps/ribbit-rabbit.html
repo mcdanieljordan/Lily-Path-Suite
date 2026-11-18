@@ -3229,7 +3229,7 @@ async function init(){
   await loadFolders();
   const al=await dbGet('settings','autoLevel');if(al)autoLevel=al.value!==false;
   {const t=document.getElementById('autoLevelToggle');if(t)t.checked=autoLevel}
-  {const a=await dbGet('settings','schoolCal');if(a&&a.value)schoolCal=a.value;const b=await dbGet('settings','calEvents');if(b&&Array.isArray(b.value))calEvents=b.value;const c=await dbGet('settings','showAllAbsent');showAllAbsent=!!(c&&c.value);renderCalStatus();renderAttInfo();syncSeeAbsentBtn()}
+  {const a=await dbGet('settings','schoolCal');if(a&&a.value)schoolCal=a.value;const b=await dbGet('settings','calEvents');if(b&&Array.isArray(b.value))calEvents=b.value;const c=await dbGet('settings','showAllAbsent');showAllAbsent=!!(c&&c.value);renderCalStatus();renderAttInfo();syncSeeAbsentBtn()};await autoBasisCal()
   const qb=await dbGet('settings','quickbarSlots');if(qb)quickbarSlots=qb.value||{};
   const lv=await dbGet('settings','soundListView');if(lv)soundViewMode=lv.value?'list':'grid';
   const ro=await dbGet('settings','randomOrders');if(ro)randomOrders=ro.value||{};
@@ -5767,6 +5767,33 @@ function renderAttInfo(){
 }
 function openCalendar(date){const d=date||dISO(new Date());calMonth=d.slice(0,7);calSel={a:d,b:d};openModal('calModal');renderCal()}
 function calSelDates(){if(!calSel.a)return[];const[a,b]=[calSel.a,calSel.b||calSel.a].sort();const out=[];for(let d=a;d<=b;d=dAdd(d,1))out.push(d);return out}
+/* BASIS Cedar Park 2026-27 academic calendar, loaded automatically unless you have put in your own */
+const BASIS_CP_CAL={school_year:'2026-2027',first_day:'2026-08-11',last_day:'2027-05-28',src:'basis-cp-2026-27',days_off:[
+  {start:'2026-09-07',end:'2026-09-07',name:'Labor Day',type:'holiday'},
+  {start:'2026-09-28',end:'2026-09-28',name:'Student Holiday / Staff Work Day',type:'no_school'},
+  {start:'2026-10-12',end:'2026-10-16',name:'Fall Break',type:'break'},
+  {start:'2026-11-23',end:'2026-11-27',name:'Thanksgiving Break',type:'break'},
+  {start:'2026-12-21',end:'2027-01-01',name:'Winter Break',type:'break'},
+  {start:'2027-01-04',end:'2027-01-04',name:'Student Holiday / Staff Work Day',type:'no_school'},
+  {start:'2027-01-18',end:'2027-01-18',name:'MLK Day',type:'holiday'},
+  {start:'2027-02-15',end:'2027-02-15',name:"Presidents' Day",type:'holiday'},
+  {start:'2027-03-08',end:'2027-03-12',name:'Spring Break',type:'break'},
+  {start:'2027-04-23',end:'2027-04-23',name:'Student & Teacher Holiday / NTS Workday',type:'no_school'},
+  {start:'2027-05-31',end:'2027-05-31',name:'Memorial Day',type:'holiday'}],
+ events:[['2026-08-11','First Day of School'],['2026-10-09','End of Quarter 1'],['2026-12-18','Early Release (Winter Break)'],['2027-01-08','End of Quarter 2'],['2027-03-19','End of Quarter 3'],['2027-05-25','Term Projects'],['2027-05-26','Term Projects'],['2027-05-27','Term Projects'],['2027-05-28','End of Quarter 4 · Last Day of School']]};
+async function autoBasisCal(){
+  try{
+    const mine=schoolCal&&(schoolCal.first_day||(schoolCal.days_off||[]).length)&&schoolCal.src!==BASIS_CP_CAL.src;
+    if(mine)return;
+    const have=calEvents.some(e=>e.src==='basis-cp');
+    if(schoolCal.src===BASIS_CP_CAL.src&&have)return;
+    const {events,...cal}=BASIS_CP_CAL;
+    schoolCal=cal;
+    calEvents=calEvents.filter(e=>e.src!=='basis-cp');
+    events.forEach(([d,t])=>calEvents.push({id:uid(),date:d,type:'event',title:t,note:'',src:'basis-cp'}));
+    await dbPut('settings',{key:'schoolCal',value:schoolCal});await saveCal();renderCalStatus();
+  }catch(e){console.warn('school calendar auto-load failed',e)}
+}
 async function saveCal(){await dbPut('settings',{key:'calEvents',value:calEvents});renderAttInfo()}
 function renderCal(){
   const[y,m]=calMonth.split('-').map(Number),first=new Date(y,m-1,1),obs=observancesInMonth(y,m);
@@ -5825,7 +5852,7 @@ function renderCalStatus(){
   const el=document.getElementById('calStatus');if(!el)return;
   if(!schoolCal.first_day&&!(schoolCal.days_off||[]).length){el.textContent='No calendar loaded yet.';return}
   let total=0;if(schoolCal.first_day&&schoolCal.last_day)for(let d=schoolCal.first_day;d<=schoolCal.last_day;d=dAdd(d,1))if(isSchoolDay(d))total++;
-  el.textContent=`✓ ${schoolCal.school_year||'Calendar'} loaded · {total?' · '+total+' school days':''}`;
+  el.textContent=`✓ ${schoolCal.school_year||'Calendar'} loaded${total?' · '+total+' school days':''}`;
 }
 async function applyCalJson(){
   const st=document.getElementById('calStatus'),txt=document.getElementById('calJsonIn').value,i=txt.indexOf('{'),j=txt.lastIndexOf('}');

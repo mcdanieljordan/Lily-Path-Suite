@@ -1507,6 +1507,10 @@ const LADDER=[[-1,1],[0,0],[0,2],[0,3],[1,1]];
    for the grades in play. If the table is missing, empty or unreachable the built-in questions are used, so a game never waits or breaks. */
 const QB_URL='https://aiczpuoskwzqtzvoomll.supabase.co/rest/v1/question_bank';
 const QB_SUBJ={math:'Mathematics',sci:'Science',ela:'English Language Arts and Reading',hist:'Social Studies'};
+/* the question bank files Music, Art and Theatre together as Fine Arts; every other subject uses the same name as the standards table */
+const QB_ALIAS={Music:'Fine Arts',Art:'Fine Arts',Theatre:'Fine Arts'};
+const qbSubj=s=>QB_ALIAS[s]||s;
+const QB_HAS=new Set(['Mathematics','Science','English Language Arts and Reading','Social Studies','Physical Education','Health Education','Technology Applications','Music','Art','Theatre','Spanish Language Arts and English as a Second Language']);
 const QB_ROW_D=[3,2,3,4,2];   /* target difficulty (1-5) for the five rows; row 1 comes from the grade below, row 5 previews the grade above */
 const QB={sets:{},seen:{},tries:{},q:[],run:false,off:false};
 const qbK=(s,g)=>s+'|'+g;
@@ -1529,7 +1533,7 @@ function qbPump(){
 function qbWarm(){
   try{
     const gs=[...new Set((G&&G.teams?G.teams:(setup&&setup.teams)||[]).map(t=>+t.grade||0))],subs=Object.values(QB_SUBJ);
-    CATS.forEach(c=>(c.tk||[]).forEach(t=>qbLoad(t.s,t.g)));
+    CATS.forEach(c=>(c.tk||[]).forEach(t=>qbLoad(qbSubj(t.s),t.g)));
     gs.forEach(g=>subs.forEach(s=>qbLoad(s,g)));
     gs.forEach(g=>subs.forEach(s=>{qbLoad(s,g-1);qbLoad(s,g+1);}));
   }catch(e){}
@@ -1714,8 +1718,8 @@ const TK_URL='https://aiczpuoskwzqtzvoomll.supabase.co/rest/v1/teks_game';
 const TK_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFpY3pwdW9za3d6cXR6dm9vbWxsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4MzczNjgsImV4cCI6MjEwNDQxMzM2OH0.ttZE_4PrGb7qCJjcOKdahv4lH02JrWR4BpePsXC4gpA';
 /* [database subject, name shown, practice-question bank key or null] */
 const TK_SUBJ=[['Mathematics','Math','math'],['Science','Science','sci'],['English Language Arts and Reading','Reading & Language Arts','ela'],['Social Studies','Social Studies','hist'],
-  ['Physical Education','Physical Education',null],['Health Education','Health',null],['Technology Applications','Technology',null],['Music','Music',null],['Art','Art',null],['Theatre','Theatre',null]];
-const TK_SHORT={'Mathematics':'Math','Science':'Science','English Language Arts and Reading':'Reading','Social Studies':'Soc. Studies','Physical Education':'PE','Health Education':'Health','Technology Applications':'Tech','Music':'Music','Art':'Art','Theatre':'Theatre'};
+  ['Physical Education','Physical Education',null],['Spanish Language Arts and English as a Second Language','Spanish',null],['Health Education','Health',null],['Technology Applications','Technology',null],['Music','Music',null],['Art','Art',null],['Theatre','Theatre',null]];
+const TK_SHORT={'Spanish Language Arts and English as a Second Language':'Spanish','Mathematics':'Math','Science':'Science','English Language Arts and Reading':'Reading','Social Studies':'Soc. Studies','Physical Education':'PE','Health Education':'Health','Technology Applications':'Tech','Music':'Music','Art':'Art','Theatre':'Theatre'};
 const TK_ABBR={'Developing and sustaining foundational language skills':'Foundational language skills','Mathematical process standards':'Math processes','Scientific and engineering practices':'Science practices',
   'Injury and violence prevention and safety':'Safety & injury prevention','Movement patterns and movement skills':'Movement skills','Health, physical activity, and fitness':'Fitness & health',
   'Social and emotional health':'Social & emotional','Alcohol, tobacco, and other drugs':'Alcohol, tobacco & drugs','Healthy eating and physical activity':'Healthy eating & activity',
@@ -1846,7 +1850,7 @@ function tkQuestion(col,row,avoid){
   const t=col.tk[row],bk=tkBank(t.s);
   if(col.qm==='judge')return tkJudged(col,row);
   const g=Math.max(0,Math.min(10,t.g));
-  {const bq=qbPick(t.s,g,row,t.c,avoid);if(bq){bq.grade=g;bq.row=row;bq.teks={c:t.c,g:t.g,s:t.s,t:t.t};return bq;}}
+  {const bq=qbPick(qbSubj(t.s),g,row,t.c,avoid);if(bq){bq.grade=g;bq.row=row;bq.teks={c:t.c,g:t.g,s:t.s,t:t.t};return bq;}}
   if(!bk)return tkJudged(col,row);
   const q=bk==='math'?build(buildMath(g,[0,1,2,3,3][row])):build(dec(BANK[g][bk][row%4]));
   q.grade=g;q.row=row;q.teks={c:t.c,g:t.g,s:t.s,t:t.t};
@@ -1936,7 +1940,7 @@ function tkRender(){
   pool.forEach(r=>{const k=tkGk(r);if(!gm.has(k))gm.set(k,{k,lab:tkLab(r),sens:tkSens(r),n:0,gs:new Set()});const g=gm.get(k);g.n++;g.gs.add(r.g);});
   const groups=[...gm.values()].sort((a,b)=>b.gs.size-a.gs.size||b.n-a.n);
   const presets=[[T.cg,T.cg,'My class (Gr '+tkGl(T.cg)+')'],[0,2,'K–2'],[3,5,'3–5'],[0,5,'K–5'],[6,8,'6–8']];
-  const noBank=T.subj==='*'||!tkBank(T.subj);
+  const noBank=T.subj==='*'||!(tkBank(T.subj)||QB_HAS.has(T.subj));
   let body='';
   if(T.err)body=`<p class="note" role="alert" style="font-size:18px">${esc(T.err)}</p><div class="row2"><button class="btn" data-tk="retry">Try again</button></div>`;
   else if(T.busy)body='<p class="note" style="font-size:20px">Loading TEKS…</p>';
@@ -2109,7 +2113,7 @@ function renderSetup(){
       <select id="clsSel" style="width:auto;min-width:180px">${meta.list.map(n=>`<option value="${esc(n)}" ${n===meta.current?'selected':''}>${esc(n)}</option>`).join('')}<option value="__new">＋ New class…</option></select>
       <button class="ibtn wide${Voice.on?' live':''}" data-act="voice" aria-pressed="${Voice.on}">${ICON.mic}<span class="vlab">Voice ${Voice.on?'on':'off'}</span></button><button class="ibtn wide" data-act="sound">Sound ${Snd.on?'on':'off'}</button>
     </div></div>
-    <p class="hero">Answer to load your ammo. Land a shot on a hidden fleet. When your ship takes a hit, answer to repair the damage.</p>
+    <p class="hero">Answer to load your ammo. Land a shot on a hidden fleet. When your ship takes a hit, answer to repair it on your next turn.</p>
     ${resume}
     ${boardsCard()}
     <div class="grid2">
@@ -2123,7 +2127,7 @@ function renderSetup(){
       <div class="stack">
         <div class="card"><h3>Rules</h3>
           <div class="field"><span class="lbl">Life points per squad</span>${seg('hp',[400,800,1200,2000],c.hp)}<p class="note" id="perShip" style="margin-top:6px"></p></div>
-          <div class="field"><span class="lbl">Repair: a right answer heals</span>${seg('repairPct',[50,75,100],c.repairPct,v=>v+'%')}<p class="note" style="margin-top:6px">of the damage the hit squad just took.</p></div>
+          <div class="field"><span class="lbl">Repair: a right answer heals</span>${seg('repairPct',[50,75,100],c.repairPct,v=>v+'%')}<p class="note" style="margin-top:6px">of the damage the hit squad took, answered on that squad's next turn.</p></div>
           <div class="field"><span class="lbl">Question timer</span>${seg('timer',[20,30,45,60,0],c.timer,v=>v?v+'s':'Off')}</div>
           ${tgl('tLast','Last-chance repair: a ship at 0 HP can be saved',c.lastChance)}
           ${tgl('tChal','Teacher challenge before each question',c.challenge)}
@@ -2148,7 +2152,7 @@ function renderSetup(){
       <div><b>Challenge</b>You judge it. Done unlocks the question.</div>
       <div><b>Load ammo</b>Answer it. Fast answers hit harder.</div>
       <div><b>Fire</b>Call a square on their hidden fleet.</div>
-      <div><b>Repair</b>The hit squad answers to heal the damage.</div>
+      <div><b>Repair</b>A hit squad answers to heal the damage when its own turn comes up.</div>
     </div>`;
   $('#selEnd').value=c.end;
   renderTeams();perShip();
@@ -2290,14 +2294,20 @@ function resumeGame(){
 }
 
 /* ---------- rules: hits and repairs ---------- */
+function addPending(t,si,taken){
+  t.repairs=t.repairs||[];
+  const f=t.repairs.find(x=>x.si===si);
+  if(f)f.taken+=taken;else t.repairs.push({si,taken});
+}
 function resolveHit(t,si,dmg,lastChance){
-  const s=t.ships[si],before=s.hp,taken=Math.min(before,dmg);
+  const s=t.ships[si],before=s.hp,taken=Math.min(before,dmg),wasCrit=!!s.critical;
   s.hp=before-taken;
   let state='damaged',finishing=0;
-  if(s.hits>=s.len){finishing=s.hp;s.hp=0;s.sunk=true;state='holes';}
-  else if(s.hp<=0){if(lastChance){s.critical=true;state='critical';}else{s.sunk=true;state='sunk';}}
+  if(s.hits>=s.len){finishing=s.hp;s.hp=0;s.sunk=true;s.critical=false;state='holes';}
+  else if(s.hp<=0){if(lastChance&&!wasCrit){s.critical=true;state='critical';}else{s.sunk=true;s.critical=false;state='sunk';}}
   if(s.sunk)s.cells.forEach(([r,c])=>t.shots[r][c]='s');
   if(t.ships.every(x=>x.sunk))t.alive=false;
+  if(t.repairs)t.repairs=t.repairs.filter(x=>!t.ships[x.si].sunk);
   return{before,taken,state,finishing,eliminated:!t.alive};
 }
 function resolveRepair(t,si,ok,taken,pct){
@@ -2330,9 +2340,9 @@ function bannerHtml(t,sub){
   return`<div class="banner"><div class="proj">${badgeHtml(t,96,46)}</div><div style="min-width:0"><div class="bn-name" style="font-size:${fs}px">${esc(t.name)}</div><div class="bn-sub">${sub}</div></div></div>`;
 }
 function shipsHtml(t){
-  return t.ships.map(s=>{
-    const pct=Math.round(s.hp/s.maxHp*100);
-    return`<div class="shp${s.sunk?' sunk':''}"><div class="row"><span>${esc(s.name)}</span><span>${s.sunk?'sunk':s.hp+'/'+s.maxHp}</span></div><div class="bar"><i style="width:${s.sunk?0:pct}%;background:${fillFor(pct)}"></i></div></div>`;
+  return t.ships.map((s,si)=>{
+    const pct=Math.round(s.hp/s.maxHp*100),pend=!s.sunk&&(t.repairs||[]).some(x=>x.si===si);
+    return`<div class="shp${s.sunk?' sunk':''}"><div class="row"><span>${esc(s.name)}${pend?' · repair pending':''}</span><span>${s.sunk?'sunk':s.hp+'/'+s.maxHp}</span></div><div class="bar"><i style="width:${s.sunk?0:pct}%;background:${fillFor(pct)}"></i></div></div>`;
   }).join('');
 }
 function leftHtml(t){
@@ -2459,7 +2469,7 @@ function openBoardSwitch(){
 function turnHtml(){
   const t=G.teams[G.turn];applyTheme(G.theme,t.color);
   const left=TILES-G.used.size,lim=G.cfg.end==='board'?1:G.cfg.end==='two'?2:0;
-  return topBar(`Board ${G.round}${lim?' of '+lim:''} · ${left} tile${left===1?'':'s'} left`)+bannerHtml(t,'Pick a tile!')+`<div class="cols">${leftHtml(t)}${boardHtml()}${standingsHtml()}</div>`;
+  return topBar(`Board ${G.round}${lim?' of '+lim:''} · ${left} tile${left===1?'':'s'} left`)+bannerHtml(t,(t.repairs||[]).some(x=>t.ships[x.si]&&!t.ships[x.si].sunk)?'Repair pending: answer it first, then fire. Pick a tile!':'Pick a tile!')+`<div class="cols">${leftHtml(t)}${boardHtml()}${standingsHtml()}</div>`;
 }
 /* effects level: the Look toggle, or automatic if this computer is too slow to animate smoothly */
 let autoLite=false,probed=false;
@@ -2501,7 +2511,10 @@ function openStrike(ci,row){
   S={atk,key,ci,row,value:(row+1)*100,surge:G.surge===key,step:'target',target:foes.length===1?foes[0]:null,mult:1,dmg:0,si:-1,shot:null,res:null,ammoQ:null,replQ:null,idea:pick(IDEAS),hit:null,rep:null};
   Snd.play('pick');if(S.surge)setTimeout(()=>Snd.play('surge'),180);
   Voice.say(CATS[ci].name+' '+S.value+(S.surge?', power surge':''));
-  goStep(S.target?(G.cfg.challenge?'challenge':'ammo'):'target');
+  S.after=S.target?(G.cfg.challenge?'challenge':'ammo'):'target';
+  const pr=(atk.repairs||[]).find(x=>atk.ships[x.si]&&!atk.ships[x.si].sunk);
+  if(pr){S.pre=pr;S.si=pr.si;Voice.say(atk.name+', repair first');goStep('repair');return;}
+  goStep(S.after);
 }
 function goStep(step){
   stopTimer();qHandle=null;S.step=step;
@@ -2525,7 +2538,8 @@ const ringHtml=secs=>secs?`<div class="cap">Timer</div><div class="ring"><svg wi
 function strikeHtml(){
   const atk=S.atk,tgt=S.target;
   const defenderTurn=S.step==='repair'||(S.step==='result'&&S.res&&S.res.type==='hit');
-  const team=defenderTurn&&tgt?tgt:atk;
+  const rtm=S.pre?atk:tgt;
+  const team=defenderTurn&&rtm?rtm:atk;
   applyTheme(G.theme,team.color);
   const top=topBar(`${esc(STEP_NAMES[S.step])}`);
   let sub='',left='',mid='',right='';
@@ -2559,17 +2573,17 @@ function strikeHtml(){
       <div class="chips" style="justify-content:center"><span class="chip pan">empty</span>${G.cfg.hints?'<span class="chip pan">yellow = ship next to it</span>':''}<span class="chip pan">red = hit</span><span class="chip pan">black = sunk</span></div>`;
     right=`<aside class="qright"><div class="cap">Result</div><div id="fireOut" aria-live="polite" style="font-size:24px;font-weight:700;line-height:1.25">Tap a square on the grid to fire.</div></aside>`;
   }else if(S.step==='repair'){
-    const sh=tgt.ships[S.si],h=S.hit;
+    const sh=rtm.ships[S.si],h=S.pre||S.hit;
     const secs=timer?Math.max(Math.min(15,timer),timer-5):0;
     const base=Math.round(sh.hp/sh.maxHp*100),pend=Math.round(Math.min(sh.maxHp-sh.hp,Math.max(5,r5(h.taken*G.cfg.repairPct/100)))/sh.maxHp*100);
-    sub=`${esc(atk.name)} hit your ${esc(sh.name)} for ${h.taken}. Answer to repair it!`;
+    sub=S.pre?`${esc(atk.name)}, your ${esc(sh.name)} took ${h.taken} damage. Repair it before you fire!`:`${esc(atk.name)} hit your ${esc(sh.name)} for ${h.taken}. Answer to repair it!`;
     left=`<aside class="qleft"><div class="cap">${sh.critical?'Last chance':'Direct hit'}</div><div class="big" style="font-size:44px">${esc(sh.name)}</div>
       <div style="font-size:28px;font-weight:700">${sh.hp} / ${sh.maxHp} HP</div>
       <div class="pendbar"><div style="width:${base}%;background:${fillFor(base)}"></div><div style="width:${pend}%;background:repeating-linear-gradient(45deg,rgba(var(--inkRgb),.75) 0 8px,rgba(var(--inkRgb),.3) 8px 16px)"></div></div>
       <div style="font-size:24px;font-weight:700;line-height:1.2">Answer right to repair up to +${Math.max(5,r5(h.taken*G.cfg.repairPct/100))} HP</div>
       ${sh.critical?'<div class="note-box">Last chance! At 0 HP this ship sinks unless you answer right.</div>':''}</aside>`;
     mid=`<div class="chips"><span class="chip solid">Repair question</span><span class="chip pan">${esc(CATS[S.ci].name)}</span></div>${qMid}`;
-    right=`<aside class="qright">${ringHtml(secs)}<div style="font-size:22px;font-weight:700;line-height:1.25;margin-top:6px">${esc(memberUp(tgt)?memberUp(tgt)+', you\'re up!':'Read it out loud, then pick a letter.')}</div></aside>`;
+    right=`<aside class="qright">${ringHtml(secs)}<div style="font-size:22px;font-weight:700;line-height:1.25;margin-top:6px">${esc(memberUp(rtm)?memberUp(rtm)+', you\'re up!':'Read it out loud, then pick a letter.')}</div></aside>`;
   }else{
     return resultHtml();
   }
@@ -2666,9 +2680,9 @@ function mountFire(){
       setTimeout(()=>{Snd.play(ship.sunk?'sunk':'hit');ship.sunk?FX.sunk(x,y):FX.hit(x,y);FX.shake($('#stage'));sea.classList.remove('punch','pull');void sea.offsetWidth;sea.classList.add(ship.sunk?'pull':'punch');Voice.say(ship.sunk?'Ship destroyed':'Direct hit');},280);
       log(`${S.atk.name} hits ${t.name}'s ${ship.name} at ${coord} for ${h.taken}.`,'hit');
       const goesRepair=!ship.sunk&&t.alive;
-      out.innerHTML=`<div class="fb no"><h3>Direct hit on the ${esc(ship.name)}!</h3><p>${h.taken} damage.${ship.sunk?(h.state==='holes'?' Every square is hit, so the hull collapses.':' The ship goes down.'):ship.critical?' It is at 0 HP: one answer can save it.':''}${goesRepair?` ${esc(t.name)} can repair by answering a question.`:''}</p></div>`;
-      nxt.textContent=goesRepair?`${t.name}: repair!`:'See the result';
-      nxt.onclick=()=>{Snd.play('click');S.res={type:'hit'};if(goesRepair)goStep('repair');else goStep('result');};
+      out.innerHTML=`<div class="fb no"><h3>Direct hit on the ${esc(ship.name)}!</h3><p>${h.taken} damage.${ship.sunk?(h.state==='holes'?' Every square is hit, so the hull collapses.':' The ship goes down.'):ship.critical?' It is at 0 HP: one answer can save it.':''}${goesRepair?` ${esc(t.name)} must answer a repair question on their next turn.`:''}</p></div>`;
+      nxt.textContent='See the result';
+      nxt.onclick=()=>{Snd.play('click');S.res={type:'hit'};if(goesRepair){addPending(t,res.si,h.taken);log(`${t.name}'s ${ship.name} needs repairs. They can answer for it on their turn.`,'warn');}goStep('result');};
     }else{
       paint(b,t.shots[r][c]);
       S.res={type:res.type};
@@ -2682,21 +2696,27 @@ function mountFire(){
 }
 
 function mountRepair(){
-  const t=S.target,tm=G.cfg.timer,secs=tm?Math.max(Math.min(15,tm),tm-5):0;
+  const t=S.pre?S.atk:S.target,tm=G.cfg.timer,secs=tm?Math.max(Math.min(15,tm),tm-5):0;
   if(!S.replQ)S.replQ=freshQuestion(S.ci,S.row,t.grade,S.ammoQ&&S.ammoQ.q);
-  const sh=t.ships[S.si],h=S.hit,crit=sh.critical;
+  const sh=t.ships[S.si],h=S.pre||S.hit,crit=sh.critical;
   mountQuestion(S.replQ,{
     seconds:secs,
-    contLabel:ok=>ok?(crit?'Saved! See the result':'Repaired! See the result'):(crit?'It sinks. See the result':'No repair. See the result'),
+    contLabel:ok=>S.pre?(ok?(crit?'Saved! Now pick your target':'Repaired! Now fire'):(crit?'It sinks. Keep going':'No repair. Now fire')):(ok?(crit?'Saved! See the result':'Repaired! See the result'):(crit?'It sinks. See the result':'No repair. See the result')),
     onDone:ok=>{
       t.stats.asked++;t.mi++;if(ok)t.stats.right++;
       const r=resolveRepair(t,S.si,ok,h.taken,G.cfg.repairPct);
       S.rep={ok,...r,crit};t.stats.healed+=r.heal;
-      if(S.rep.sunk)S.atk.stats.sunk++;
+      if(S.rep.sunk&&!S.pre)S.atk.stats.sunk++;
+      if(S.pre){t.repairs=(t.repairs||[]).filter(x=>x!==S.pre);}
       if(ok)Snd.play('deflect');
       Voice.say(ok?(crit?'Ship saved':'Repair complete'):(crit?'Ship lost':'Repair failed'));
       log(ok?`${t.name} repairs the ${sh.name}: +${r.heal} HP${crit?' and saves it from sinking':''}.`:`${t.name} fails to repair the ${sh.name}${crit?' and it sinks':''}.`,ok?'good':'warn');
       if(r.eliminated)log(`${t.name} has been eliminated!`,'hit');
+      if(S.pre){
+        S.pre=null;S.si=-1;S.replQ=null;S.rep=null;
+        if(!t.alive){S.res={type:'selfsunk'};goStep('result');return;}
+        goStep(S.after);return;
+      }
       goStep('result');
     }
   });
@@ -2706,6 +2726,7 @@ function resultHtml(){
   const r=S.res,t=S.target,atk=S.atk;let body='',title='',teamForColor=atk;
   if(r.type==='jam'){title='Challenge missed';body=`<p class="qtext" style="font-size:30px">No question this time. The tile stays on the board and the turn passes.</p>`;}
   else if(r.type==='misfire'){title='Misfire';body=`<p class="qtext" style="font-size:30px">A wrong answer means no shot. The tile is used up and the turn passes.</p>`;}
+  else if(r.type==='selfsunk'){title=`${esc(atk.name)} is eliminated!`;body=`<p class="qtext" style="font-size:30px">The repair failed and the last ship went down. The turn passes.</p>`;}
   else if(r.type==='miss'||r.type==='near'){title='No damage';body=`<p class="qtext" style="font-size:30px">${r.type==='near'?'Close! A ship is hiding right next to that square.':'The shot found open water.'}</p>`;}
   else{
     teamForColor=t;const h=S.hit,ship=t.ships[S.si],rep=S.rep;
@@ -2715,6 +2736,7 @@ function resultHtml(){
     rows.push([`Damage to the ${ship.name}`,'−'+h.taken]);
     if(h.finishing)rows.push(['Hull collapses: leftover HP lost','−'+h.finishing]);
     if(rep)rows.push([rep.ok?(rep.saved?'Repair saved the ship':'Repair heals'):'Repair failed',rep.ok?'+'+rep.heal:'0']);
+    if((t.repairs||[]).some(x=>x.si===S.si&&!ship.sunk))rows.push(['Repair pending: answer on their turn','⚠']);
     title=t.alive?(ship.sunk?`The ${ship.name} is sunk!`:`${esc(ship.name)} now at ${ship.hp} / ${ship.maxHp} HP`):`${esc(t.name)} is eliminated!`;
     body=`<table class="calc"><tbody>${rows.map(([a,b])=>`<tr><td>${esc(a)}</td><td>${b}</td></tr>`).join('')}<tr class="tot"><td>${esc(t.name)} HP now</td><td>${teamHp(t)} / ${teamMax(t)}</td></tr></tbody></table>
       <div class="fleet2">${shipsHtml(t)}</div>`;

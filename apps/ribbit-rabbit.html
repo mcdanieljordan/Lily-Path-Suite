@@ -6954,7 +6954,26 @@ const RRAuth=(function(){
     }
     if(changed)await applyTotals();
   }
-  async function pushAttendance(){/* attendance history is mirrored (encrypted) by the cloud sync; beta_attendance has a different shape */}
+  /* Today's present/absent marks go to beta_attendance (ids only, no names) so Leader Locator and other apps see absences. */
+  const attSig={};
+  async function pushAttendance(){
+    try{
+      for(const r of rosters){
+        const cid=remoteClassId(r);if(!cid)continue;
+        const att=attendance[getAttendanceKey(r.id)];if(!att||!att.records)continue;
+        const date=att.date||new Date().toISOString().split('T')[0],rows=[];
+        for(const rec of att.records){
+          if(rec.status==='unmarked')continue;
+          const s=r.students.find(x=>x.id===rec.studentId),sid=remoteStudentId(s);if(!sid)continue;
+          rows.push({class_id:cid,student_id:sid,date,status:rec.status==='absent'?'absent':'present'});
+        }
+        const sig=date+JSON.stringify(rows);if(attSig[cid]===sig)continue;
+        const d=await client().from('beta_attendance').delete().eq('class_id',cid).eq('date',date);if(d.error)throw d.error;
+        for(let i=0;i<rows.length;i+=200){const x=await client().from('beta_attendance').insert(rows.slice(i,i+200));if(x.error)throw x.error}
+        attSig[cid]=sig;
+      }
+    }catch(e){console.warn('attendance share failed',e&&e.message||e)}
+  }
   function markSynced(){lastSync=new Date();lastError='';updateAuthUI()}
   async function fullSync(){
     if(!user||!cryptoKey)return;

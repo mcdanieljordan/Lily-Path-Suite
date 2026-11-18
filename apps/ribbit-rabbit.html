@@ -1274,6 +1274,7 @@ body.groups-fullscreen #panel-groups{top:32px}
 #llHost{display:none;position:fixed;left:0;right:0;bottom:0;top:40px;zoom:.8;z-index:50;background:#0E0820}
 #llHost iframe{width:100%;height:100%;border:0;display:block}
 html.ll-mode #llHost{display:block}
+html.rr-solo #appBar,html.rr-solo #llHost{display:none !important}
 html.ll-mode body>*:not(#appBar):not(#llHost):not(.modal-overlay):not(.toast){display:none !important}
 </style>
 <style id="kid-hand">
@@ -1303,6 +1304,8 @@ if(document.readyState!=='loading')init();else document.addEventListener('DOMCon
 <body style="zoom: 125%;">
 <div id="appBar"><button class="ab on" data-t="rr" type="button">🐸 Ribbit Rabbit</button><button class="ab" data-t="ll" type="button">⭐ Leader Locator</button></div>
 <div id="llHost"><iframe id="llFrame" title="Leader Locator" src="leader-locator.html" allow="fullscreen; autoplay; clipboard-write" allowfullscreen></iframe></div>
+<script>/* Ribbit Rabbit runs on its own; Leader Locator only loads inside it when opened with ?combo=1 (data is shared through the cloud instead) */
+(function(){var combo=/[?&]combo=1/.test(location.search);if(combo)return;document.documentElement.classList.add('rr-solo');var f=document.getElementById('llFrame');if(f)f.removeAttribute('src');})();</script>
 
 
 

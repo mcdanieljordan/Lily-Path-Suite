@@ -34,7 +34,7 @@ function seedLib() {
   const ai = (id, name, url) => ({ id, type: 'ai', name, url, seeded: 1 });
   const ch = (id, name, url) => ({ id, type: 'channel', name, url, seeded: 1 });
   return [
-    app('a0', 'Ribbit-Leader', G + 'Lily-Path-Suite/apps/ribbit-rabbit.html', 'apps/ribbit-rabbit.html'),
+    app('a0', 'Ribbit-Leader', G + 'Lily-Path-Suite/apps/ribbit-rabbit.html?combo=1', 'apps/ribbit-rabbit.html?combo=1'),
     app('a1', 'Ribbit Rabbit', G + 'Lily-Path-Suite/apps/ribbit-rabbit.html', 'apps/ribbit-rabbit.html'),
     app('a2', 'Leader Locator', G + 'Lily-Path-Suite/apps/leader-locator.html', 'apps/leader-locator.html'),
     app('a3', 'Turn 2 Learn', G + 'turn-2-learn/', 'apps/turn-2-learn.html'),
@@ -70,7 +70,7 @@ function seed() {
   return {
     day: defaultDay(),
     periods, plan,
-    seedV: 9,
+    seedV: 10,
     lib: seedLib(),
   };
 }
@@ -88,6 +88,8 @@ if (S.seedV < 7) { const o = S.lib.find(i => i.id === 'a5'); if (o && o.seeded &
 if (S.seedV < 8) { const fresh = seedLib(); for (const id of ['a0', 'a1', 'a2']) { const o = S.lib.find(i => i.id === id), n = fresh.find(i => i.id === id); if (o && o.seeded && n) { o.url = n.url; o.local = n.local; } } S.seedV = 8; }
 /* v9: Battleship Jeopardy now opens the suite copy (class sharing + saved boards), not the old standalone page */
 if (S.seedV < 9) { const o = S.lib.find(i => i.id === 'a8'), n = seedLib().find(i => i.id === 'a8'); if (o && n && /Battleship-in-Jeopardy\/?$/i.test(o.url || '')) { o.url = n.url; o.local = n.local; } S.seedV = 9; }
+/* v10: Ribbit Rabbit and Leader Locator are separate tabs now; only the combined Ribbit-Leader tab embeds Leader Locator */
+if (S.seedV < 10) { const fresh = seedLib(); for (const id of ['a0']) { const o = S.lib.find(i => i.id === id), n = fresh.find(i => i.id === id); if (o && o.seeded && n) { o.url = n.url; o.local = n.local; } } S.seedV = 10; }
 if (!S.at) S.at = FRESH ? 0 : Date.now();
 let syncSoon = () => {};
 const save = () => { S.at = Date.now(); try { localStorage.setItem(KEY, JSON.stringify({ ...S, wk: undefined, lib: S.lib.filter(i => !i.blob && !i.temp) })); } catch (e) {} syncSoon(); };

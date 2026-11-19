@@ -537,6 +537,12 @@ html[data-theme="holo"] .tkg[aria-pressed=true]{background:var(--acc);color:#041
 .tknote{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .tknote .chip{font-size:16px;padding:4px 12px}
 .tknote p{flex-basis:100%;font-size:18px;line-height:1.25;opacity:.85}
+
+.tkqs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:10px}
+.tkqcol h4{margin:0 0 6px;font-size:16px}
+.tkq{border:2px solid var(--line,rgba(128,128,128,.35));border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.tkqh{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.tkqh .btn{margin-left:auto;min-height:34px;padding:0 10px}
+.tkqt{font-weight:700;margin:4px 0}.tkqo{margin:4px 0 0 20px}.tkqo li.ok{font-weight:800;color:#1b7a34}
 </style>
 </head>
 <body>
@@ -1725,7 +1731,8 @@ const TK_ABBR={'Developing and sustaining foundational language skills':'Foundat
   'Social and emotional health':'Social & emotional','Alcohol, tobacco, and other drugs':'Alcohol, tobacco & drugs','Healthy eating and physical activity':'Healthy eating & activity',
   'Mental health and wellness':'Mental health','Reproductive and sexual health':'Reproductive health','Data literacy, management, and representation':'Data literacy',
   'Practical technology concepts':'Technology concepts','Creativity and innovation':'Creativity & innovation','Inquiry and research':'Inquiry & research','Expressions, equations, and relationships':'Expressions & equations'};
-const TK_GR=['K','1','2','3','4','5','6','7','8'];
+/* elementary only: Kindergarten to Grade 5 */
+const TK_GR=['K','1','2','3','4','5'],TK_MAXG=5;
 const tkGl=g=>g===0?'K':String(g);
 const tkCap=s=>s?s[0].toUpperCase()+s.slice(1):'';
 const tkAb=s=>TK_ABBR[s]||s;
@@ -1749,7 +1756,7 @@ const TK_PAGE=1000;
 function tkFetchAll(){
   if(tk.all)return Promise.resolve(tk.all);
   if(tk.allP)return tk.allP;
-  const base=`${TK_URL}?select=id,code,grade_num,subject,strand,topic,kns,stmt,ord&order=grade_num.asc,ord.asc,id.asc&limit=${TK_PAGE}`;
+  const base=`${TK_URL}?select=id,code,grade_num,subject,strand,topic,kns,stmt,ord&order=grade_num.asc,ord.asc,id.asc&grade_num=lte.${TK_MAXG}&limit=${TK_PAGE}`;
   const page=async off=>{
     let err;
     for(let t=0;t<2;t++){
@@ -1770,7 +1777,7 @@ function tkFetchAll(){
 function tkLoad(subj){
   if(tk.rows[subj])return Promise.resolve(tk.rows[subj]);
   return tkFetchAll().then(all=>{
-    tk.rows[subj]=all.filter(r=>r.subject===subj).map(r=>({c:String(r.code),g:+r.grade_num,s:subj,st:String(r.strand||''),tp:String(r.topic||''),k:tkTxt(r.kns),t:tkTxt(r.stmt),o:+r.ord||0}));
+    tk.rows[subj]=all.filter(r=>r.subject===subj&&+r.grade_num<=TK_MAXG).map(r=>({c:String(r.code),g:+r.grade_num,s:subj,st:String(r.strand||''),tp:String(r.topic||''),k:tkTxt(r.kns),t:tkTxt(r.stmt),o:+r.ord||0}));
     return tk.rows[subj];
   });
 }
@@ -1847,6 +1854,11 @@ function tkJudged(col,row){
     exp:'TEKS '+t.c+' (Grade '+tkGl(t.g)+')'+(t.k?'. '+tkCut(t.k,200):'.'),teks:{c:t.c,g:t.g,s:t.s,t:t.t}};
 }
 function tkQuestion(col,row,avoid){
+  /* a question the teacher locked in while previewing the board is used first (never for repairs, which pass avoid) */
+  if(col.pre&&col.pre[row]&&!avoid){
+    const p=col.pre[row];
+    if(!hist().asked[p.q]&&!(G&&G.usedQ&&G.usedQ.has(p.q)))return JSON.parse(JSON.stringify(p));
+  }
   const t=col.tk[row],bk=tkBank(t.s);
   if(col.qm==='judge')return tkJudged(col,row);
   const g=Math.max(0,Math.min(10,t.g));
@@ -1864,8 +1876,8 @@ function tkNoteHtml(q){
 /* ---- the builder window ---- */
 let tkb=null;
 function openTeksBuilder(){
-  const cg=Math.min(8,gradeForClass(meta.current));
-  tkb={subj:'Physical Education',from:Math.max(0,cg-1),to:Math.min(8,cg+1),picks:[],pins:new Set(),judge:false,draft:null,err:'',busy:true,q:'',sf:'',sg:'',more:false,sel:null,cg,msg:''};
+  const cg=Math.min(TK_MAXG,gradeForClass(meta.current));
+  tkb={subj:'Physical Education',from:Math.max(0,cg-1),to:Math.min(TK_MAXG,cg+1),pq:null,showQ:false,pqBusy:false,picks:[],pins:new Set(),judge:false,draft:null,err:'',busy:true,q:'',sf:'',sg:'',more:false,sel:null,cg,msg:''};
   openModal('<div id="tkRoot"></div>');
   tkRefresh(true);
 }
@@ -1876,7 +1888,7 @@ function tkRegen(){
   T.picks=T.picks.filter(k=>keys.has(k));
   const codes=new Set(pool.filter(r=>r.g>=T.from&&r.g<=T.to&&T.picks.includes(tkGk(r))).map(r=>r.c));
   T.pins=new Set([...T.pins].filter(c=>codes.has(c)));
-  T.draft=tkGen(pool,tkOpts());T.sel=null;
+  T.draft=tkGen(pool,tkOpts());T.sel=null;T.pq=null;
 }
 async function tkRefresh(regen){
   const T=tkb;if(!T)return;
@@ -1939,7 +1951,7 @@ function tkRender(){
   const gm=new Map();
   pool.forEach(r=>{const k=tkGk(r);if(!gm.has(k))gm.set(k,{k,lab:tkLab(r),sens:tkSens(r),n:0,gs:new Set()});const g=gm.get(k);g.n++;g.gs.add(r.g);});
   const groups=[...gm.values()].sort((a,b)=>b.gs.size-a.gs.size||b.n-a.n);
-  const presets=[[T.cg,T.cg,'My class (Gr '+tkGl(T.cg)+')'],[0,2,'K–2'],[3,5,'3–5'],[0,5,'K–5'],[6,8,'6–8']];
+  const presets=[[T.cg,T.cg,'My class (Gr '+tkGl(T.cg)+')'],[0,2,'K–2'],[3,5,'3–5'],[0,5,'K–5']];
   const noBank=T.subj==='*'||!(tkBank(T.subj)||QB_HAS.has(T.subj));
   let body='';
   if(T.err)body=`<p class="note" role="alert" style="font-size:18px">${esc(T.err)}</p><div class="row2"><button class="btn" data-tk="retry">Try again</button></div>`;
@@ -1964,7 +1976,9 @@ function tkRender(){
         <p class="note" style="margin-top:6px">${T.subj==='*'?'':T.picks.length?`${T.picks.length} of 5 picked. The rest are filled in randomly.`:'None picked, so all 5 columns are random. Tap up to 5 to choose your own.'}</p></div>
       <div class="field"><span class="lbl">Your board</span>${prev}</div>
       <div class="field"><span class="lbl">Questions</span><div class="seg" role="group"><button type="button" data-tk="qm" data-v="auto" aria-pressed="${!T.judge}">Practice questions when available</button><button type="button" data-tk="qm" data-v="judge" aria-pressed="${T.judge}">Teacher-judged challenges</button></div>
-        <p class="note" style="margin-top:6px">${noBank&&!T.judge?'This subject has no practice-question bank yet, so these tiles are teacher-judged challenges built from the standard.':'Practice questions match the subject and grade level. Every tile is tagged with its TEKS.'}</p></div>`;
+        <p class="note" style="margin-top:6px">${noBank&&!T.judge?'This subject has no practice-question bank yet, so these tiles are teacher-judged challenges built from the standard.':'Practice questions match the subject and grade level. Every tile is tagged with its TEKS.'}</p>
+        <div class="row2" style="margin-top:8px"><button type="button" class="btn sun" data-tk="pq" ${T.draft?'':'disabled'}>👀 ${T.showQ?'Hide the questions':'Preview the questions'}</button>${T.showQ&&T.pq?'<button type="button" class="btn ghost" data-tk="pqall">🎲 New set of questions</button>':''}</div>
+        ${T.showQ?tkPreviewHtml():''}</div>`;
   }
   root.innerHTML=`<h2>TEKS board builder</h2>
     <p class="note" style="margin-bottom:12px">Similar TEKS are grouped into strands. Each column is one strand and the rows climb through the grade levels you pick.</p>
@@ -1977,9 +1991,48 @@ function tkRender(){
     <div class="row2" style="margin-top:14px"><button class="btn sun" data-tk="reroll" ${T.busy||T.err?'disabled':''}>🎲 Reroll</button><button class="btn" data-tk="build" ${T.draft&&!T.busy?'':'disabled'}>Save board</button><button class="btn" data-tk="play" ${T.draft&&!T.busy&&setup.teams.length>=2?'':'disabled'}>Build &amp; play now</button><button class="btn ghost" data-act="mclose">Close</button></div>`;
   sh.scrollTop=top;
 }
+/* ---- preview the questions before the board is built ---- */
+function qbReady(list,ms){
+  return new Promise(res=>{
+    list.forEach(([s,g])=>qbLoad(s,g));
+    const t0=Date.now(),chk=()=>{
+      const done=list.every(([s,g])=>QB.sets[qbK(s,Math.max(0,Math.min(12,g|0)))]||QB.off||(QB.tries[qbK(s,Math.max(0,Math.min(12,g|0)))]||0)>=1);
+      if(done||Date.now()-t0>ms)res();else setTimeout(chk,150);};
+    chk();
+  });
+}
+function tkPickQ(T,ci,r,seen){
+  const c={...T.draft[ci],qm:T.judge?'judge':'auto',pre:null};
+  let q=null;
+  for(let i=0;i<12;i++){q=tkQuestion(c,r);if(!seen.has(q.q)||q.judged)break;}
+  seen.add(q.q);return q;
+}
+async function tkPreview(all){
+  const T=tkb;if(!T||!T.draft)return;
+  T.pqBusy=true;tkRender();
+  if(!T.judge)await qbReady([].concat(...T.draft.map(c=>c.tk.map(t=>[qbSubj(t.s),t.g]))),7000);
+  if(tkb!==T)return;
+  const seen=new Set();T.pq={};
+  T.draft.forEach((c,ci)=>{for(let r=0;r<5;r++)T.pq[ci+'-'+r]=tkPickQ(T,ci,r,seen);});
+  T.pqBusy=false;tkRender();
+}
+function tkSwap(k){
+  const T=tkb;if(!T||!T.pq)return;const [ci,r]=k.split('-').map(Number);
+  const seen=new Set(Object.values(T.pq).map(q=>q.q));
+  T.pq[k]=tkPickQ(T,ci,r,seen);tkRender();
+}
+function tkPreviewHtml(){
+  const T=tkb;
+  if(T.pqBusy||!T.pq)return'<p class="note" style="font-size:18px">Getting the questions…</p>';
+  return`<div class="tkqs">${T.draft.map((c,ci)=>`<div class="tkqcol"><h4>${esc(c.name)}</h4>${[0,1,2,3,4].map(r=>{
+    const q=T.pq[ci+'-'+r],t=c.tk[r];
+    return`<div class="tkq"><div class="tkqh"><b>${(r+1)*100}</b> <span class="note">TEKS ${esc(t.c)} · Gr ${tkGl(t.g)}</span><button type="button" class="btn sm ghost" data-tk="pqswap" data-k="${ci}-${r}" title="Swap this question for another">↻ Swap</button></div>
+      <div class="tkqt">${esc(q.q)}</div>${q.judged?'<p class="note">Teacher-judged: the squad shows they can do it.</p>':`<ol class="tkqo">${q.opts.map((o,i)=>`<li${i===q.ans?' class="ok"':''}>${esc(String(o))}${i===q.ans?' ✓':''}</li>`).join('')}</ol>`}</div>`;}).join('')}</div>`).join('')}</div>
+    <p class="note" style="margin-top:6px">These are the exact questions your board will use. Swap any you don't like, then tap Save board or Build &amp; play now. (Repair questions are always new ones.)</p>`;
+}
 function tkBuild(play){
   const T=tkb;if(!T||!T.draft)return;
-  const b=newTeksRec(T.draft.map(c=>({...c,qm:T.judge?'judge':'auto'})),tkLabel(T),{subj:T.subj,from:T.from,to:T.to,picks:T.picks.slice(),judge:T.judge});
+  const b=newTeksRec(T.draft.map((c,ci)=>{const o={...c,qm:T.judge?'judge':'auto'};if(T.pq){o.pre={};for(let r=0;r<5;r++){const q=T.pq[ci+'-'+r];if(q)o.pre[r]=q;}}return o;}),tkLabel(T),{subj:T.subj,from:T.from,to:T.to,picks:T.picks.slice(),judge:T.judge});
   tkb=null;closeModal();
   if(play&&setup.teams.length>=2){startGame({boardId:b.id});return;}
   renderSetup();bjNote('TEKS board saved. Press Play on it below.');
@@ -1998,7 +2051,10 @@ document.addEventListener('click',e=>{
     T.msg='';tkRegen();tkRender();
   }
   else if(a==='reroll'){T.msg='';tkRegen();tkRender();}
-  else if(a==='qm'){T.judge=b.dataset.v==='judge';if(T.draft)T.draft.forEach(c=>{c.qm=T.judge?'judge':'auto';});tkRender();}
+  else if(a==='qm'){T.judge=b.dataset.v==='judge';if(T.draft)T.draft.forEach(c=>{c.qm=T.judge?'judge':'auto';});T.pq=null;if(T.showQ){tkPreview(false);return;}tkRender();}
+  else if(a==='pq'){T.showQ=!T.showQ;if(T.showQ&&!T.pq){tkPreview(false);return;}tkRender();}
+  else if(a==='pqall'){tkPreview(true);}
+  else if(a==='pqswap'){tkSwap(b.dataset.k);}
   else if(a==='peek'){T.sel=T.sel===b.dataset.k?null:b.dataset.k;tkRender();}
   else if(a==='more'){T.more=!T.more;tkRender();}
   else if(a==='retry'){tkRefresh(true);}

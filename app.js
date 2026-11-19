@@ -37,11 +37,11 @@ function seedLib() {
     app('a0', 'Ribbit-Leader', G + 'Lily-Path-Suite/apps/ribbit-rabbit.html?combo=1', 'apps/ribbit-rabbit.html?combo=1'),
     app('a1', 'Ribbit Rabbit', G + 'Lily-Path-Suite/apps/ribbit-rabbit.html', 'apps/ribbit-rabbit.html'),
     app('a2', 'Leader Locator', G + 'Lily-Path-Suite/apps/leader-locator.html', 'apps/leader-locator.html'),
-    app('a3', 'Turn 2 Learn', G + 'turn-2-learn/', 'apps/turn-2-learn.html'),
-    app('a4', 'Wave Lab', G + 'tempo-wavlab/', 'apps/wave-lab.html'),
+    app('a3', 'Turn 2 Learn', G + 'Lily-Path-Suite/apps/turn-2-learn.html', 'apps/turn-2-learn.html'),
+    app('a4', 'Wave Lab', G + 'Lily-Path-Suite/apps/wave-lab.html', 'apps/wave-lab.html'),
     app('a5', 'BASIS Olympics', G + 'Lily-Path-Suite/apps/basis-olympics.html', 'apps/basis-olympics.html'),
-    app('a6', 'Great Prompts', G + 'GreatPrompts-TeachersEdition/', 'apps/great-prompts.html'),
-    app('a7', 'Tons of Teaching Tools', '', 'apps/tons-of-teaching-tools.html'),
+    app('a6', 'Great Prompts', G + 'Lily-Path-Suite/apps/great-prompts.html', 'apps/great-prompts.html'),
+    app('a7', 'Tons of Teaching Tools', G + 'Lily-Path-Suite/apps/tons-of-teaching-tools.html', 'apps/tons-of-teaching-tools.html'),
     app('a8', 'Battleship Jeopardy', G + 'Lily-Path-Suite/apps/battleship-in-jeopardy.html', 'apps/battleship-in-jeopardy.html'),
     ai('a9', 'Gemini', 'https://gemini.google.com/app'),
     ai('a10', 'Claude', 'https://claude.ai/new'),
@@ -70,7 +70,7 @@ function seed() {
   return {
     day: defaultDay(),
     periods, plan,
-    seedV: 11,
+    seedV: 12,
     lib: seedLib(),
   };
 }
@@ -100,6 +100,8 @@ if (S.seedV < 11) {
   }
   S.seedV = 11;
 }
+/* v12: every built-in app opens from its hosted GitHub page (the saved copy is only the offline fallback) */
+if (S.seedV < 12) { const fresh = seedLib(); for (const id of ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8']) { const o = S.lib.find(i => i.id === id), n = fresh.find(i => i.id === id); if (o && o.seeded && n) { o.url = n.url; o.local = n.local; } } S.seedV = 12; }
 if (!S.at) S.at = FRESH ? 0 : Date.now();
 let syncSoon = () => {};
 const save = () => { S.at = Date.now(); try { localStorage.setItem(KEY, JSON.stringify({ ...S, wk: undefined, lib: S.lib.filter(i => !i.blob && !i.temp) })); } catch (e) {} syncSoon(); };
@@ -282,9 +284,9 @@ function greet() { const h = new Date().getHours(); return h < 12 ? 'Good mornin
 const fold = k => (S.fold && S.fold[k]) ? 'folded' : '';
 const caret = k => (S.fold && S.fold[k]) ? '▸' : '▾';
 function renderToday() {
-  const tools = S.lib.filter(i => i.type === 'tool' || i.type === 'page');
-  const ais = S.lib.filter(i => i.type === 'ai');
-  const chans = S.lib.filter(i => i.type === 'channel');
+  const tools = S.lib.filter(i => (i.type === 'tool' || i.type === 'page') && !i.temp);
+  const ais = S.lib.filter(i => i.type === 'ai' && !i.temp);
+  const chans = S.lib.filter(i => i.type === 'channel' && !i.temp);
   const res = S.lib.filter(i => !['tool', 'channel', 'page', 'ai'].includes(i.type) && !i.temp);
   const dayName = DAYS.find(d => d[0] === S.day)[1];
   $('#today').innerHTML = `
@@ -461,7 +463,7 @@ todayEl.addEventListener('click', e => {
   if (act === 'fold') { S.fold = S.fold || {}; S.fold[a.dataset.sec] = !S.fold[a.dataset.sec]; save(); return renderToday(); }
   if (act === 'edit') { e.stopPropagation(); return editItem(host.dataset.lib); }
   if (act === 'rm') { e.stopPropagation(); slot(pEl.dataset.pid).items.splice(+host.dataset.chip, 1); save(); return renderToday(); }
-  if (act === 'open') return openItem(host.dataset.lib || host.dataset.id);
+  if (act === 'open') { const hid = host.dataset.lib || host.dataset.id; return (e.metaKey || e.ctrlKey || e.shiftKey) ? openCopy(hid) : openItem(hid); }
   if (act === 'day') { S.day = a.dataset.d; save(); return renderToday(); }
   if (act === 'wk') { S.wk = shiftWeek(S.wk, +a.dataset.n); return renderToday(); }
   if (act === 'wk0') { S.wk = mondayOf(new Date()); return renderToday(); }
@@ -704,6 +706,14 @@ function openItem(id, beside) {
   activate(id);
 }
 
+/* a second (third...) tab of the same app: its own page, its own state, closes without touching the original */
+function openCopy(id) {
+  const base = item(id); if (!base) return;
+  const root = base.copyOf ? item(base.copyOf) || base : base;
+  const n = S.lib.filter(i => i.copyOf === root.id).length + 2;
+  const c = { ...root, id: uid(), temp: 1, copyOf: root.id, name: root.name + ' ' + n };
+  delete c.seeded; S.lib.push(c); openItem(c.id);
+}
 function mkView(it) {
   const el = document.createElement('section');
   el.className = 'view'; el.dataset.id = it.id;
@@ -801,7 +811,7 @@ const hideCtx = () => { ctx.hidden = true; };
 function tabMenu(id, x, y) {
   const o = ent(id), it = item(id); if (!o || !it) return;
   const others = open.filter(q => q.id !== id && !q.mate && !o.mate);
-  let h = mi('rename', 'Rename', id) + (isWeb(it) && !it.path ? mi('edit', 'Edit link…', id) : '') + (o.el._wv ? mi('reload', 'Reload', id) : '') + mi('icon', 'Change icon…', id) + (it.icon ? mi('noicon', 'Remove icon', id) : '') + '<hr>';
+  let h = (isWeb(it) || it.local ? mi('copy', 'Open another copy', id) : '') + mi('rename', 'Rename', id) + (isWeb(it) && !it.path ? mi('edit', 'Edit link…', id) : '') + (o.el._wv ? mi('reload', 'Reload', id) : '') + mi('icon', 'Change icon…', id) + (it.icon ? mi('noicon', 'Remove icon', id) : '') + '<hr>';
   if (o.mate) h += mi('unpair', 'Separate from “' + esc(item(o.mate)?.name) + '”', id) + mi('swap', 'Swap sides', id);
   else if (others.length) h += '<div class="mh">Split view with</div>' + others.map(q => mi('pair', esc(item(q.id)?.name), id, q.id)).join('');
   else h += '<div class="mh">Open a second tab to split</div>';
@@ -811,7 +821,7 @@ function tabMenu(id, x, y) {
 function tileMenu(id, x, y) {
   const it = item(id); if (!it) return;
   const cand = open.filter(q => !q.mate && q.id !== id);
-  let h = mi('open', 'Open', id) + mi('rename', 'Rename', id) + mi('edit', 'Edit…', id) + mi('icon', 'Change icon…', id) + (it.icon ? mi('noicon', 'Remove icon', id) : '');
+  let h = mi('open', 'Open', id) + (isWeb(it) || it.local ? mi('copy', 'Open another copy', id) : '') + mi('rename', 'Rename', id) + mi('edit', 'Edit…', id) + mi('icon', 'Change icon…', id) + (it.icon ? mi('noicon', 'Remove icon', id) : '');
   if (cand.length) h += '<hr><div class="mh">Open in split with</div>' + cand.map(q => mi('besideof', esc(item(q.id)?.name), id, q.id)).join('');
   showCtx(h, x, y);
 }
@@ -848,6 +858,7 @@ document.addEventListener('click', e => {
   else if (a === 'right') stepUnit(id, 1);
   else if (a === 'close') closeTab(id);
   else if (a === 'open') openItem(id);
+  else if (a === 'copy') openCopy(id);
   else if (a === 'besideof') openItem(id, o);
 });
 window.addEventListener('keydown', e => { if (e.key === 'Escape') hideCtx(); });

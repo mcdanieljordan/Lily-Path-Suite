@@ -163,21 +163,42 @@ function pickIcon(id) {
   };
   i.click();
 }
+function pickImageData(cb) {
+  const i = document.createElement('input'); i.type = 'file'; i.accept = 'image/*';
+  i.onchange = () => {
+    const f = i.files[0]; if (!f) return;
+    const url = URL.createObjectURL(f), im = new Image();
+    im.onload = () => {
+      const c = document.createElement('canvas'); c.width = c.height = 128;
+      const x = c.getContext('2d'), m = Math.min(im.width, im.height);
+      x.drawImage(im, (im.width - m) / 2, (im.height - m) / 2, m, m, 0, 0, 128, 128);
+      URL.revokeObjectURL(url); cb(c.toDataURL('image/png'));
+    };
+    im.onerror = () => toast("Can't read that image");
+    im.src = url;
+  };
+  i.click();
+}
 function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 1800); }
 
 /* ---------------- dialog ---------------- */
-function ask({ title, name = '', url = '', showUrl = true, canDelete = false, namePh = 'Name' }) {
+function ask({ title, name = '', url = '', showUrl = true, canDelete = false, namePh = 'Name', icon = '', showIcon = true }) {
   return new Promise(res => {
     const d = $('#dlg');
     $('#dlgTitle').textContent = title;
     $('#dName').value = name; $('#dName').placeholder = namePh;
     $('#dUrl').value = url; $('#dUrlWrap').style.display = showUrl ? '' : 'none';
     $('#dDel').style.visibility = canDelete ? 'visible' : 'hidden';
+    let newIcon; /* undefined = unchanged, '' = removed, data URL = new picture */
+    const paintIcon = () => { const cur = newIcon === undefined ? icon : newIcon; $('#dImgPrev').innerHTML = cur ? `<img src="${cur}">` : '<span>No picture</span>'; $('#dImgRm').style.display = cur ? '' : 'none'; };
+    $('#dImgWrap').style.display = showIcon ? '' : 'none'; paintIcon();
+    $('#dImgPick').onclick = () => pickImageData(d => { newIcon = d; paintIcon(); });
+    $('#dImgRm').onclick = () => { newIcon = ''; paintIcon(); };
     let out = null;
     const done = v => { out = v; d.close(); };
     $('#dDel').onclick = () => done('delete');
     $('#dCancel').onclick = () => done(null);
-    $('#dlgForm').onsubmit = e => { e.preventDefault(); done({ name: $('#dName').value.trim(), url: normUrl($('#dUrl').value) }); };
+    $('#dlgForm').onsubmit = e => { e.preventDefault(); done({ name: $('#dName').value.trim(), url: normUrl($('#dUrl').value), icon: newIcon }); };
     d.onclose = () => res(out);
     d.showModal();
     (showUrl && !name ? $('#dUrl') : $('#dName')).focus();
@@ -188,12 +209,13 @@ function ask({ title, name = '', url = '', showUrl = true, canDelete = false, na
 async function addLink(kind) {
   const r = await ask({ title: { tool: 'Add a tool', channel: 'Add a channel', ai: 'Add an AI tool' }[kind] || 'Add a link', namePh: 'Name (optional)' });
   if (!r || !r.url) return;
-  S.lib.push({ id: uid(), type: kind, name: r.name || hostOf(r.url), url: r.url });
+  const ni = { id: uid(), type: kind, name: r.name || hostOf(r.url), url: r.url }; if (r.icon) ni.icon = r.icon;
+  S.lib.push(ni);
   save(); renderToday();
 }
 async function editItem(id) {
   const it = item(id); if (!it) return;
-  const r = await ask({ title: 'Edit', name: it.name, url: it.url || '', showUrl: isWeb(it) && !it.path, canDelete: true });
+  const r = await ask({ title: 'Edit', name: it.name, url: it.url || '', showUrl: isWeb(it) && !it.path, canDelete: true, icon: it.icon || '', showIcon: true });
   if (!r) return;
   if (r === 'delete') {
     S.lib = S.lib.filter(i => i.id !== id);
@@ -201,6 +223,7 @@ async function editItem(id) {
     closeTab(id);
   } else {
     it.name = r.name || it.name;
+    if (r.icon !== undefined) { if (r.icon) it.icon = r.icon; else delete it.icon; }
     if (isWeb(it) && !it.path && r.url !== it.url) { it.url = r.url; const was = active === id; closeTab(id); if (was && it.url) openItem(id); }
     renderTabs();
   }
@@ -230,7 +253,8 @@ function resHTML(it) {
   const u = itemUrl(it);
   let th = ICON[TYPE_ICON[it.type]];
   if (it.type === 'image') th = `<img src="${esc(u)}" draggable="false" loading="lazy">`;
-  if (it.type === 'video') th = `<video src="${esc(u)}#t=0.6" preload="metadata" muted></video>`;
+  if (it.icon) th = `<img src="${it.icon}" draggable="false">`;
+  else if (it.type === 'video') th = `<video src="${esc(u)}#t=0.6" preload="metadata" muted></video>`;
   return `<div class="res" draggable="true" data-lib="${it.id}" data-act="open" title="${esc(it.name)}">
     <div class="th">${th}</div><div class="nm">${esc(it.name)}</div>
     <button class="edit" data-act="edit" title="Edit">${ICON.edit}</button></div>`;
@@ -255,6 +279,8 @@ function periodHTML(p, i) {
 }
 const dayHas = d => Object.values((S.weeks[S.wk] || {})[d] || {}).some(c => c.items && c.items.length);
 function greet() { const h = new Date().getHours(); return h < 12 ? 'Good morning ☀️' : h < 17 ? 'Good afternoon 🌤️' : 'Good evening 🌙'; }
+const fold = k => (S.fold && S.fold[k]) ? 'folded' : '';
+const caret = k => (S.fold && S.fold[k]) ? '▸' : '▾';
 function renderToday() {
   const tools = S.lib.filter(i => i.type === 'tool' || i.type === 'page');
   const ais = S.lib.filter(i => i.type === 'ai');
@@ -263,8 +289,8 @@ function renderToday() {
   const dayName = DAYS.find(d => d[0] === S.day)[1];
   $('#today').innerHTML = `
   <aside class="lib" id="lib">
-    <section>
-      <h4>Tools <span><button data-act="add-html" title="Add an HTML file you made">+ HTML</button> <button data-act="add-tool">+ Link</button></span></h4>
+    <section class="${fold('tools')}">
+      <h4><button class="fold" data-act="fold" data-sec="tools" title="Show or hide">${caret('tools')} Tools</button> <span><button data-act="add-html" title="Add an HTML file you made">+ HTML</button> <button data-act="add-tool">+ Link</button></span></h4>
       <div class="tools">${tools.map(t => `
         <div class="tool" draggable="true" data-lib="${t.id}" data-act="open" title="${esc(t.url ? hostOf(t.url) : t.path ? 'Local file' : 'Click to add a link')}">
           ${fav(t)}
@@ -272,24 +298,24 @@ function renderToday() {
           <button class="edit" data-act="edit" title="Edit">${ICON.edit}</button>
         </div>`).join('') || '<div class="empty">Add the apps you use.</div>'}</div>
     </section>
-    <section>
-      <h4>AI <button data-act="add-ai">+ Add</button></h4>
+    <section class="${fold('ai')}">
+      <h4><button class="fold" data-act="fold" data-sec="ai" title="Show or hide">${caret('ai')} AI</button> <button data-act="add-ai">+ Add</button></h4>
       <div class="tools">${ais.map(t => `
         <div class="tool" draggable="true" data-lib="${t.id}" data-act="open" title="${esc(hostOf(t.url))}">
           ${fav(t)}<div class="nm">${esc(t.name)}</div>
           <button class="edit" data-act="edit" title="Edit">${ICON.edit}</button>
         </div>`).join('') || '<div class="empty">Add your AI tools.</div>'}</div>
     </section>
-    <section>
-      <h4>YouTube <button data-act="add-chan">+ Add</button></h4>
+    <section class="${fold('yt')}">
+      <h4><button class="fold" data-act="fold" data-sec="yt" title="Show or hide">${caret('yt')} YouTube</button> <button data-act="add-chan">+ Add</button></h4>
       <div class="tools">${chans.map(t => `
         <div class="tool" draggable="true" data-lib="${t.id}" data-act="open" title="${esc(hostOf(t.url))}">
           ${fav(t)}<div class="nm">${esc(t.name)}</div>
           <button class="edit" data-act="edit" title="Edit">${ICON.edit}</button>
         </div>`).join('') || '<div class="empty">Add channels you use.</div>'}</div>
     </section>
-    <section>
-      <h4>Videos, images &amp; files <button data-act="add-link">+ Link</button></h4>
+    <section class="${fold('files')}">
+      <h4><button class="fold" data-act="fold" data-sec="files" title="Show or hide">${caret('files')} Videos, images &amp; files</button> <button data-act="add-link">+ Link</button></h4>
       ${res.length ? `<div class="res-grid">${res.map(resHTML).join('')}</div>` : ''}
       <div class="drop">Drop files or links here,<br>paste a link, or <b data-act="add-files">browse</b></div>
     </section>
@@ -432,6 +458,7 @@ window.addEventListener('paste', e => {
 todayEl.addEventListener('click', e => {
   const a = e.target.closest('[data-act]'); if (!a) return;
   const act = a.dataset.act, host = a.closest('[data-lib],[data-chip]'), pEl = a.closest('.period');
+  if (act === 'fold') { S.fold = S.fold || {}; S.fold[a.dataset.sec] = !S.fold[a.dataset.sec]; save(); return renderToday(); }
   if (act === 'edit') { e.stopPropagation(); return editItem(host.dataset.lib); }
   if (act === 'rm') { e.stopPropagation(); slot(pEl.dataset.pid).items.splice(+host.dataset.chip, 1); save(); return renderToday(); }
   if (act === 'open') return openItem(host.dataset.lib || host.dataset.id);
@@ -692,6 +719,7 @@ function mkView(it) {
     if (IS_APP) {
       wv = document.createElement('webview');
       wv.setAttribute('partition', 'persist:lily'); wv.setAttribute('allowpopups', '');
+      if (window.lily.credPreload) wv.setAttribute('preload', window.lily.credPreload);
       wv.setAttribute('src', u);
     } else { wv = document.createElement('iframe'); wv.src = u; wv.allow = 'fullscreen; camera; microphone; autoplay'; }
     el.appendChild(wv);

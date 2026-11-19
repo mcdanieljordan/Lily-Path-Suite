@@ -371,3 +371,12 @@ body.tabdrag .dropz{display:flex;pointer-events:auto}
 #pclock.mini .pc-lbl,#pclock.mini .pc-next{display:none}
 #pclock.mini .pc-time{font-size:18px}
 .period.next{outline:2px dashed var(--c,#888);outline-offset:2px}
+
+/* collapsible library sections + link pictures */
+.lib h4 button.fold{color:inherit;font:inherit;letter-spacing:inherit;text-transform:inherit;padding:2px 4px;margin-left:-4px;cursor:pointer;flex:1;text-align:left}
+.lib h4 button.fold:hover{background:var(--accent-soft)}
+.lib section.folded>:not(h4){display:none}
+.imgrow{display:flex;align-items:center;gap:12px;margin:6px 0}
+.imgprev{width:56px;height:56px;border-radius:12px;background:rgba(128,128,128,.18);display:grid;place-items:center;overflow:hidden;font-size:10px;color:var(--muted,#888);text-align:center}
+.imgprev img{width:100%;height:100%;object-fit:cover}
+.imgbtns{display:flex;gap:8px;flex-wrap:wrap}

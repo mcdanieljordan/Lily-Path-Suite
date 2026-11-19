@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, ipcMain, dialog, shell, session } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain, dialog, shell, session, safeStorage } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
@@ -47,9 +47,43 @@ app.whenReady().then(() => {
     }
   });
 
+  // Saved logins: encrypted with the macOS Keychain (safeStorage), kept only in this app's own data folder.
+  const credFile = () => path.join(app.getPath('userData'), 'logins.json');
+  const loadCreds = () => { try { return JSON.parse(fs.readFileSync(credFile(), 'utf8')); } catch (e) { return { sites: {}, never: [] }; } };
+  const saveCreds = d => fs.writeFileSync(credFile(), JSON.stringify(d), { mode: 0o600 });
+  const hostFor = e => { try { return new URL(e.senderFrame ? e.senderFrame.url : e.sender.getURL()).hostname.replace(/^www\./, ''); } catch (x) { return ''; } };
+  const fromWebview = e => e.sender && e.sender.getType && e.sender.getType() === 'webview';
+  const pending = new Map();
+  ipcMain.on('cred-preload-path', e => { e.returnValue = 'file://' + path.join(__dirname, 'cred-preload.js'); });
+  ipcMain.handle('cred:list', e => { if (!fromWebview(e) || !safeStorage.isEncryptionAvailable()) return []; const h = hostFor(e); return Object.keys(loadCreds().sites[h] || {}); });
+  ipcMain.handle('cred:get', (e, user) => {
+    if (!fromWebview(e) || !safeStorage.isEncryptionAvailable()) return null;
+    const v = (loadCreds().sites[hostFor(e)] || {})[user]; if (!v) return null;
+    try { return safeStorage.decryptString(Buffer.from(v, 'base64')); } catch (x) { return null; }
+  });
+  ipcMain.handle('cred:delete', (e, user) => { if (!fromWebview(e)) return; const d = loadCreds(), h = hostFor(e); if (d.sites[h]) { delete d.sites[h][user]; if (!Object.keys(d.sites[h]).length) delete d.sites[h]; saveCreds(d); } });
+  ipcMain.on('cred:pending', (e, p) => {
+    if (!fromWebview(e) || !safeStorage.isEncryptionAvailable() || !p || !p.user || !p.pass) return;
+    const h = hostFor(e), d = loadCreds();
+    if ((d.never || []).includes(h)) return;
+    if (d.sites[h] && d.sites[h][p.user]) { try { if (safeStorage.decryptString(Buffer.from(d.sites[h][p.user], 'base64')) === p.pass) return; } catch (x) {} }
+    pending.set(e.sender.id, { host: h, user: String(p.user).slice(0, 200), pass: String(p.pass).slice(0, 500), at: Date.now() });
+  });
+  ipcMain.on('cred:save-pending', e => {
+    const p = pending.get(e.sender.id); if (!p || !fromWebview(e)) return; pending.delete(e.sender.id);
+    const d = loadCreds(); d.sites[p.host] = d.sites[p.host] || {}; d.sites[p.host][p.user] = safeStorage.encryptString(p.pass).toString('base64'); saveCreds(d);
+  });
+  ipcMain.on('cred:drop-pending', e => { pending.delete(e.sender.id); });
+  ipcMain.on('cred:never', e => { const p = pending.get(e.sender.id); pending.delete(e.sender.id); if (!p) return; const d = loadCreds(); d.never = Array.from(new Set((d.never || []).concat(p.host))); saveCreds(d); });
+
   // Links that try to open a new window become a new tab instead.
   app.on('web-contents-created', (_e, wc) => {
     if (wc.getType() === 'webview') {
+      wc.on('did-finish-load', () => {
+        const p = pending.get(wc.id);
+        if (p && Date.now() - p.at < 120000 && Date.now() - p.at > 400) wc.send('cred:offer', { host: p.host, user: p.user });
+        else if (p && Date.now() - p.at >= 120000) pending.delete(wc.id);
+      });
       wc.setWindowOpenHandler(({ url }) => {
         let h = ''; try { h = new URL(url).hostname; } catch (e) {}
         if (/(^|\.)(accounts\.google\.com|appleid\.apple\.com|login\.microsoftonline\.com|login\.live\.com|auth0\.com|openai\.com)$/.test(h)) return { action: 'allow' };

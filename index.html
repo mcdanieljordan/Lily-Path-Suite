@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Lily Path</title>
-<link rel="stylesheet" href="style.css?v=9">
+<link rel="stylesheet" href="style.css?v=10">
 </head>
 <body>
 <header class="bar" id="bar">
@@ -29,6 +29,8 @@
     <h3 id="dlgTitle"></h3>
     <label>Name<input id="dName" autocomplete="off"></label>
     <label id="dUrlWrap">Link<input id="dUrl" autocomplete="off" placeholder="https://"></label>
+    <div id="dImgWrap" class="imgrow"><div id="dImgPrev" class="imgprev"></div>
+      <div class="imgbtns"><button type="button" class="ghost" id="dImgPick">Add picture</button><button type="button" class="ghost" id="dImgRm">Remove picture</button></div></div>
     <div class="dbtns">
       <button type="button" class="ghost danger" id="dDel">Delete</button>
       <span class="sp"></span>
@@ -40,6 +42,6 @@
 
 <div class="ctx" id="ctx" hidden></div>
 <div class="toast" id="toast" hidden></div>
-<script src="app.js?v=16"></script>
+<script src="app.js?v=17"></script>
 </body>
 </html>

@@ -603,6 +603,7 @@ function stepUnit(id, dir) {
 }
 function renderTabs() {
   if (renaming) return;
+  setTimeout(() => { saveTabs(); renderBm(); }, 0);
   const btn = o => { const it = item(o.id); return `<button class="tab ${active === o.id ? 'on' : ''}" draggable="true" data-id="${o.id}" title="${esc(it?.name)} — double-click to rename, right-click for more">${it && isWeb(it) ? `<span class="ti">${fav(it, 14)}</span>` : ''}<span class="t">${esc(it?.name)}</span><span class="x" data-x="1">✕</span></button>`; };
   $('#tabs').innerHTML = `<button class="tab home ${active === TODAY_TAB ? 'on' : ''}" data-id="${TODAY_TAB}">${ICON.home}<span>Today</span></button>` +
     unitsOf().map(g => g.length > 1
@@ -678,6 +679,7 @@ dropz.addEventListener('drop', e => {
 })();
 
 function activate(id) {
+  if (active && active !== id && active !== TODAY_TAB) capThumb(active);
   active = id;
   const g = id === TODAY_TAB ? [] : groupOf(id), ids = g.map(o => o.id);
   $('#today').classList.toggle('show', id === TODAY_TAB);
@@ -724,7 +726,7 @@ function mkView(it) {
     return el;
   }
   if (isWeb(it)) {
-    el.innerHTML = `<div class="wbar"><button data-w="back" title="Back">${ICON.back}</button><button data-w="fwd" title="Forward">${ICON.fwd}</button><button data-w="reload" title="Reload">${ICON.reload}</button><div class="addr">${esc(u)}</div>${isLL(it) ? '<button class="bijbtn" data-w="bij" title="Send these groups to Battleship Jeopardy">⚓ Send to Battleship</button>' : ''}<i class="spin"></i><button data-w="ext" title="Open in Chrome">${ICON.ext}</button></div>`;
+    el.innerHTML = `<div class="wbar"><button data-w="back" title="Back">${ICON.back}</button><button data-w="fwd" title="Forward">${ICON.fwd}</button><button data-w="reload" title="Reload">${ICON.reload}</button><div class="addr">${esc(u)}</div>${isLL(it) ? '<button class="bijbtn" data-w="bij" title="Send these groups to Battleship Jeopardy">⚓ Send to Battleship</button>' : ''}<i class="spin"></i><button data-w="star" title="Add to bookmarks bar">☆</button><button data-w="ext" title="Open in Chrome">${ICON.ext}</button></div>`;
     let wv;
     if (IS_APP) {
       wv = document.createElement('webview');
@@ -744,7 +746,9 @@ function mkView(it) {
         const lu = localUrl(it);
         if (e.isMainFrame && e.errorCode !== -3 && lu && !el._fell && wv.getAttribute('src') !== lu) { el._fell = 1; wv.src = lu; toast('Offline — opened saved copy'); }
       });
-      wv.addEventListener('did-navigate', upd); wv.addEventListener('did-navigate-in-page', upd);
+      wv.addEventListener('did-navigate', e => { upd(e); if (it.temp && it.type === 'link' && e.url) { it.url = e.url; saveTabs(); } refreshStar(); });
+      wv.addEventListener('did-navigate-in-page', e => { upd(e); refreshStar(); });
+      wv.addEventListener('did-stop-loading', () => setTimeout(() => { if (active === it.id) capThumb(it.id); }, 1200));
     }
     el.addEventListener('click', e => {
       const b = e.target.closest('[data-w]'); if (!b) return;
@@ -753,6 +757,7 @@ function mkView(it) {
         if (w === 'back') IS_APP ? wv.goBack() : history.back();
         if (w === 'fwd') IS_APP && wv.goForward();
         if (w === 'reload') IS_APP ? wv.reload() : (wv.src = wv.src);
+        if (w === 'star') toggleBookmarkFor(it.id);
         if (w === 'bij') sendGroups(wv);
         if (w === 'ext') IS_APP ? window.lily.openExternal(IS_APP && wv.getURL ? wv.getURL() : u) : window.open(u, '_blank');
       } catch (err) {}
@@ -811,7 +816,7 @@ const hideCtx = () => { ctx.hidden = true; };
 function tabMenu(id, x, y) {
   const o = ent(id), it = item(id); if (!o || !it) return;
   const others = open.filter(q => q.id !== id && !q.mate && !o.mate);
-  let h = (isWeb(it) || it.local ? mi('copy', 'Open another copy', id) : '') + mi('rename', 'Rename', id) + (isWeb(it) && !it.path ? mi('edit', 'Edit link…', id) : '') + (o.el._wv ? mi('reload', 'Reload', id) : '') + mi('icon', 'Change icon…', id) + (it.icon ? mi('noicon', 'Remove icon', id) : '') + '<hr>';
+  let h = (isWeb(it) || it.local ? mi('copy', 'Open another copy', id) : '') + (isWeb(it) || it.local ? mi('bmadd', bmFor(id) ? 'Remove from bookmarks bar' : 'Add to bookmarks bar', id) : '') + mi('rename', 'Rename', id) + (isWeb(it) && !it.path ? mi('edit', 'Edit link…', id) : '') + (o.el._wv ? mi('reload', 'Reload', id) : '') + mi('icon', 'Change icon…', id) + (it.icon ? mi('noicon', 'Remove icon', id) : '') + '<hr>';
   if (o.mate) h += mi('unpair', 'Separate from “' + esc(item(o.mate)?.name) + '”', id) + mi('swap', 'Swap sides', id);
   else if (others.length) h += '<div class="mh">Split view with</div>' + others.map(q => mi('pair', esc(item(q.id)?.name), id, q.id)).join('');
   else h += '<div class="mh">Open a second tab to split</div>';
@@ -821,7 +826,7 @@ function tabMenu(id, x, y) {
 function tileMenu(id, x, y) {
   const it = item(id); if (!it) return;
   const cand = open.filter(q => !q.mate && q.id !== id);
-  let h = mi('open', 'Open', id) + (isWeb(it) || it.local ? mi('copy', 'Open another copy', id) : '') + mi('rename', 'Rename', id) + mi('edit', 'Edit…', id) + mi('icon', 'Change icon…', id) + (it.icon ? mi('noicon', 'Remove icon', id) : '');
+  let h = mi('open', 'Open', id) + (isWeb(it) || it.local ? mi('copy', 'Open another copy', id) : '') + (isWeb(it) || it.local ? mi('bmadd', bmFor(id) ? 'Remove from bookmarks bar' : 'Add to bookmarks bar', id) : '') + mi('rename', 'Rename', id) + mi('edit', 'Edit…', id) + mi('icon', 'Change icon…', id) + (it.icon ? mi('noicon', 'Remove icon', id) : '');
   if (cand.length) h += '<hr><div class="mh">Open in split with</div>' + cand.map(q => mi('besideof', esc(item(q.id)?.name), id, q.id)).join('');
   showCtx(h, x, y);
 }
@@ -859,6 +864,14 @@ document.addEventListener('click', e => {
   else if (a === 'close') closeTab(id);
   else if (a === 'open') openItem(id);
   else if (a === 'copy') openCopy(id);
+  else if (a === 'bmadd') toggleBookmarkFor(id);
+  else if (a === 'bmopen') openBookmark(id);
+  else if (a === 'bmcopy') { const b = (S.bm || []).find(x => x.id === id); if (b) { const t = bmTarget(b); t ? openCopy(t) : openBookmark(id, true); } }
+  else if (a === 'bmren') renameBookmark(id);
+  else if (a === 'bmedit') editBookmark(id);
+  else if (a === 'bmrm') removeBookmark(id);
+  else if (a === 'bmleft') moveBookmark(id, -1);
+  else if (a === 'bmright') moveBookmark(id, 1);
   else if (a === 'besideof') openItem(id, o);
 });
 window.addEventListener('keydown', e => { if (e.key === 'Escape') hideCtx(); });
@@ -931,6 +944,172 @@ if (IS_APP) {
   window.lily.on('reload-tab', () => { const o = open.find(x => x.id === active); try { o?.el._wv?.reload(); } catch (e) {} });
 }
 
+
+/* ---------------- bookmarks bar, tab previews, and remembering open tabs ---------------- */
+const bmbar = $('#bmbar');
+const tkey = it => (it && (it.url || it.local || it.id)) || '';
+const bmFor = itemId => (S.bm || []).find(b => b.itemId === itemId || (item(itemId) && b.url && b.url === item(itemId).url));
+const bmTarget = b => { if (b.itemId && ent(b.itemId)) return b.itemId; const o = open.find(x => { const it = item(x.id); return it && (it.bm === b.id || (b.url && it.url === b.url)); }); return o ? o.id : null; };
+function bmSeed() {
+  if (Array.isArray(S.bm)) return;
+  S.bm = ['a1', 'a2', 'a8', 'a3', 'a4', 'a7'].map(id => item(id)).filter(Boolean).map(it => ({ id: uid(), name: it.name, url: it.url || '', itemId: it.id }));
+  save();
+}
+function favHtml(b, it) {
+  const ic = (it && it.icon) || b.icon;
+  if (ic && /^(data:|https?:)/.test(ic)) return `<img src="${esc(ic)}" alt="">`;
+  if (ic) return `<span class="bi">${esc(ic)}</span>`;
+  return `<span class="bi">${esc((b.name || '?').trim().charAt(0).toUpperCase())}</span>`;
+}
+function renderBm() {
+  if (!bmbar) return;
+  bmSeed();
+  const list = S.bm || [];
+  bmbar.innerHTML = list.map(b => {
+    const it = b.itemId ? item(b.itemId) : null, on = bmTarget(b) && bmTarget(b) === active;
+    return `<button class="bm${on ? ' on' : ''}${bmTarget(b) ? ' live' : ''}" draggable="true" data-bm="${b.id}" title="">${favHtml(b, it)}<span class="bt">${esc((it && it.name) || b.name)}</span></button>`;
+  }).join('') + `<button class="bm add" data-bmadd="1" title="Bookmark this page, or add a link">＋</button>` + (list.length ? '' : '<span class="bmhint">Click ☆ on any page, or ＋ to add a bookmark</span>');
+}
+function openBookmark(id, forceNew) {
+  const b = (S.bm || []).find(x => x.id === id); if (!b) return;
+  const t = forceNew ? null : bmTarget(b);
+  if (t) return openItem(t);
+  if (b.itemId && item(b.itemId) && !forceNew) return openItem(b.itemId);
+  if (!b.url) return toast('That bookmark has no link yet');
+  const it = { id: uid(), type: 'link', name: b.name, url: b.url, temp: true, bm: b.id }; if (b.icon) it.icon = b.icon;
+  S.lib.push(it); openItem(it.id);
+}
+function toggleBookmarkFor(itemId) {
+  const it = item(itemId); if (!it) return;
+  bmSeed();
+  const ex = bmFor(itemId);
+  if (ex) { S.bm = S.bm.filter(b => b !== ex); toast('Removed from bookmarks'); }
+  else {
+    const o = ent(itemId), wv = o && o.el._wv; let url = it.url || '';
+    try { if (wv && wv.getURL) url = wv.getURL() || url; } catch (e) {}
+    const b = { id: uid(), name: it.name, url }; if (!it.temp) b.itemId = it.id; if (it.icon) b.icon = it.icon;
+    S.bm.push(b); toast('Added to bookmarks');
+  }
+  save(); renderBm(); refreshStar();
+}
+function refreshStar() {
+  document.querySelectorAll('#views .view').forEach(v => { const s = v.querySelector('[data-w="star"]'); if (!s) return; const on = !!bmFor(v.dataset.id); s.textContent = on ? '★' : '☆'; s.classList.toggle('on', on); s.title = on ? 'Remove from bookmarks bar' : 'Add to bookmarks bar'; });
+}
+async function renameBookmark(id) { const b = (S.bm || []).find(x => x.id === id); if (!b) return; const r = await ask({ title: 'Rename bookmark', name: b.name, showUrl: false, showIcon: false }); if (!r || r === 'delete' || !r.name) return; b.name = r.name; save(); renderBm(); }
+async function editBookmark(id) {
+  const b = (S.bm || []).find(x => x.id === id); if (!b) return;
+  const r = await ask({ title: 'Edit bookmark', name: b.name, url: b.url || '', showUrl: !b.itemId, canDelete: true, icon: b.icon || '', showIcon: true });
+  if (r === 'delete') return removeBookmark(id);
+  if (!r || !r.name) return;
+  b.name = r.name; if (!b.itemId && r.url) b.url = r.url;
+  if (r.icon !== undefined) { if (r.icon) b.icon = r.icon; else delete b.icon; }
+  save(); renderBm();
+}
+function removeBookmark(id) { S.bm = (S.bm || []).filter(b => b.id !== id); save(); renderBm(); refreshStar(); }
+function moveBookmark(id, d) { const l = S.bm || [], i = l.findIndex(b => b.id === id), j = i + d; if (i < 0 || j < 0 || j >= l.length) return; [l[i], l[j]] = [l[j], l[i]]; save(); renderBm(); }
+async function addBookmarkDialog() {
+  bmSeed();
+  const cur = item(active);
+  if (cur && active !== TODAY_TAB) return toggleBookmarkFor(active);
+  const r = await ask({ title: 'New bookmark', namePh: 'Name', name: '', url: '', showIcon: true });
+  if (!r || r === 'delete' || !r.url) return;
+  const b = { id: uid(), name: r.name || hostOf(r.url), url: r.url }; if (r.icon) b.icon = r.icon;
+  S.bm.push(b); save(); renderBm();
+}
+bmbar.addEventListener('click', e => {
+  if (e.target.closest('[data-bmadd]')) return addBookmarkDialog();
+  const b = e.target.closest('[data-bm]'); if (!b) return;
+  hidePv();
+  if (e.metaKey || e.ctrlKey || e.shiftKey) { const bb = (S.bm || []).find(x => x.id === b.dataset.bm), t = bb && bmTarget(bb); return t ? openCopy(t) : openBookmark(b.dataset.bm, true); }
+  openBookmark(b.dataset.bm);
+});
+bmbar.addEventListener('auxclick', e => { const b = e.target.closest('[data-bm]'); if (b && e.button === 1) { e.preventDefault(); const bb = (S.bm || []).find(x => x.id === b.dataset.bm); const t = bb && bmTarget(bb); t ? openCopy(t) : openBookmark(b.dataset.bm, true); } });
+bmbar.addEventListener('contextmenu', e => {
+  const b = e.target.closest('[data-bm]'); if (!b) return; e.preventDefault(); hidePv();
+  const id = b.dataset.bm, bb = (S.bm || []).find(x => x.id === id);
+  showCtx(mi('bmopen', 'Open', id) + mi('bmcopy', 'Open in a new tab', id) + '<hr>' + mi('bmren', 'Rename', id) + mi('bmedit', 'Edit…', id) + '<hr>' + mi('bmleft', 'Move left', id) + mi('bmright', 'Move right', id) + '<hr>' + mi('bmrm', 'Remove bookmark', id), e.clientX, e.clientY);
+});
+let bmDrag = null;
+bmbar.addEventListener('dragstart', e => { const b = e.target.closest('[data-bm]'); if (!b) return; bmDrag = b.dataset.bm; hidePv(); e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', bmDrag); } catch (x) {} });
+bmbar.addEventListener('dragover', e => { if (bmDrag) e.preventDefault(); });
+bmbar.addEventListener('drop', e => {
+  if (!bmDrag) return; e.preventDefault();
+  const t = e.target.closest('[data-bm]'), l = S.bm || [], i = l.findIndex(b => b.id === bmDrag);
+  if (i < 0) return; const [m] = l.splice(i, 1);
+  let j = t ? l.findIndex(b => b.id === t.dataset.bm) : l.length;
+  if (t) { const r = t.getBoundingClientRect(); if (e.clientX > r.left + r.width / 2) j++; }
+  l.splice(j < 0 ? l.length : j, 0, m); bmDrag = null; save(); renderBm();
+});
+bmbar.addEventListener('dragend', () => { bmDrag = null; });
+
+/* --- little page previews: what each tab last showed --- */
+const THUMBK = 'lily-thumbs-v1';
+let thumbs = {}; try { thumbs = JSON.parse(localStorage.getItem(THUMBK) || '{}'); } catch (e) {}
+const saveThumbs = () => { try { const ks = Object.keys(thumbs); if (ks.length > 40) ks.sort((x, y) => (thumbs[x].at || 0) - (thumbs[y].at || 0)).slice(0, ks.length - 40).forEach(k => delete thumbs[k]); localStorage.setItem(THUMBK, JSON.stringify(thumbs)); } catch (e) {} };
+const capBusy = {};
+async function capThumb(tabId) {
+  if (!IS_APP || capBusy[tabId]) return;
+  const o = ent(tabId), it = item(tabId), wv = o && o.el._wv; if (!wv || !it || !o.el.classList.contains('show') || !o.el._ready) return;
+  capBusy[tabId] = 1;
+  try {
+    const img = await wv.capturePage(); if (!img || (img.isEmpty && img.isEmpty())) return;
+    const url = img.toDataURL(), im = new Image();
+    await new Promise((res, rej) => { im.onload = res; im.onerror = rej; im.src = url; });
+    const c = document.createElement('canvas'), w = 320, h = Math.max(1, Math.round(im.height * w / im.width));
+    c.width = w; c.height = h; c.getContext('2d').drawImage(im, 0, 0, w, h);
+    thumbs[tkey(it)] = { d: c.toDataURL('image/jpeg', 0.6), at: Date.now() }; saveThumbs();
+  } catch (e) {} finally { capBusy[tabId] = 0; }
+}
+setInterval(() => { if (document.hasFocus() && active !== TODAY_TAB) capThumb(active); }, 15000);
+const pv = document.createElement('div'); pv.id = 'tabpv'; pv.hidden = true; document.body.appendChild(pv);
+let pvT = 0;
+function hidePv() { clearTimeout(pvT); pv.hidden = true; }
+async function showPv(el) {
+  let it = null, name = '', url = '', tabId = null;
+  if (el.dataset.bm) { const b = (S.bm || []).find(x => x.id === el.dataset.bm); if (!b) return; tabId = bmTarget(b); it = tabId ? item(tabId) : (b.itemId ? item(b.itemId) : null); name = (it && it.name) || b.name; url = (it && it.url) || b.url || ''; }
+  else { tabId = el.dataset.id; it = item(tabId); if (!it) return; name = it.name; url = it.url || ''; }
+  if (tabId && tabId === active) await capThumb(tabId);
+  const t = it ? thumbs[tkey(it)] : (url ? thumbs[url] : null), live = !!tabId;
+  pv.innerHTML = (t ? `<img src="${t.d}" alt="">` : `<div class="pvnone">${live ? 'Preview appears after you have looked at this tab' : 'Not open yet'}</div>`) + `<div class="pvn">${esc(name)}</div>` + (url ? `<div class="pvu">${esc(hostOf(url))}</div>` : '');
+  pv.hidden = false;
+  const r = el.getBoundingClientRect();
+  pv.style.left = Math.max(8, Math.min(r.left, innerWidth - pv.offsetWidth - 8)) + 'px';
+  pv.style.top = (r.bottom + 6) + 'px';
+}
+document.addEventListener('mouseover', e => {
+  const el = e.target.closest('.tab:not(.home):not(.pair),.bm:not(.add)');
+  if (!el) { if (!e.target.closest('#tabpv')) hidePv(); return; }
+  if (el._pv) return; el._pv = 1;
+  clearTimeout(pvT); pvT = setTimeout(() => showPv(el), 350);
+  el.addEventListener('mouseleave', () => { el._pv = 0; hidePv(); }, { once: true });
+});
+document.addEventListener('mousedown', hidePv, true);
+
+/* --- open tabs come back when the app opens --- */
+const TABSK = 'lily-open-tabs-v1';
+let restoring = false;
+function saveTabs() {
+  if (restoring) return;
+  try {
+    const tabs = open.map(o => { const it = item(o.id); if (!it || it.blob || o.id === 'sync') return null; const t = { id: o.id }; if (it.temp) t.it = { ...it }; if (o.mate) t.mate = o.mate; return t; }).filter(Boolean);
+    localStorage.setItem(TABSK, JSON.stringify({ tabs, active }));
+  } catch (e) {}
+}
+function restoreTabs() {
+  let st = null; try { st = JSON.parse(localStorage.getItem(TABSK) || 'null'); } catch (e) {}
+  if (!st || !Array.isArray(st.tabs)) return;
+  restoring = true;
+  try {
+    for (const t of st.tabs) {
+      if (t.it && !item(t.id)) S.lib.push(t.it);
+      const it = item(t.id); if (!it || ent(t.id)) continue;
+      const el = mkView(it); $('#views').appendChild(el); open.push({ id: t.id, el });
+    }
+    for (const t of st.tabs) { if (t.mate && ent(t.id) && ent(t.mate)) { const a = ent(t.id), d = ent(t.mate); if (!a.mate && !d.mate) { a.mate = d.id; d.mate = a.id; } } }
+  } finally { restoring = false; }
+  activate(st.active && (st.active === TODAY_TAB || ent(st.active)) ? st.active : TODAY_TAB);
+}
+
 /* ---------------- go ---------------- */
 S.lib = S.lib.filter(i => !i.temp);
 const THEMES = [['purple', 'Champion Purple'], ['fire', 'Fire Red'], ['ocean', 'Ocean Blue'], ['jungle', 'Jungle Green'], ['sunset', 'Sunset Orange'], ['candy', 'Candy Pink'], ['galaxy', 'Galaxy'], ['gold', 'Gold Rush'], ['arctic', 'Arctic Ice']];
@@ -940,7 +1119,9 @@ $('#themes').innerHTML = THEMES.map(([k, n]) => `<button class="th-card" data-t=
 $('#themes').addEventListener('click', e => { const b = e.target.closest('[data-t]'); if (!b) return; S.theme = b.dataset.t; save(); applyTheme(); $('#themes').hidden = true; });
 document.addEventListener('click', e => { if (!e.target.closest('#themes')) $('#themes').hidden = true; });
 applyTheme();
-renderTabs(); renderToday();
+renderTabs(); renderToday(); renderBm();
+restoreTabs();
+window.addEventListener('beforeunload', saveTabs);
 
 /* ---------------- sync across devices (Supabase) ---------------- */
 const SEEDV = 9;

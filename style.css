@@ -380,3 +380,23 @@ body.tabdrag .dropz{display:flex;pointer-events:auto}
 .imgprev{width:56px;height:56px;border-radius:12px;background:rgba(128,128,128,.18);display:grid;place-items:center;overflow:hidden;font-size:10px;color:var(--muted,#888);text-align:center}
 .imgprev img{width:100%;height:100%;object-fit:cover}
 .imgbtns{display:flex;gap:8px;flex-wrap:wrap}
+
+/* bookmarks bar + tab previews */
+.bmbar{display:flex;align-items:center;gap:2px;height:32px;padding:0 10px;background:var(--bg);border-bottom:1px solid var(--line);flex:none;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+.bmbar::-webkit-scrollbar{display:none}
+.bm{display:flex;align-items:center;gap:6px;height:24px;max-width:170px;padding:0 9px 0 6px;border-radius:7px;color:var(--ink);font-size:12.5px;white-space:nowrap;flex:none}
+.bm:hover{background:rgba(0,0,0,.08)}
+.bm.on{background:var(--accent-soft)}
+.bm.live .bt{font-weight:600}
+.bm .bt{overflow:hidden;text-overflow:ellipsis}
+.bm img,.bm .bi{width:16px;height:16px;border-radius:4px;object-fit:cover;flex:none}
+.bm .bi{display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);font-size:10px;font-weight:700}
+.bm.add{padding:0 8px;font-size:15px;color:var(--muted)}
+.bmhint{color:var(--muted);font-size:12px;margin-left:6px}
+.wbar [data-w="star"]{font-size:16px;padding:0 8px;color:var(--muted)}
+.wbar [data-w="star"].on{color:#e6a700}
+#tabpv{position:fixed;z-index:10000;width:240px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.28);overflow:hidden;pointer-events:none}
+#tabpv img{display:block;width:100%;height:auto;max-height:170px;object-fit:cover;object-position:top;background:#fff}
+#tabpv .pvnone{padding:22px 14px;font-size:12px;color:var(--muted);text-align:center;background:rgba(128,128,128,.12)}
+#tabpv .pvn{padding:8px 12px 0;font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#tabpv .pvu{padding:0 12px 9px;font-size:11px;color:var(--muted)}

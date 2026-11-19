@@ -196,7 +196,7 @@ input[type=color] { width: 52px; height: 40px; padding: 2px; border: 1.5px solid
 .bl { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; padding-block: 16px 24px; align-items: start; }
 @media (min-width: 980px) { .bl { grid-template-columns: minmax(0, 1.5fr) minmax(320px, 1fr); } }
 .plots { display: grid; gap: 10px; grid-template-columns: minmax(0, 1fr); }
-@media (min-width: 640px) { .plots { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.6fr); grid-template-rows: 1fr 1fr; height: min(560px, calc(100dvh - 150px)); min-height: 400px; } .plots .scene { grid-row: 1 / 3; } }
+@media (min-width: 640px) { .plots { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr); grid-template-rows: 1fr 1fr; height: min(560px, calc(100dvh - 150px)); min-height: 400px; } .plots .scene { grid-row: 1 / 3; } }
 .plot { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: var(--cv-bg); min-height: 150px; }
 .plot.scene { min-height: 320px; }
 .plot canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
@@ -205,6 +205,10 @@ input[type=color] { width: 52px; height: 40px; padding: 2px; border: 1.5px solid
 .bl-head h2 { font-size: 22px; font-weight: 800; margin-right: auto; letter-spacing: -0.01em; }
 .bl-head .btn { min-height: 40px; padding: 0 14px; }
 .planets { display: flex; }
+.dpre { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.dpre button { min-height: 44px; padding: 6px 8px; border-radius: 12px; border: 2px solid var(--line, rgba(128,128,128,.4)); background: var(--surface-2); color: var(--ink); font: 700 14px/1.15 inherit; cursor: pointer; text-align: left; }
+.dpre button small { display: block; font-weight: 600; opacity: .75; font-size: 12px; }
+.dpre button[aria-pressed="true"] { background: var(--sun); color: #1b1b1b; border-color: var(--ink); }
 .planets button { flex: 1; }
 .fact { padding: 14px 16px; border-radius: 14px; background: var(--surface-2); display: flex; flex-direction: column; gap: 8px; }
 .fact .kicker { font-size: 12px; font-weight: 800; letter-spacing: .08em; color: var(--pink); text-transform: uppercase; }
@@ -324,6 +328,11 @@ input[type=color] { width: 52px; height: 40px; padding: 2px; border: 1.5px solid
             <h2>Bounce Lab</h2>
             <button type="button" class="btn sun" id="phPause">Pause</button>
             <button type="button" class="btn" id="phRestart">Restart</button>
+          </div>
+          <div class="row" data-fact="dribble">
+            <div class="row-head"><label>Dribble tempos <span class="status">(one bounce = one beat)</span></label></div>
+            <div class="dpre" id="dribblePresets" role="group" aria-label="Dribble tempo presets"></div>
+            <p class="note" id="dribbleNote" style="margin:6px 0 0"></p>
           </div>
           <div class="seg planets" id="planets" role="group" aria-label="Planet" data-fact="planet"></div>
           <div id="phSliders" style="display:flex;flex-direction:column;gap:6px"></div>
@@ -1161,6 +1170,7 @@ function facts(P) {
     scene: { title: 'Real scale, real fall', formula: 'v_land = √(2·g·h) = ' + f1(Math.sqrt(2 * P.g * P.h)) + ' m/s', body: 'The ruler is in meters and the ball is ~22 cm, like a soccer ball. It lands as fast as it left. Mass doesn’t matter: with no air, a feather and a hammer fall together (Apollo 15, 1971).' },
     hgraph: { title: 'Height over time', formula: 'h = v₀·t − ½·g·t²', body: 'A curve (a parabola), not a line: the ball rises fast, slows, stops at ' + f2(P.h) + ' m, then falls faster. Yellow dots mark the top. Dashed lines are the bounces, which are the beat.' },
     vgraph: { title: 'Speed over time', formula: 'v = v₀ − g·t   (slope = −g)', body: 'A straight line sloping down at −' + f2(P.g) + ' m/s every second. It crosses ZERO at the top: the ball stops for an instant. Below zero means moving down, speeding up again.' },
+    dribble: { title: 'Dribble tempo', formula: 'beats per minute = bounces per minute', body: 'A dribble is a bounce on a beat. Faster tempo = a lower, quicker bounce (peak ' + f2(P.h) + ' m here, one bounce every ' + f2(P.T) + ' s). Match your hand to the ball and bounce when you hear the thump!' },
     apex: { title: 'The very top', formula: 'v = 0, but a = −g', body: 'At the top the speed is zero, yet gravity is still pulling at ' + f2(P.g) + ' m/s². That pull is why the ball turns around instead of floating away.' },
   };
 }
@@ -1171,9 +1181,19 @@ function showFact(k) {
 }
 const PH_SLIDERS = [
   { key: 'g', label: 'Gravity (g)', min: 1, max: 30, step: 0.01, fmt: v => v.toFixed(2) + ' m/s²', fact: 'gravity' },
-  { key: 'bpm', label: 'Beat (BPM)', min: 20, max: 120, step: 1, fmt: v => v + ' BPM', fact: 'bpm' },
+  { key: 'bpm', label: 'Beat (BPM)', min: 20, max: 180, step: 1, fmt: v => v + ' BPM', fact: 'bpm' },
   { key: 'e', label: 'Bounciness (e)', min: 40, max: 100, step: 1, fmt: v => (v / 100).toFixed(2), fact: 'bounce' },
 ];
+/* a bounce = one beat; each tempo is bounces per minute for a ball that is kept bouncing at the same height */
+const DRIBBLES = [
+  ['Slow & high', 60, 'Big slow bounce, about chest height. Great for catching it. One bounce each second.'],
+  ['Kinder dribble', 80, 'A comfortable, steady bounce at about waist height. Say "bounce, bounce" with the beat.'],
+  ['Walking dribble', 100, 'The tempo of a walking dribble: about 1 bounce and a bit each second.'],
+  ['Control dribble', 120, 'Lower and quicker, about knee to hip. Two bounces every second.'],
+  ['Fast hands', 150, 'Quick low bounces for ball-handling drills. Keep the fingertips soft!'],
+  ['Speed dribble', 170, 'Very fast and very low. Hard to do, great to watch!']
+];
+function updDribbles() { document.querySelectorAll('#dribblePresets button').forEach(b => b.setAttribute('aria-pressed', String(S.ph.g === 9.81 && +b.dataset.bpm === S.ph.bpm && S.ph.e === 100))); }
 const PLANETS = [['Moon', 1.62], ['Mars', 3.71], ['Earth', 9.81], ['Jupiter', 24.79]];
 function buildBounceUI() {
   const box = $('#phSliders');
@@ -1182,16 +1202,25 @@ function buildBounceUI() {
     const out = h('output', { for: id }, d.fmt(S.ph[d.key]));
     const input = h('input', { type: 'range', id, min: d.min, max: d.max, step: d.step, 'aria-label': d.label });
     input.value = S.ph[d.key]; fillPct(input);
-    input.addEventListener('input', () => { S.ph[d.key] = +input.value; out.textContent = d.fmt(S.ph[d.key]); fillPct(input); showFact(d.fact); updPlanets(); });
+    input.addEventListener('input', () => { S.ph[d.key] = +input.value; out.textContent = d.fmt(S.ph[d.key]); fillPct(input); showFact(d.fact); updPlanets(); updDribbles(); });
     input.addEventListener('focus', () => showFact(d.fact));
     const row = h('div', { class: 'row', 'data-fact': d.fact }, h('div', { class: 'row-head' }, h('label', { for: id }, d.label), out), input);
     row._sync = () => { input.value = S.ph[d.key]; out.textContent = d.fmt(S.ph[d.key]); fillPct(input); };
     return row;
   }));
   $('#planets').replaceChildren(...PLANETS.map(([label, g]) => h('button', { type: 'button', 'aria-pressed': 'false', 'data-g': g, onclick: () => {
-    S.ph.g = g; box.children[0]._sync(); showFact('planet'); updPlanets();
+    S.ph.g = g; box.children[0]._sync(); showFact('planet'); updPlanets(); updDribbles();
   } }, label)));
-  updPlanets();
+  $('#dribblePresets').replaceChildren(...DRIBBLES.map(([label, bpm, note]) => {
+    const P = { h: 9.81 * Math.pow(60 / bpm, 2) / 8 };
+    return h('button', { type: 'button', 'aria-pressed': 'false', 'data-bpm': bpm, onclick: () => {
+      S.ph.g = 9.81; S.ph.bpm = bpm; S.ph.e = 100; S.ph.paused = false; $('#phPause').textContent = 'Pause';
+      [...box.children].forEach(r => r._sync && r._sync());
+      $('#dribbleNote').textContent = note + ' (' + bpm + ' bounces a minute, peak ' + (P.h * 100).toFixed(0) + ' cm)';
+      showFact('dribble'); updPlanets(); updDribbles(); ph = null; audio();
+    } }, label, h('small', null, bpm + ' BPM'));
+  }));
+  updPlanets(); updDribbles();
   ['#cvScene', '#cvH', '#cvV'].forEach(s => ro.observe($(s)));
   document.querySelectorAll('#view-bounce [data-fact]').forEach(el => {
     el.addEventListener('pointerenter', () => { if (S.ph.fact !== el.dataset.fact) showFact(el.dataset.fact); });
@@ -1208,7 +1237,7 @@ function bounceSound(impact) {
 }
 function stepPhysics(dt) {
   const P = physParams(), key = [P.g, P.T, P.e].join('|');
-  if (!ph || ph.key !== key) ph = { key, y: 0, v: P.v0, t: 0, hist: [], wait: 0 };
+  if (!ph || ph.key !== key) ph = { key, y: 0, v: P.v0, t: 0, hist: [], wait: 0, hit: -9, count: 0 };
   const W = P.T * 2.2;
   if (!S.ph.paused) {
     const rem = Math.min(dt, 0.05), n = Math.max(1, Math.ceil(rem / 0.004)), hh = rem / n;
@@ -1220,7 +1249,7 @@ function stepPhysics(dt) {
       if (pv > 0 && ph.v <= 0) ph.hist.push({ t: ph.t, y: ph.y, v: 0, apex: true });
       if (ph.y <= 0 && ph.v < 0) {
         const imp = -ph.v; ph.y = -ph.y; ph.v = imp * P.e;
-        bounceSound(imp);
+        bounceSound(imp); ph.hit = ph.t; ph.count++;
         if (P.e < 1 && ph.v < 0.4) { ph.y = 0; ph.v = 0; ph.wait = 1.2; }
         ph.hist.push({ t: ph.t, y: 0, v: ph.v, bounce: true });
       }
@@ -1255,6 +1284,8 @@ function drawScene(P) {
   ctx.strokeStyle = CV.pink; ctx.lineWidth = 2; ctx.setLineDash([6, 5]); ctx.beginPath(); ctx.moveTo(0, ay); ctx.lineTo(w, ay); ctx.stroke(); ctx.setLineDash([]);
   ctx.fillStyle = CV.pink; ctx.textAlign = 'right'; ctx.fillText('top ' + P.h.toFixed(P.h < 10 ? 2 : 1) + ' m', w - 6, ay - 2);
   ctx.fillStyle = CV.ground; ctx.fillRect(0, gy, w, gr);
+  const since = ph.t - ph.hit, fl = since >= 0 && since < 0.28 ? 1 - since / 0.28 : 0;
+  if (fl > 0) { ctx.fillStyle = 'rgba(255,214,10,' + (0.9 * fl).toFixed(2) + ')'; ctx.fillRect(0, gy - 4, w, gr + 4); }
   const bx = w * 0.62, cy = gy - ph.y * sc - r;
   ctx.fillStyle = 'rgba(0,0,0,0.25)'; const sh = Math.max(0.3, 1 - ph.y / (P.h * 1.5 + 0.1));
   ctx.beginPath(); ctx.ellipse(bx, gy + 4, r * sh, 3.5 * sh, 0, 0, Math.PI * 2); ctx.fill();
@@ -1265,13 +1296,21 @@ function drawScene(P) {
     ctx.beginPath(); ctx.moveTo(ax, cy); ctx.lineTo(ax, y2 + d * 8); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(ax, y2); ctx.lineTo(ax - 9, y2 + d * 14); ctx.lineTo(ax + 9, y2 + d * 14); ctx.closePath(); ctx.fill();
   }
-  ctx.fillStyle = CV.sun; ctx.strokeStyle = INK; ctx.lineWidth = 3.5;
-  ctx.beginPath(); ctx.arc(bx, cy, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+  if (fl > 0) {
+    ctx.strokeStyle = 'rgba(255,255,255,' + fl.toFixed(2) + ')'; ctx.lineWidth = 5;
+    ctx.beginPath(); ctx.ellipse(bx, gy + 2, r * (1.2 + (1 - fl) * 2.4), 7 + (1 - fl) * 9, 0, 0, Math.PI * 2); ctx.stroke();
+  }
+  /* ball colour shows speed: slow = blue, fast = red */
+  const spd = Math.min(1, Math.abs(ph.v) / P.v0), sq = fl > 0 ? 1 - 0.18 * fl : 1;
+  ctx.fillStyle = 'hsl(' + Math.round(215 - 215 * spd) + ' 90% 55%)'; ctx.strokeStyle = INK; ctx.lineWidth = 3.5;
+  ctx.beginPath(); ctx.ellipse(bx, cy + r * (1 - sq), r * (2 - sq), r * sq, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
   ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(bx, cy, r * 0.55, 0.3, 2.2); ctx.stroke();
   const top0 = Math.abs(ph.v) < 0.07 * P.v0 && ph.wait <= 0;
   const cap = S.ph.paused ? 'Paused' : ph.wait > 0 ? 'Resting…' : top0 ? 'At the top: speed = 0!' : ph.v > 0 ? 'Going up: slowing down' : 'Falling: speeding up';
   ctx.font = '800 15px ' + FONT; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   ctx.fillStyle = top0 ? CV.pink : INK; ctx.fillText(cap, w / 2, 17);
+  if (fl > 0) { ctx.font = '900 ' + Math.round(22 + 10 * fl) + 'px ' + FONT; ctx.fillStyle = '#1b1b1b'; ctx.textAlign = 'center'; ctx.lineWidth = 5; ctx.strokeStyle = '#fff'; ctx.strokeText('BOUNCE!', w / 2, gy - 22); ctx.fillText('BOUNCE!', w / 2, gy - 22); ctx.font = '800 15px ' + FONT; }
+  ctx.font = '800 14px ' + FONT; ctx.fillStyle = INK; ctx.fillText('Bounces: ' + ph.count + '  ·  Speed: ' + (spd > 0.66 ? 'FAST' : spd > 0.25 ? 'medium' : 'slow'), w / 2, 38); ctx.font = '800 15px ' + FONT;
   ctx.fillStyle = '#FFFFFF';
   ctx.fillText(ph.y.toFixed(2) + ' m  ' + (ph.v >= 0 ? '↑' : '↓') + Math.abs(ph.v).toFixed(1) + ' m/s', w / 2, gy + gr / 2);
 }

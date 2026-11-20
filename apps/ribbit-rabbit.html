@@ -8342,10 +8342,10 @@ window.RRTowerDebug={sync:towerSync,get TW(){return TW},prefs};
     snapshot(){
       const classes=[];let sig='';
       for(const r of rosters){
-        if(r.synced||!r.students.length)continue;
+        if(!r.students.length)continue;
         const ab=absentOf(r);
         const students=r.students.map(s=>({id:uid(s),rid:s.id,name:nameOf(s),leader:!!s.isLeader,absent:!!ab[s.id],points:s.points||0,total:typeof studentXP==='function'?studentXP(s):(s.points||0)}));
-        classes.push({id:String(r.remoteId||r.id),rid:r.id,name:r.name,students});
+        classes.push({id:String(r.remoteId||r.id),rid:r.id,name:String(r.name||'').replace(/\s*\(Synced\)\s*$/,''),students});
         sig+=r.id+'|'+r.name+'|'+students.map(x=>x.id+'~'+x.name+(x.leader?1:0)+(x.absent?1:0)+'~'+x.points+'~'+x.total).join(',')+';';
       }
       return{sig,classes};
@@ -8360,6 +8360,17 @@ window.RRTowerDebug={sync:towerSync,get TW(){return TW},prefs};
     client(){return window.RRAuth&&RRAuth.client?RRAuth.client():null},
     user(){return window.RRAuth?RRAuth.user:null}
   };
+  /* Standalone Leader Locator (another Lily Path tab, same origin) asks for the roster over a BroadcastChannel: names stay in memory, never stored. */
+  try{if(window.BroadcastChannel){
+    const ch=new BroadcastChannel('lily-rr-bridge');let last='';
+    const send=()=>{try{const u=window.RRBridge.user();ch.postMessage({t:'snap',snap:window.RRBridge.snapshot(),user:u?{id:u.id,email:u.email}:null})}catch(e){}};
+    ch.onmessage=e=>{const m=e.data||{};
+      if(m.t==='hello'){last='';send()}
+      else if(m.t==='setPoints')window.RRBridge.setPoints(m.id,m.v);
+      else if(m.t==='setLeader')window.RRBridge.setLeader(m.id,m.v);
+      else if(m.t==='setName')window.RRBridge.setName(m.id,m.v)};
+    setInterval(()=>{try{const u=window.RRBridge.user(),s=window.RRBridge.snapshot().sig+'|'+(u?u.id:'');if(s!==last){last=s;send()}}catch(e){}},1000);
+  }}catch(e){}
   const root=document.documentElement,bar=document.getElementById('appBar');
   function show(t){
     const ll=t==='ll';

@@ -604,7 +604,7 @@ function stepUnit(id, dir) {
 function renderTabs() {
   if (renaming) return;
   setTimeout(() => { saveTabs(); renderBm(); }, 0);
-  const btn = o => { const it = item(o.id); return `<button class="tab ${active === o.id ? 'on' : ''}" draggable="true" data-id="${o.id}" title="${esc(it?.name)} — double-click to rename, right-click for more">${it && isWeb(it) ? `<span class="ti">${fav(it, 14)}</span>` : ''}<span class="t">${esc(it?.name)}</span><span class="x" data-x="1">✕</span></button>`; };
+  const btn = o => { const it = item(o.id); return `<button class="tab ${active === o.id ? 'on' : ''}" draggable="true" data-id="${o.id}" title="${esc(it?.name)} — double-click to rename, right-click for more">${it && isWeb(it) ? `<span class="ti">${fav(it, 14)}</span>` : ''}<span class="t">${esc(it?.name)}</span>${o.muted ? `<span class="spk off" data-spk="1" title="Muted — click to unmute">🔇</span>` : audible[o.id] ? `<span class="spk" data-spk="1" title="Playing sound — click to mute">🔊</span>` : ""}<span class="x" data-x="1">✕</span></button>`; };
   $('#tabs').innerHTML = `<button class="tab home ${active === TODAY_TAB ? 'on' : ''}" data-id="${TODAY_TAB}">${ICON.home}<span>Today</span></button>` +
     unitsOf().map(g => g.length > 1
       ? `<div class="pair ${g.some(o => o.id === active) ? 'on' : ''}" data-unit="${g[0].id}">${g.map(btn).join('<i class="psep"></i>')}</div>`
@@ -613,6 +613,7 @@ function renderTabs() {
 $('#tabs').addEventListener('click', e => {
   const t = e.target.closest('.tab'); if (!t || renaming) return;
   if (e.target.closest('[data-x]')) return closeTab(t.dataset.id);
+  if (e.target.closest('[data-spk]')) return toggleMute(t.dataset.id);
   if (t.dataset.id === active && !t.classList.contains('pair')) return;
   activate(t.dataset.id);
 });
@@ -738,7 +739,11 @@ function mkView(it) {
     const bar = $('.wbar', el), addr = $('.addr', el);
     if (IS_APP) {
       const upd = e => { if (e.url && e.isMainFrame !== false) addr.textContent = e.url; };
-      wv.addEventListener('dom-ready', () => { el._ready = 1; });
+      wv.addEventListener('dom-ready', () => {
+        el._ready = 1;
+        try { const o = ent(it.id); if (o && o.muted) wv.setAudioMuted(true); } catch (e) {}
+        try { if (!/(^|\.)github\.io$/.test(hostOf(wv.getURL() || it.url || ''))) wv.executeJavaScript(HOLD_MEDIA).catch(() => {}); } catch (e) {}
+      });
       wv.addEventListener('focus', () => { if (active !== it.id && groupOf(active).some(o => o.id === it.id)) { active = it.id; document.querySelectorAll('#views .view').forEach(v => v.classList.toggle('focus', v.dataset.id === it.id && v.classList.contains('show'))); renderTabs(); } });
       wv.addEventListener('did-start-loading', () => { el._ready = 0; bar.classList.add('loading'); });
       wv.addEventListener('did-stop-loading', () => bar.classList.remove('loading'));
@@ -816,7 +821,7 @@ const hideCtx = () => { ctx.hidden = true; };
 function tabMenu(id, x, y) {
   const o = ent(id), it = item(id); if (!o || !it) return;
   const others = open.filter(q => q.id !== id && !q.mate && !o.mate);
-  let h = (isWeb(it) || it.local ? mi('copy', 'Open another copy', id) : '') + (isWeb(it) || it.local ? mi('bmadd', bmFor(id) ? 'Remove from bookmarks bar' : 'Add to bookmarks bar', id) : '') + mi('rename', 'Rename', id) + (isWeb(it) && !it.path ? mi('edit', 'Edit link…', id) : '') + (o.el._wv ? mi('reload', 'Reload', id) : '') + mi('icon', 'Change icon…', id) + (it.icon ? mi('noicon', 'Remove icon', id) : '') + '<hr>';
+  let h = (ent(id) ? mi('mute', ent(id).muted ? 'Unmute tab' : 'Mute tab', id) : '') + (isWeb(it) || it.local ? mi('copy', 'Open another copy', id) : '') + (isWeb(it) || it.local ? mi('bmadd', bmFor(id) ? 'Remove from bookmarks bar' : 'Add to bookmarks bar', id) : '') + mi('rename', 'Rename', id) + (isWeb(it) && !it.path ? mi('edit', 'Edit link…', id) : '') + (o.el._wv ? mi('reload', 'Reload', id) : '') + mi('icon', 'Change icon…', id) + (it.icon ? mi('noicon', 'Remove icon', id) : '') + '<hr>';
   if (o.mate) h += mi('unpair', 'Separate from “' + esc(item(o.mate)?.name) + '”', id) + mi('swap', 'Swap sides', id);
   else if (others.length) h += '<div class="mh">Split view with</div>' + others.map(q => mi('pair', esc(item(q.id)?.name), id, q.id)).join('');
   else h += '<div class="mh">Open a second tab to split</div>';
@@ -826,7 +831,7 @@ function tabMenu(id, x, y) {
 function tileMenu(id, x, y) {
   const it = item(id); if (!it) return;
   const cand = open.filter(q => !q.mate && q.id !== id);
-  let h = mi('open', 'Open', id) + (isWeb(it) || it.local ? mi('copy', 'Open another copy', id) : '') + (isWeb(it) || it.local ? mi('bmadd', bmFor(id) ? 'Remove from bookmarks bar' : 'Add to bookmarks bar', id) : '') + mi('rename', 'Rename', id) + mi('edit', 'Edit…', id) + mi('icon', 'Change icon…', id) + (it.icon ? mi('noicon', 'Remove icon', id) : '');
+  let h = mi('open', 'Open', id) + (ent(id) ? mi('mute', ent(id).muted ? 'Unmute tab' : 'Mute tab', id) : '') + (isWeb(it) || it.local ? mi('copy', 'Open another copy', id) : '') + (isWeb(it) || it.local ? mi('bmadd', bmFor(id) ? 'Remove from bookmarks bar' : 'Add to bookmarks bar', id) : '') + mi('rename', 'Rename', id) + mi('edit', 'Edit…', id) + mi('icon', 'Change icon…', id) + (it.icon ? mi('noicon', 'Remove icon', id) : '');
   if (cand.length) h += '<hr><div class="mh">Open in split with</div>' + cand.map(q => mi('besideof', esc(item(q.id)?.name), id, q.id)).join('');
   showCtx(h, x, y);
 }
@@ -864,6 +869,7 @@ document.addEventListener('click', e => {
   else if (a === 'close') closeTab(id);
   else if (a === 'open') openItem(id);
   else if (a === 'copy') openCopy(id);
+  else if (a === 'mute') toggleMute(id);
   else if (a === 'bmadd') toggleBookmarkFor(id);
   else if (a === 'bmopen') openBookmark(id);
   else if (a === 'bmcopy') { const b = (S.bm || []).find(x => x.id === id); if (b) { const t = bmTarget(b); t ? openCopy(t) : openBookmark(id, true); } }
@@ -944,6 +950,25 @@ if (IS_APP) {
   window.lily.on('reload-tab', () => { const o = open.find(x => x.id === active); try { o?.el._wv?.reload(); } catch (e) {} });
 }
 
+
+/* ---------------- videos stay paused until you press play; tab mute + speaker icon ---------------- */
+const HOLD_MEDIA = `(function(){try{if(window.__lilyHold)return;window.__lilyHold=1;
+const ua=()=>navigator.userActivation&&navigator.userActivation.hasBeenActive;
+document.addEventListener('play',e=>{if(!ua()){try{e.target.pause()}catch(x){}}},true);
+const stop=()=>document.querySelectorAll('video,audio').forEach(m=>{if(!m.paused){try{m.pause()}catch(x){}}});
+stop();let n=0;const iv=setInterval(()=>{if(ua()||++n>60){clearInterval(iv);return}stop()},500)}catch(e){}})()`;
+const audible = {};
+function toggleMute(id) {
+  const o = ent(id); if (!o) return;
+  o.muted = !o.muted;
+  try { if (o.el._wv && o.el._wv.setAudioMuted) o.el._wv.setAudioMuted(o.muted); } catch (e) {}
+  toast(o.muted ? 'Tab muted' : 'Tab unmuted'); renderTabs();
+}
+if (IS_APP) setInterval(() => {
+  let ch = false;
+  open.forEach(o => { let a = false; try { const w = o.el._wv; a = !!(w && o.el._ready && w.isCurrentlyAudible && w.isCurrentlyAudible()); } catch (e) {} if (!!audible[o.id] !== a) { audible[o.id] = a; ch = true; } });
+  if (ch) renderTabs();
+}, 1000);
 
 /* ---------------- bookmarks bar, tab previews, and remembering open tabs ---------------- */
 const bmbar = $('#bmbar');
@@ -1091,7 +1116,7 @@ let restoring = false;
 function saveTabs() {
   if (restoring) return;
   try {
-    const tabs = open.map(o => { const it = item(o.id); if (!it || it.blob || o.id === 'sync') return null; const t = { id: o.id }; if (it.temp) t.it = { ...it }; if (o.mate) t.mate = o.mate; return t; }).filter(Boolean);
+    const tabs = open.map(o => { const it = item(o.id); if (!it || it.blob || o.id === 'sync') return null; const t = { id: o.id }; if (it.temp) t.it = { ...it }; if (o.mate) t.mate = o.mate; if (o.muted) t.muted = 1; return t; }).filter(Boolean);
     localStorage.setItem(TABSK, JSON.stringify({ tabs, active }));
   } catch (e) {}
 }
@@ -1103,7 +1128,7 @@ function restoreTabs() {
     for (const t of st.tabs) {
       if (t.it && !item(t.id)) S.lib.push(t.it);
       const it = item(t.id); if (!it || ent(t.id)) continue;
-      const el = mkView(it); $('#views').appendChild(el); open.push({ id: t.id, el });
+      const el = mkView(it); $('#views').appendChild(el); open.push({ id: t.id, el, muted: !!t.muted });
     }
     for (const t of st.tabs) { if (t.mate && ent(t.id) && ent(t.mate)) { const a = ent(t.id), d = ent(t.mate); if (!a.mate && !d.mate) { a.mate = d.id; d.mate = a.id; } } }
   } finally { restoring = false; }
